@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>סורק ספל וידית</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--panel2:#1c2330;--line:#2a3340;--txt:#e6edf3;--mut:#8b98a8;
+--grn:#3fb950;--red:#f85149;--amb:#d29922;--blu:#58a6ff;--pur:#bc8cff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:Heebo,system-ui,sans-serif;font-size:15px}
+.num{font-family:"JetBrains Mono",monospace;direction:ltr;unicode-bidi:isolate}
+header{padding:22px 16px 10px;max-width:1200px;margin:auto}
+h1{margin:0;font-size:24px}
+.sub{color:var(--mut);margin-top:6px;font-size:13px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:16px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px}
+.kpi b{display:block;font-size:24px;margin-top:4px}
+.kpi span{color:var(--mut);font-size:12px}
+nav{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);z-index:5}
+nav .in{max-width:1200px;margin:auto;display:flex;gap:4px;overflow-x:auto;padding:0 16px}
+nav button{background:none;border:0;color:var(--mut);padding:12px 14px;font:inherit;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent}
+nav button.on{color:var(--txt);border-color:var(--blu)}
+nav .ct{background:var(--panel2);border-radius:9px;padding:1px 7px;font-size:12px;margin-inline-start:5px}
+main{max-width:1200px;margin:auto;padding:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.sym{font-size:20px;font-weight:700}
+.nm{color:var(--mut);font-size:12px}
+.badge{font-size:12px;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.b-breakout{background:#3fb95026;color:var(--grn)}.b-above{background:#58a6ff26;color:var(--blu)}
+.b-near{background:#d2992226;color:var(--amb)}.b-forming{background:#8b98a826;color:var(--mut)}
+svg{width:100%;height:150px;display:block;margin:10px 0 6px}
+.st{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 10px;font-size:12px}
+.st div>span{color:var(--mut);display:block}
+.st div b{font-weight:600}
+.tags{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;border:1px solid var(--line);border-radius:6px;padding:2px 6px;color:var(--mut)}
+.tag.ok{color:var(--grn);border-color:#3fb95055}.tag.no{color:var(--red);border-color:#f8514955}
+.empty{color:var(--mut);padding:40px;text-align:center;background:var(--panel);border-radius:12px}
+.pos{color:var(--grn)}.neg{color:var(--red)}
+table{width:100%;border-collapse:collapse;background:var(--panel);border-radius:12px;overflow:hidden;font-size:13px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right}
+th{color:var(--mut);font-weight:500}
+.prose{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;line-height:1.7}
+.prose h3{margin-top:0}
+.conf{font-size:11px;padding:1px 6px;border-radius:5px;margin-inline-start:6px}
+.c-f{background:#3fb95022;color:var(--grn)}.c-e{background:#d2992222;color:var(--amb)}
+.filters{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.filters input,.filters select{background:var(--panel);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:7px 10px;font:inherit}
+a{color:var(--blu)}
+@media(max-width:420px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>☕ סורק ספל וידית — S&amp;P 500</h1>
+  <div class="sub" id="sub"></div>
+  <div class="kpis" id="kpis"></div>
+</header>
+<nav><div class="in" id="tabs"></div></nav>
+<main id="main"></main>
+<script>
+const D = /*__DATA__*/null;
+const ST = {breakout:"פריצה היום",above:"מעל הפיבוט",near:"קרוב לפיבוט",forming:"בהתהוות"};
+const TABS = [["breakout","פריצות היום"],["above","מעל הפיבוט"],["near","קרוב לפיבוט (≤5%)"],["forming","בהתהוות"],["all","טבלה מלאה"],["hist","היסטוריה"],["method","מתודולוגיה"]];
+let tab = "breakout", q = "", sec = "";
+const f = (x,d=2)=>Number(x).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const sg = x=>`<span class="num ${x>=0?'pos':'neg'}">${x>=0?'+':''}${f(x)}%</span>`;
+
+function chart(r){
+  const c=r.chart.c, n=c.length, W=340, H=150, pad=6;
+  const lo=Math.min(...c,r.pivot)*0.98, hi=Math.max(...c,r.pivot)*1.02;
+  const X=i=>pad+(W-2*pad)*i/(n-1), Y=v=>H-pad-(H-2*pad)*(v-lo)/(hi-lo);
+  const p=c.map((v,i)=>`${i?'L':'M'}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join("");
+  const {iL,ib,ir}=r.chart;
+  const dot=(i,col,t)=>`<circle cx="${X(i)}" cy="${Y(c[i])}" r="3.5" fill="${col}"/><text x="${X(i)}" y="${Y(c[i])-7}" fill="${col}" font-size="10" text-anchor="middle">${t}</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-label="גרף ${r.sym}">
+   <rect x="${X(iL)}" y="0" width="${X(ir)-X(iL)}" height="${H}" fill="#58a6ff10"/>
+   <rect x="${X(ir)}" y="0" width="${X(n-1)-X(ir)}" height="${H}" fill="#bc8cff14"/>
+   <line x1="0" x2="${W}" y1="${Y(r.pivot)}" y2="${Y(r.pivot)}" stroke="#d29922" stroke-dasharray="4 3"/>
+   <path d="${p}" fill="none" stroke="#e6edf3" stroke-width="1.4"/>
+   ${dot(iL,"#58a6ff","שפה")}${dot(ib,"#f85149","תחתית")}${dot(ir,"#bc8cff","ידית")}
+  </svg>`;
+}
+function card(r){
+  return `<div class="card"><div class="top"><div><div class="sym">${r.sym}</div><div class="nm">${r.name} · ${r.sector}</div></div>
+   <div style="text-align:left"><span class="badge b-${r.status}">${ST[r.status]}</span><div class="num" style="margin-top:6px">$${f(r.close)} ${sg(r.chg)}</div></div></div>
+   ${chart(r)}
+   <div class="st">
+    <div><span>פיבוט (נק' קנייה)</span><b class="num">$${f(r.pivot)}</b></div>
+    <div><span>מרחק מפיבוט</span><b>${sg(r.dist)}</b></div>
+    <div><span>ציון איכות</span><b class="num">${r.score}/100</b></div>
+    <div><span>עומק ספל</span><b class="num">${f(r.depth,1)}%</b></div>
+    <div><span>אורך ספל</span><b><span class="num">${f(r.cup_weeks,0)}</span> שבועות</b></div>
+    <div><span>ידית</span><b class="num">${r.handle_days}d / ${f(r.handle_depth,1)}%</b></div>
+    <div><span>מגמה קודמת</span><b class="num">+${f(r.prior,0)}%</b></div>
+    <div><span>ווליום / ממוצע 50</span><b class="num">${f(r.vol_ratio)}x</b></div>
+    <div><span>RSI(14)</span><b class="num">${f(r.rsi14,1)}</b></div>
+   </div>
+   <div class="tags"><span class="tag ${r.above50?'ok':'no'}">${r.above50?'מעל':'מתחת'} SMA50</span>
+    <span class="tag ${r.above200?'ok':'no'}">${r.above200?'מעל':'מתחת'} SMA200</span>
+    <span class="tag ${r.dry?'ok':'no'}">ווליום ${r.dry?'מתייבש':'לא מתייבש'} בידית</span>
+    <a class="tag" href="https://finviz.com/quote.ashx?t=${r.sym}" target="_blank" rel="noopener">Finviz ↗</a>
+    <a class="tag" href="https://www.tradingview.com/chart/?symbol=${r.sym}" target="_blank" rel="noopener">TradingView ↗</a></div>
+  </div>`;
+}
+function filtered(){return D.results.filter(r=>(!q||r.sym.includes(q.toUpperCase())||r.name.toUpperCase().includes(q.toUpperCase()))&&(!sec||r.sector===sec));}
+function filtersBar(){
+  const secs=[...new Set(D.results.map(r=>r.sector))].sort();
+  return `<div class="filters"><input id="q" placeholder="חיפוש סימול / שם" value="${q}">
+   <select id="sec"><option value="">כל הסקטורים</option>${secs.map(s=>`<option ${s===sec?'selected':''}>${s}</option>`).join("")}</select></div>`;
+}
+function render(){
+  const m=document.getElementById("main");
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===tab));
+  if(tab==="method"){m.innerHTML=method();return;}
+  if(tab==="hist"){m.innerHTML=hist();return;}
+  const rows=filtered();
+  if(tab==="all"){
+    m.innerHTML=filtersBar()+`<div style="overflow-x:auto"><table><tr><th>סימול</th><th>סטטוס</th><th>סגירה</th><th>פיבוט</th><th>מרחק</th><th>עומק</th><th>שבועות</th><th>ידית</th><th>ווליום</th><th>RSI</th><th>ציון</th><th>סקטור</th></tr>`+
+     rows.map(r=>`<tr><td><b>${r.sym}</b></td><td><span class="badge b-${r.status}">${ST[r.status]}</span></td><td class="num">${f(r.close)}</td><td class="num">${f(r.pivot)}</td><td>${sg(r.dist)}</td><td class="num">${f(r.depth,1)}%</td><td class="num">${f(r.cup_weeks,0)}</td><td class="num">${f(r.handle_depth,1)}%</td><td class="num">${f(r.vol_ratio)}x</td><td class="num">${f(r.rsi14,0)}</td><td class="num">${r.score}</td><td>${r.sector}</td></tr>`).join("")+`</table></div>`;
+  } else {
+    const rs=rows.filter(r=>r.status===tab);
+    m.innerHTML=filtersBar()+(rs.length?`<div class="grid">${rs.map(card).join("")}</div>`:`<div class="empty">אין מניות בקטגוריה הזו היום.</div>`);
+  }
+  const qi=document.getElementById("q"); if(qi){qi.oninput=e=>{q=e.target.value;render();const n=document.getElementById("q");n.focus();n.setSelectionRange(q.length,q.length);};}
+  const si=document.getElementById("sec"); if(si){si.onchange=e=>{sec=e.target.value;render();};}
+}
+function hist(){
+  if(!D.history||!D.history.length) return `<div class="empty">ההיסטוריה תתמלא עם הימים.</div>`;
+  return `<table><tr><th>תאריך</th><th>תבניות</th><th>פריצות</th><th>קרוב לפיבוט</th></tr>`+
+   D.history.map(h=>`<tr><td class="num">${h.date}</td><td class="num">${h.total}</td><td>${h.breakout.join(", ")||"—"}</td><td>${h.near.join(", ")||"—"}</td></tr>`).join("")+`</table>`;
+}
+function method(){
+  const p=D.params;
+  return `<div class="prose"><h3>איך הסורק מזהה ספל וידית</h3>
+  <p>כל ערב מסחר, אחרי הסגירה בוול סטריט, נסרקות כל מניות ה‑S&P 500 על נרות יומיים של שנתיים אחורה, לפי הכללים הקלאסיים של ויליאם אוניל (CAN SLIM):</p>
+  <ul>
+   <li><b>מגמה קודמת:</b> עלייה של לפחות ${p.prior_uptrend*100}% אל השפה השמאלית של הספל.</li>
+   <li><b>אורך הספל:</b> ${p.cup_min/5}–${p.cup_max/5} שבועות.</li>
+   <li><b>עומק הספל:</b> ${p.depth_min*100}%–${p.depth_max*100}% מהשפה השמאלית.</li>
+   <li><b>צורת U ולא V:</b> התחתית נמצאת באזור האמצע של הספל, והמחיר שוהה זמן מה בשליש התחתון.</li>
+   <li><b>שפה ימנית:</b> מתאוששת ל‑${p.rim_tol_low*100}%–${p.rim_tol_high*100}% מגובה השפה השמאלית.</li>
+   <li><b>ידית:</b> ${p.handle_min}–${p.handle_max} ימי מסחר, עומק של עד ${p.handle_depth_max*100}%, וכולה בחצי העליון של הספל.</li>
+   <li><b>פיבוט (נקודת קנייה):</b> השיא של הידית ועוד 10 סנט.</li>
+   <li><b>פריצה היום:</b> סגירה מעל הפיבוט בווליום של לפחות ${p.breakout_vol} פעמים ממוצע 50 הימים.</li>
+  </ul>
+  <h3>רמת ודאות</h3>
+  <p>מחירים, ווליום ואינדיקטורים <span class="conf c-f">עובדה</span> מגיעים מ-Yahoo Finance (מתואמים לדיבידנדים ולפיצולים, כך שהם עשויים להיות שונים מעט מ-Finviz).<br>
+  זיהוי התבנית, הפיבוט והציון <span class="conf c-e">הערכה</span>: ספל וידית מוגדרת בצורה סובייקטיבית, ולכן זו רשימת מועמדים לבדיקה ידנית על הגרף ולא אות קנייה.</p>
+  <p class="sub">מקור הרשימה: ${D.source} · נסרקו ${D.scanned} מתוך ${D.universe} · נוצר ${D.generated}</p></div>`;
+}
+(function init(){
+  const c=s=>D.results.filter(r=>r.status===s).length;
+  document.getElementById("sub").innerHTML=`נתוני סגירה ל‑<span class="num">${D.asof}</span> · נסרקו <span class="num">${D.scanned}</span> מניות · עודכן ${D.generated}`;
+  document.getElementById("kpis").innerHTML=[["תבניות שזוהו",D.results.length],["פריצות היום",c("breakout")],["מעל הפיבוט",c("above")],["קרוב לפיבוט",c("near")],["בהתהוות",c("forming")]]
+   .map(([a,b])=>`<div class="kpi"><span>${a}</span><b class="num">${b}</b></div>`).join("");
+  const cnt={all:D.results.length,breakout:c("breakout"),above:c("above"),near:c("near"),forming:c("forming")};
+  document.getElementById("tabs").innerHTML=TABS.map(([k,v])=>`<button data-t="${k}">${v}${cnt[k]!=null?`<span class="ct num">${cnt[k]}</span>`:""}</button>`).join("");
+  document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{tab=b.dataset.t;render();});
+  if(!cnt.breakout) tab = cnt.near?"near":(cnt.above?"above":"forming");
+  render();
+})();
+</script>
+</body>
+</html>
