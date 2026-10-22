@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>סורק חציית ממוצעים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--panel2:#1c2330;--line:#2a3340;--txt:#e6edf3;--mut:#8b98a8;
+--grn:#3fb950;--red:#f85149;--amb:#d29922;--blu:#58a6ff;--pur:#bc8cff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:Heebo,system-ui,sans-serif;font-size:15px}
+.num{font-family:"JetBrains Mono",monospace;direction:ltr;unicode-bidi:isolate}
+header{padding:22px 16px 10px;max-width:1200px;margin:auto}
+h1{margin:0;font-size:24px}
+.sub{color:var(--mut);margin-top:6px;font-size:13px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:16px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px}
+.kpi b{display:block;font-size:24px;margin-top:4px}
+.kpi span{color:var(--mut);font-size:12px}
+nav{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);z-index:5}
+nav .in{max-width:1200px;margin:auto;display:flex;gap:4px;overflow-x:auto;padding:0 16px}
+nav button{background:none;border:0;color:var(--mut);padding:12px 14px;font:inherit;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent}
+nav button.on{color:var(--txt);border-color:var(--blu)}
+nav .ct{background:var(--panel2);border-radius:9px;padding:1px 7px;font-size:12px;margin-inline-start:5px}
+main{max-width:1200px;margin:auto;padding:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.sym{font-size:20px;font-weight:700}
+.nm{color:var(--mut);font-size:12px}
+.badge{font-size:12px;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.b-breakout{background:#3fb95026;color:var(--grn)}.b-above{background:#58a6ff26;color:var(--blu)}
+.b-near{background:#d2992226;color:var(--amb)}.b-forming{background:#8b98a826;color:var(--mut)}
+svg{width:100%;height:150px;display:block;margin:10px 0 6px}
+.st{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 10px;font-size:12px}
+.st div>span{color:var(--mut);display:block}
+.st div b{font-weight:600}
+.tags{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;border:1px solid var(--line);border-radius:6px;padding:2px 6px;color:var(--mut)}
+.tag.ok{color:var(--grn);border-color:#3fb95055}.tag.no{color:var(--red);border-color:#f8514955}
+.empty{color:var(--mut);padding:40px;text-align:center;background:var(--panel);border-radius:12px}
+.pos{color:var(--grn)}.neg{color:var(--red)}
+table{width:100%;border-collapse:collapse;background:var(--panel);border-radius:12px;overflow:hidden;font-size:13px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right}
+th{color:var(--mut);font-weight:500}
+.prose{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;line-height:1.7}
+.prose h3{margin-top:0}
+.conf{font-size:11px;padding:1px 6px;border-radius:5px;margin-inline-start:6px}
+.c-f{background:#3fb95022;color:var(--grn)}.c-e{background:#d2992222;color:var(--amb)}
+.filters{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.filters input,.filters select{background:var(--panel);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:7px 10px;font:inherit}
+a{color:var(--blu)}
+@media(max-width:420px){.grid{grid-template-columns:1fr}}
+</style>
+<style>
+.b-up{background:#3fb95026;color:var(--grn)}.b-down{background:#f8514926;color:var(--red)}
+.legend{display:flex;gap:12px;font-size:11px;color:var(--mut)}.legend i{display:inline-block;width:14px;height:2px;vertical-align:middle;margin-inline-end:4px}
+.xlink{font-size:13px;margin-top:8px;display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <h1>✂️ חציית EMA9 / SMA20 — S&amp;P 500</h1>
+  <div class="sub" id="sub"></div>
+  <a class="xlink" href="../">← לסורק ספל וידית</a>
+  <div class="kpis" id="kpis"></div>
+</header>
+<nav><div class="in" id="tabs"></div></nav>
+<main id="main"></main>
+<script>
+const D = /*__DATA__*/null;
+const TABS=[["up","חצייה מעלה ▲"],["down","חצייה מטה ▼"],["all","טבלה מלאה"],["hist","היסטוריה"],["method","מתודולוגיה"]];
+const KIND={up:"חצייה מעלה ▲",down:"חצייה מטה ▼"};
+let tab="up",q="",sec="";
+const f=(x,d=2)=>x==null?"—":Number(x).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const sg=x=>`<span class="num ${x>=0?'pos':'neg'}">${x>=0?'+':''}${f(x)}%</span>`;
+function chart(r){
+  const {c,e9,s20}=r.chart,n=c.length,W=340,H=150,pad=6;
+  const all=[...c,...e9,...s20.filter(x=>x!=null)],lo=Math.min(...all)*0.995,hi=Math.max(...all)*1.005;
+  const X=i=>pad+(W-2*pad)*i/(n-1),Y=v=>H-pad-(H-2*pad)*(v-lo)/(hi-lo);
+  const line=(a,col,w,dash)=>{let p="",m=true;a.forEach((v,i)=>{if(v==null){m=true;return;}p+=`${m?'M':'L'}${X(i).toFixed(1)},${Y(v).toFixed(1)}`;m=false;});return `<path d="${p}" fill="none" stroke="${col}" stroke-width="${w}" ${dash?'stroke-dasharray="4 3"':''}/>`;};
+  const col=r.kind==="up"?"#3fb950":"#f85149";
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-label="גרף ${r.sym}">
+   ${line(c,"#8b98a8",1)}${line(s20,"#d29922",1.6)}${line(e9,"#58a6ff",1.6)}
+   <circle cx="${X(n-1)}" cy="${Y(e9[n-1])}" r="4.5" fill="none" stroke="${col}" stroke-width="2"/></svg>
+   <div class="legend"><span><i style="background:#58a6ff"></i>EMA9</span><span><i style="background:#d29922"></i>SMA20</span><span><i style="background:#8b98a8"></i>מחיר (60 יום)</span></div>`;
+}
+function card(r){
+  return `<div class="card"><div class="top"><div><div class="sym">${r.sym}</div><div class="nm">${r.name} · ${r.sector}</div></div>
+   <div style="text-align:left"><span class="badge b-${r.kind}">${KIND[r.kind]}</span><div class="num" style="margin-top:6px">$${f(r.close)} ${sg(r.chg)}</div></div></div>
+   ${chart(r)}
+   <div class="st" style="margin-top:8px">
+    <div><span>EMA9</span><b class="num">${f(r.ema9)}</b></div>
+    <div><span>SMA20</span><b class="num">${f(r.sma20)}</b></div>
+    <div><span>פער EMA9–SMA20</span><b>${sg(r.gap)}</b></div>
+    <div><span>ווליום / ממוצע 50</span><b class="num">${f(r.vol_ratio)}x</b></div>
+    <div><span>RSI(14)</span><b class="num">${f(r.rsi14,1)}</b></div>
+    <div><span>RSI(35)/EMA(10)</span><b class="num">${f(r.rsi35_ema10,1)}</b></div>
+    <div><span>EMA20 / EMA30</span><b class="num">${f(r.ema20)} / ${f(r.ema30)}</b></div>
+    <div><span>EMA50 / EMA200</span><b class="num">${f(r.ema50)} / ${f(r.ema200)}</b></div>
+    <div><span>SMA150</span><b class="num">${f(r.sma150)}</b></div>
+   </div>
+   <div class="tags"><span class="tag ${r.above50?'ok':'no'}">${r.above50?'מעל':'מתחת'} SMA50</span>
+    <span class="tag ${r.above200?'ok':'no'}">${r.above200?'מעל':'מתחת'} SMA200</span>
+    <span class="tag">המצב הקודם נמשך <span class="num">${r.prior_days}</span> ימים</span>
+    <a class="tag" href="https://finviz.com/quote.ashx?t=${r.sym}" target="_blank" rel="noopener">Finviz ↗</a>
+    <a class="tag" href="https://www.tradingview.com/chart/?symbol=${r.sym}" target="_blank" rel="noopener">TradingView ↗</a></div></div>`;
+}
+function filtered(){return D.results.filter(r=>(!q||r.sym.includes(q.toUpperCase())||r.name.toUpperCase().includes(q.toUpperCase()))&&(!sec||r.sector===sec));}
+function filtersBar(){const secs=[...new Set(D.results.map(r=>r.sector))].sort();
+  return `<div class="filters"><input id="q" placeholder="חיפוש סימול / שם" value="${q}"><select id="sec"><option value="">כל הסקטורים</option>${secs.map(s=>`<option ${s===sec?'selected':''}>${s}</option>`).join("")}</select></div>`;}
+function render(){
+  const m=document.getElementById("main");
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===tab));
+  if(tab==="method"){m.innerHTML=method();return;}
+  if(tab==="hist"){m.innerHTML=hist();return;}
+  const rows=filtered();
+  if(tab==="all"){
+    m.innerHTML=filtersBar()+`<div style="overflow-x:auto"><table><tr><th>סימול</th><th>כיוון</th><th>סגירה</th><th>שינוי</th><th>EMA9</th><th>SMA20</th><th>פער</th><th>ווליום</th><th>RSI14</th><th>SMA50</th><th>SMA200</th><th>סקטור</th></tr>`+
+    rows.map(r=>`<tr><td><b>${r.sym}</b></td><td><span class="badge b-${r.kind}">${KIND[r.kind]}</span></td><td class="num">${f(r.close)}</td><td>${sg(r.chg)}</td><td class="num">${f(r.ema9)}</td><td class="num">${f(r.sma20)}</td><td>${sg(r.gap)}</td><td class="num">${f(r.vol_ratio)}x</td><td class="num">${f(r.rsi14,0)}</td><td>${r.above50?'מעל':'מתחת'}</td><td>${r.above200?'מעל':'מתחת'}</td><td>${r.sector}</td></tr>`).join("")+`</table></div>`;
+  } else {
+    const rs=rows.filter(r=>r.kind===tab);
+    m.innerHTML=filtersBar()+(rs.length?`<div class="grid">${rs.map(card).join("")}</div>`:`<div class="empty">אין חציות בכיוון הזה היום.</div>`);
+  }
+  const qi=document.getElementById("q");if(qi){qi.oninput=e=>{q=e.target.value;render();const n=document.getElementById("q");n.focus();n.setSelectionRange(q.length,q.length);};}
+  const si=document.getElementById("sec");if(si){si.onchange=e=>{sec=e.target.value;render();};}
+}
+function hist(){
+  return `<table><tr><th>תאריך</th><th>חצייה מעלה ▲</th><th>חצייה מטה ▼</th></tr>`+
+   D.history.map(h=>`<tr><td class="num">${h.date}</td><td><span class="num pos">${h.up.length}</span> · ${h.up.join(", ")||"—"}</td><td><span class="num neg">${h.down.length}</span> · ${h.down.join(", ")||"—"}</td></tr>`).join("")+`</table>`;
+}
+function method(){
+  return `<div class="prose"><h3>מה הסורק בודק</h3>
+  <p>בכל יום מסחר בשעה 23:10 שעון ישראל, אחרי הסגירה בוול סטריט, נסרקות כל מניות ה‑S&P 500 על נרות יומיים.</p>
+  <ul><li><b>חצייה מעלה ▲:</b> בסגירה של היום EMA9 מעל SMA20, ובסגירה של אתמול EMA9 היה מתחת ל‑SMA20 או שווה לו.</li>
+  <li><b>חצייה מטה ▼:</b> בסגירה של היום EMA9 מתחת ל‑SMA20, ובסגירה של אתמול EMA9 היה מעליו או שווה לו.</li>
+  <li><b>מיון:</b> לפי יחס הווליום של היום לממוצע 50 הימים, מהגבוה לנמוך. חצייה בווליום גבוה נחשבת משמעותית יותר.</li>
+  <li><b>"המצב הקודם נמשך":</b> כמה ימים EMA9 היה בצד השני לפני החצייה. מספר קטן מרמז על דשדוש וחציות שווא חוזרות.</li></ul>
+  <h3>רמת ודאות ומקורות</h3>
+  <p>מחירים, ממוצעים ו‑RSI <span class="conf c-f">עובדה</span>, מ‑Yahoo Finance. המחירים מתואמים לפיצולים בלבד ולא לדיבידנדים, כמו ברירת המחדל של TradingView ו‑Finviz, ולכן הממוצעים אמורים להתאים לגרפים שם. ייתכנו הבדלים של סנטים בודדים.</p>
+  <p>הסריקה רצה כ‑10 דקות אחרי הסגירה. במקרים נדירים ההדפסה של מכירה פומבית בסגירה מתעדכנת ב‑Yahoo באיחור, ומניה שהפער בה קטן מאוד (פחות מ‑0.1%) עלולה להופיע או להיעדר בגלל זה <span class="conf c-e">הערכה</span>.</p>
+  <p class="sub">מקור הרשימה: ${D.source} · נסרקו ${D.scanned} מתוך ${D.universe}${D.stale?` · ${D.stale} ללא נר של היום`:""} · נוצר ${D.generated}</p></div>`;
+}
+(function init(){
+  const c=k=>D.results.filter(r=>r.kind===k).length;
+  document.getElementById("sub").innerHTML=(D.intraday?`<div style="background:#d2992226;color:#d29922;padding:8px 12px;border-radius:8px;margin-bottom:6px">⚠️ הרצת בדיקה במהלך יום המסחר. הנתונים חלקיים ויוחלפו בסריקה של 23:10.</div>`:"")+`נתוני סגירה ל‑<span class="num">${D.asof}</span> · נסרקו <span class="num">${D.scanned}</span> מניות · עודכן ${D.generated}`;
+  document.getElementById("kpis").innerHTML=[["חציות היום",D.results.length],["חצייה מעלה ▲",c("up")],["חצייה מטה ▼",c("down")]].map(([a,b])=>`<div class="kpi"><span>${a}</span><b class="num">${b}</b></div>`).join("");
+  const cnt={up:c("up"),down:c("down"),all:D.results.length};
+  document.getElementById("tabs").innerHTML=TABS.map(([k,v])=>`<button data-t="${k}">${v}${cnt[k]!=null?`<span class="ct num">${cnt[k]}</span>`:""}</button>`).join("");
+  document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{tab=b.dataset.t;render();});
+  if(!cnt.up&&cnt.down)tab="down";
+  render();
+})();
+</script>
+</body>
+</html>

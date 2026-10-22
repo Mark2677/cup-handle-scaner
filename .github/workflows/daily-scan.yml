@@ -37,6 +37,7 @@ jobs:
           git config user.name  "scanner-bot"
           git config user.email "scanner-bot@users.noreply.github.com"
           git add docs
-          true
-          git diff --cached --quiet || git commit -m "Scan results $(date -u +%F)"
+          git diff --cached --quiet && exit 0
+          git commit -m "Scan results $(date -u +%F)"
+          git pull --rebase origin main
           git push
