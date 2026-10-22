@@ -2,9 +2,9 @@ name: Daily cup-and-handle scan
 
 on:
   schedule:
-    # 21:30 UTC, Mon-Fri = after the US close all year round
-    # (23:30 Israel winter time / 00:30 Israel summer time)
-    - cron: "30 21 * * 1-5"
+    # 23:10 Israel time (GitHub cron is UTC only; the gate step keeps the right one)
+    - cron: "10 20 * * 1-5"   # Israel summer time (UTC+3)
+    - cron: "10 21 * * 1-5"   # Israel winter time (UTC+2)
   workflow_dispatch:
     inputs:
       dump:
@@ -23,16 +23,33 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
+      - name: Gate on Israel time
+        id: gate
+        run: |
+          OFF=$(TZ=Asia/Jerusalem date +%z)
+          S="${{ github.event.schedule }}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] \
+             || { [ "$S" = "10 20 * * 1-5" ] && [ "$OFF" = "+0300" ]; } \
+             || { [ "$S" = "10 21 * * 1-5" ] && [ "$OFF" = "+0200" ]; }; then
+            echo "go=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "Not 23:10 in Israel for this trigger (offset $OFF) - skipping"
+          fi
       - uses: actions/checkout@v4
+        if: steps.gate.outputs.go == '1'
       - uses: actions/setup-python@v5
+        if: steps.gate.outputs.go == '1'
         with:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
+        if: steps.gate.outputs.go == '1'
       - run: python scanner.py
+        if: steps.gate.outputs.go == '1'
         env:
           DUMP: ${{ github.event.inputs.dump }}
       - name: Publish results
+        if: steps.gate.outputs.go == '1'
         run: |
           git config user.name  "scanner-bot"
           git config user.email "scanner-bot@users.noreply.github.com"
