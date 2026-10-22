@@ -110,8 +110,17 @@ def rsi(s, n=14):
 
 
 # ---------------------------------------------------------------- detection
-def find_cup_handle(df):
+STAGES = ['rim_tol', 'above_rims', 'depth', 'bottom_pos', 'u_shape', 'handle_mid', 'prior_hist', 'prior_up', 'PASS']
+DIAG = {}
+
+
+def find_cup_handle(df, tag=None):
     """Return the best cup-with-handle ending today, or None."""
+    far = [-1]
+
+    def reach(k):
+        far[0] = max(far[0], STAGES.index(k))
+
     h = df["High"].to_numpy()
     l = df["Low"].to_numpy()
     c = df["Close"].to_numpy()
@@ -146,11 +155,14 @@ def find_cup_handle(df):
             if h[L] < win.max():
                 continue
             rim_l = h[L]
+            reach("rim_tol")
             if not (P["rim_tol_low"] * rim_l <= rim_r <= P["rim_tol_high"] * rim_l):
                 continue
+            reach("above_rims")
             seg_h = h[L + 1:r]
             if seg_h.max() > max(rim_l, rim_r) * 1.01:   # nothing poking above the rims
                 continue
+            reach("depth")
             seg_l = l[L:r + 1]
             b = L + int(seg_l.argmin())
             bottom = l[b]
@@ -158,25 +170,31 @@ def find_cup_handle(df):
             depth = (rim_l - bottom) / rim_l
             if not (P["depth_min"] <= depth <= P["depth_max"]):
                 continue
+            reach("bottom_pos")
             cup_len = r - L
             pos = (b - L) / cup_len
             if not (0.2 <= pos <= 0.8):                    # bottom roughly centred
                 continue
+            reach("u_shape")
             third = bottom + (top - bottom) / 3
             u_frac = float((c[L:r + 1] <= third).mean())
             if u_frac < P["u_bottom_frac"]:                # too V-shaped
                 continue
+            reach("handle_mid")
             mid = bottom + (rim_r - bottom) / 2
             if handle_low < mid:                           # handle in upper half
                 continue
+            reach("prior_hist")
             pl = max(0, L - P["prior_lookback"])
             if L - pl < 40:
                 continue
+            reach("prior_up")
             prior_low = l[pl:L].min()
             prior = rim_l / prior_low - 1
             if prior < P["prior_uptrend"]:
                 continue
 
+            reach("PASS")
             vol50 = v[-51:-1].mean()
             handle_vol = v[r + 1:-1].mean() if hl > 1 else v[-1]
             cup_vol = v[L:r + 1].mean()
@@ -198,6 +216,8 @@ def find_cup_handle(df):
             if best is None or cand["score"] > best["score"]:
                 best = cand
             break  # nearest valid left rim for this handle is enough
+    if tag is not None:
+        DIAG[tag] = STAGES[far[0]] if far[0] >= 0 else "no_rim_pair"
     return best
 
 
@@ -226,7 +246,7 @@ def run():
         if df is None:
             continue
         try:
-            m = find_cup_handle(df)
+            m = find_cup_handle(df, row["sym"])
         except Exception as e:  # noqa: BLE001
             print(row["sym"], e)
             continue
@@ -258,6 +278,10 @@ def run():
                 iL=m["L"] - start, ib=m["b"] - start, ir=m["r"] - start,
             ),
         ))
+    from collections import Counter
+    print("Furthest stage reached (blocked AT this stage):")
+    for k, n in Counter(DIAG.values()).most_common():
+        print(f"  {k:12s} {n}")
     order = {"breakout": 0, "above": 1, "near": 2, "forming": 3}
     results.sort(key=lambda x: (order[x["status"]], -x["score"]))
     payload = dict(
