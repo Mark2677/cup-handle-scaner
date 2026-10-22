@@ -37,6 +37,6 @@ jobs:
           git config user.name  "scanner-bot"
           git config user.email "scanner-bot@users.noreply.github.com"
           git add docs
-          [ -d cache ] && git add -f cache || true
+          true
           git diff --cached --quiet || git commit -m "Scan results $(date -u +%F)"
           git push

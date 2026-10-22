@@ -7,7 +7,7 @@ Detection follows William O'Neil's classic rules (approximate, algorithmic):
   * prior uptrend  >= 30% into the left rim
   * cup length 7-65 weeks (35-325 trading days), depth 12-35%, U-shaped (not V)
   * right rim recovers to within 10% of the left rim
-  * handle 1-6 weeks (5-30 trading days), depth <= 15%, in the upper half of the cup
+  * handle 1-8 weeks (5-40 trading days), depth <= 15%, in the upper half of the cup
   * pivot (buy point) = handle high + 0.10
 """
 import io
@@ -30,11 +30,12 @@ P = dict(
     prior_lookback=150,      # days before the left rim to measure the uptrend
     cup_min=35, cup_max=325, # cup length in trading days (7-65 weeks)
     depth_min=0.12, depth_max=0.35,
-    rim_tol_low=0.90,        # right rim >= 90% of left rim
+    rim_tol_low=0.85,        # right rim >= 85% of left rim
     rim_tol_high=1.05,       # right rim <= 105% of left rim
-    handle_min=5, handle_max=30,
+    handle_min=5, handle_max=40,
     handle_depth_max=0.15,
-    u_bottom_frac=0.38,      # min share of cup days in the bottom third (U ~0.5, straight V ~0.33)
+    u_bottom_frac=0.25,      # min share of cup days in the bottom third (tuned on real data)
+    rim_wick=1.03,           # intraday highs inside the cup may exceed the rims by this much
     near_pivot=0.05,         # "near pivot" = within 5% below pivot
     breakout_vol=1.4,        # breakout volume >= 1.4x 50-day average
     min_price=10.0,
@@ -160,7 +161,7 @@ def find_cup_handle(df, tag=None):
                 continue
             reach("above_rims")
             seg_h = h[L + 1:r]
-            if seg_h.max() > max(rim_l, rim_r) * 1.01:   # nothing poking above the rims
+            if seg_h.max() > max(rim_l, rim_r) * P["rim_wick"]:  # nothing poking above the rims
                 continue
             reach("depth")
             seg_l = l[L:r + 1]
@@ -204,7 +205,7 @@ def find_cup_handle(df, tag=None):
             score += 10 if 0.15 <= depth <= 0.30 else 0
             score += 10 if handle_depth <= 0.12 else 0
             score += 10 if handle_vol < cup_vol else 0
-            score += max(0, min(10, (u_frac - 0.38) * 70))
+            score += max(0, min(10, (u_frac - 0.25) * 70))
             score += 10 if rim_r >= 0.97 * rim_l else 0
             cand = dict(
                 L=L, b=b, r=r, rim_l=rim_l, rim_r=rim_r, bottom=bottom,
