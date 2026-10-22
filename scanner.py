@@ -239,6 +239,9 @@ def classify(m, close):
 def run():
     uni, source = get_universe()
     data = download(uni["yf"].tolist())
+    if os.environ.get("DUMP") == "1":
+        os.makedirs(os.path.join(HERE, "cache"), exist_ok=True)
+        pd.concat(data, names=["t", "Date"]).to_pickle(os.path.join(HERE, "cache", "prices.pkl.gz"))
     asof = max(df.index[-1] for df in data.values()).strftime("%Y-%m-%d")
     results = []
     for _, row in uni.iterrows():
@@ -286,6 +289,7 @@ def run():
     results.sort(key=lambda x: (order[x["status"]], -x["score"]))
     payload = dict(
         asof=asof, generated=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+        diag=dict(__import__("collections").Counter(DIAG.values())),
         scanned=len(data), universe=len(uni), source=source, params=P, results=results,
     )
     os.makedirs(os.path.join(DOCS, "data"), exist_ok=True)

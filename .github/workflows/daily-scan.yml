@@ -5,7 +5,11 @@ on:
     # 21:30 UTC, Mon-Fri = after the US close all year round
     # (23:30 Israel winter time / 00:30 Israel summer time)
     - cron: "30 21 * * 1-5"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      dump:
+        description: "Also save raw prices (for tuning)"
+        default: "0"
 
 permissions:
   contents: write
@@ -26,10 +30,13 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - run: python scanner.py
+        env:
+          DUMP: ${{ github.event.inputs.dump }}
       - name: Publish results
         run: |
           git config user.name  "scanner-bot"
           git config user.email "scanner-bot@users.noreply.github.com"
           git add docs
+          [ -d cache ] && git add -f cache || true
           git diff --cached --quiet || git commit -m "Scan results $(date -u +%F)"
           git push
