@@ -15,7 +15,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: scan
+  group: daily-scan
   cancel-in-progress: false
 
 jobs:
@@ -56,5 +56,7 @@ jobs:
           git add docs
           git diff --cached --quiet && exit 0
           git commit -m "Scan results $(date -u +%F)"
-          git pull --rebase origin main
-          git push
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin main && git push && break
+            sleep $((i * 7))
+          done
