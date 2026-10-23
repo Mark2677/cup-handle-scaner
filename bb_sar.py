@@ -4,9 +4,9 @@ Runs in GitHub Actions at 23:10 Israel time on US trading days.
 Writes docs/bbsar/index.html (Hebrew dashboard) and docs/bbsar/data/<date>.json.
 
 LONG  : within the last TOUCH_WINDOW bars a low touched/pierced the lower band,
-        today's close is back inside (above the lower band),
+        today's close is back inside the bands (between lower and upper),
         and today the Parabolic SAR flipped from above price to below price.
-SHORT : mirror image on the upper band, SAR flips from below to above price.
+SHORT : mirror image on the upper band (close inside the bands), SAR flips from below to above price.
 Prices are split-adjusted, not dividend-adjusted (matches TradingView / Finviz).
 """
 import json
@@ -105,11 +105,11 @@ def run():
         kind = None
         if below[-1] and not below[-2]:                       # SAR flipped under price
             touch = l[w] <= lo.to_numpy()[w]
-            if touch.any() and close > lo.iloc[-1]:
+            if touch.any() and lo.iloc[-1] < close < up.iloc[-1]:
                 kind = "long"
         elif not below[-1] and below[-2]:                     # SAR flipped over price
             touch = h[w] >= up.to_numpy()[w]
-            if touch.any() and close < up.iloc[-1]:
+            if touch.any() and lo.iloc[-1] < close < up.iloc[-1]:
                 kind = "short"
         if not kind:
             continue
