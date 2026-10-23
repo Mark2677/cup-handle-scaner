@@ -15,3 +15,13 @@
 
 * **הדשבורד:** https://mark2677.github.io/cup-handle-scaner/cross/
 * **הרצה ידנית:** Actions ← Daily EMA9 / SMA20 cross scan ← Run workflow
+
+## סורק דחייה מבולינגר + היפוך Parabolic SAR
+
+כל יום מסחר בשעה 23:10 שעון ישראל.
+**לונג:** ב‑3 ימי המסחר האחרונים השפל נגע ברצועת הבולינגר התחתונה (20/2), הסגירה חזרה פנימה, וה‑SAR (0.05/0.05/0.5) התהפך היום אל מתחת למחיר.
+**שורט:** בדיוק ההפך, על הרצועה העליונה.
+
+* **הדשבורד:** https://mark2677.github.io/cup-handle-scaner/bbsar/
+* **הרצה ידנית:** Actions ← Daily Bollinger rejection + SAR flip scan ← Run workflow
+* **פרמטרים:** בראש הקובץ `bb_sar.py`

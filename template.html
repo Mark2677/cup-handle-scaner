@@ -53,13 +53,14 @@ th{color:var(--mut);font-weight:500}
 .filters input,.filters select{background:var(--panel);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:7px 10px;font:inherit}
 a{color:var(--blu)}
 @media(max-width:420px){.grid{grid-template-columns:1fr}}
+.xnav{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;margin-top:8px}
 </style>
 </head>
 <body>
 <header>
   <h1>☕ סורק ספל וידית — S&amp;P 500</h1>
   <div class="sub" id="sub"></div>
-  <a href="cross/" style="font-size:13px;margin-top:8px;display:inline-block">לסורק חציית EMA9 / SMA20 ←</a>
+  <div class="xnav"><a href="">☕ ספל וידית</a><a href="cross/">✂️ חציית EMA9/SMA20</a><a href="bbsar/">🎯 בולינגר + SAR</a></div>
   <div class="kpis" id="kpis"></div>
 </header>
 <nav><div class="in" id="tabs"></div></nav>
