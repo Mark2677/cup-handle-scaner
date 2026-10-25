@@ -1,11 +1,7 @@
-name: Daily EMA9 / SMA20 cross scan
+name: "[stopped] EMA9 / SMA20 cross scan"
 
 on:
-  schedule:
-    # 23:10 Israel time. GitHub cron is UTC only, so both offsets are scheduled
-    # and the "gate" step keeps only the one that matches Israel's current offset:
-    - cron: "10 20 * * 1-5"   # Israel summer time (UTC+3)
-    - cron: "10 21 * * 1-5"   # Israel winter time (UTC+2)
+  # Schedule turned off 2026-10-25 (replaced by ema20-cross.yml). Manual runs still work.
   workflow_dispatch:
     inputs:
       force:
