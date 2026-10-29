@@ -16,6 +16,7 @@ from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
 import numpy as np
+import pandas as pd
 
 from ema_cross import download
 from scanner import SECTOR_HE, get_universe, rsi
@@ -26,6 +27,11 @@ OUT = os.path.join(HERE, "docs", "bbsar")
 BB_LEN, BB_MULT = 20, 2.0
 SAR_START, SAR_INC, SAR_MAX = 0.05, 0.05, 0.5
 TOUCH_WINDOW = 3  # today + 2 previous bars
+
+# Pre-sweep watchlist (stocks approaching a band, before touching it)
+PRE_ATR = 1.0     # close at most this many ATR(14) from the band
+PRE_DAYS = 2      # %B moved toward the band this many days in a row
+PRE_SAR = True    # require SAR on the "wrong" side (so a sweep + reversal would flip it)
 
 
 def psar(high, low, close, start=SAR_START, inc=SAR_INC, mx=SAR_MAX):
@@ -111,9 +117,27 @@ def run():
             touch = h[w] >= up.to_numpy()[w]
             if touch.any() and lo.iloc[-1] < close < up.iloc[-1]:
                 kind = "short"
+        # ATR(14), Wilder (as in TradingView)
+        cn = c.to_numpy(float)
+        tr = np.maximum(h[1:] - l[1:], np.maximum(abs(h[1:] - cn[:-1]), abs(l[1:] - cn[:-1])))
+        atr = float(pd.Series(tr).ewm(alpha=1 / 14, adjust=False).mean().iloc[-1])
+        pb = ((c - lo) / (up - lo)).to_numpy()
+        pbw = pb[-(PRE_DAYS + 1):]
+        lo0, up0 = float(lo.iloc[-1]), float(up.iloc[-1])
+        alert = dist_atr = None
+        if not kind:
+            if (lo0 < close <= lo0 + PRE_ATR * atr and l[-1] > lo0
+                    and all(np.diff(pbw) < 0) and (not PRE_SAR or not below[-1])):
+                kind, alert = "pre_long", lo0
+            elif (up0 - PRE_ATR * atr <= close < up0 and h[-1] < up0
+                    and all(np.diff(pbw) > 0) and (not PRE_SAR or below[-1])):
+                kind, alert = "pre_short", up0
         if not kind:
             continue
-        touch_ago = int(TOUCH_WINDOW - 1 - np.where(touch)[0].max())
+        if alert is not None:
+            dist_atr = abs(close - alert) / atr
+        touch_ago = (int(TOUCH_WINDOW - 1 - np.where(touch)[0].max())
+                     if kind in ("long", "short") else None)
         v = df["Volume"].astype(float)
         vol50 = float(v.iloc[-51:-1].mean())
         ema = lambda n: round(float(c.ewm(span=n, adjust=False).mean().iloc[-1]), 2)  # noqa: E731
@@ -131,7 +155,10 @@ def run():
             pctb=round((close - float(lo.iloc[-1])) / width * 100, 1) if width else None,
             bw=round(width / float(mid.iloc[-1]) * 100, 2),
             sar=round(float(sar[-1]), 2), sar_dist=round((float(sar[-1]) / close - 1) * 100, 2),
-            touch_ago=touch_ago,
+            touch_ago=touch_ago, atr=round(atr, 2),
+            alert=round(alert, 2) if alert is not None else None,
+            dist_atr=round(dist_atr, 2) if dist_atr is not None else None,
+            dist_pct=round(abs(close / alert - 1) * 100, 2) if alert is not None else None,
             vol_ratio=round(float(v.iloc[-1]) / vol50, 2) if vol50 else None,
             rsi14=round(float(rsi(c, 14).iloc[-1]), 1),
             rsi35_ema10=round(float(rsi(c, 35).ewm(span=10, adjust=False).mean().iloc[-1]), 1),
@@ -143,13 +170,14 @@ def run():
                        lo=rnd(lo.to_numpy()[seg]), sar=rnd(sar[seg]),
                        below=[bool(x) for x in below[seg]]),
         ))
-    results.sort(key=lambda x: -(x["vol_ratio"] or 0))
+    results.sort(key=lambda x: (x["dist_atr"] if x["dist_atr"] is not None else 0,
+                                -(x["vol_ratio"] or 0)))
     payload = dict(
         asof=asof, generated=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         intraday=bool(last == now_ny.date() and now_ny.hour < 16),
         scanned=len(data) - stale, universe=len(uni), stale=stale, source=source,
         params=dict(bb_len=BB_LEN, bb_mult=BB_MULT, sar=[SAR_START, SAR_INC, SAR_MAX],
-                    window=TOUCH_WINDOW),
+                    window=TOUCH_WINDOW, pre_atr=PRE_ATR, pre_days=PRE_DAYS, pre_sar=PRE_SAR),
         results=results,
     )
     os.makedirs(os.path.join(OUT, "data"), exist_ok=True)
@@ -162,14 +190,17 @@ def run():
                 p = json.load(f)
             hist.append(dict(date=p["asof"],
                              long=[r["sym"] for r in p["results"] if r["kind"] == "long"],
-                             short=[r["sym"] for r in p["results"] if r["kind"] == "short"]))
+                             short=[r["sym"] for r in p["results"] if r["kind"] == "short"],
+                             pre_long=[r["sym"] for r in p["results"] if r["kind"] == "pre_long"],
+                             pre_short=[r["sym"] for r in p["results"] if r["kind"] == "pre_short"]))
     payload["history"] = hist
     with open(os.path.join(HERE, "template_bbsar.html"), encoding="utf-8") as f:
         tpl = f.read()
     with open(os.path.join(OUT, "index.html"), "w", encoding="utf-8") as f:
         f.write(tpl.replace("/*__DATA__*/null", json.dumps(payload, ensure_ascii=False)))
-    print(f"{asof}: {sum(r['kind'] == 'long' for r in results)} long, "
-          f"{sum(r['kind'] == 'short' for r in results)} short")
+    n = lambda k: sum(r["kind"] == k for r in results)  # noqa: E731
+    print(f"{asof}: signals {n('long')} long / {n('short')} short | "
+          f"pre-sweep {n('pre_long')} long / {n('pre_short')} short")
 
 
 if __name__ == "__main__":

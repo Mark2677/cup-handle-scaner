@@ -56,13 +56,15 @@ a{color:var(--blu)}
 </style>
 <style>
 .b-long{background:#3fb95026;color:var(--grn)}.b-short{background:#f8514926;color:var(--red)}
+.b-pre_long{background:#58a6ff26;color:var(--blu)}.b-pre_short{background:#d2992226;color:var(--amb)}
+.alert{background:var(--panel2);border:1px dashed var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:13px}
 .legend{display:flex;gap:12px;font-size:11px;color:var(--mut);flex-wrap:wrap}.legend i{display:inline-block;width:14px;height:2px;vertical-align:middle;margin-inline-end:4px}
 .xnav{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;margin-top:8px}
 </style>
 </head>
 <body>
 <header>
-  <h1>🎯 דחייה מבולינגר + היפוך SAR — S&amp;P 500</h1>
+  <h1>🎯 בולינגר + SAR: לפני הסוויפ ואחריו — S&amp;P 500</h1>
   <div class="sub" id="sub"></div>
   <div class="xnav"><a href="../trend/">📈 EMA30/50 + RSI35</a><a href="../cross20/">✂️ EMA20/SMA20 + RSI10</a><a href="../bbsar/">🎯 בולינגר + SAR</a></div>
   <div class="kpis" id="kpis"></div>
@@ -71,9 +73,9 @@ a{color:var(--blu)}
 <main id="main"></main>
 <script>
 const D = /*__DATA__*/null;
-const TABS=[["long","לונג ▲ (רצועה תחתונה)"],["short","שורט ▼ (רצועה עליונה)"],["all","טבלה מלאה"],["hist","היסטוריה"],["method","מתודולוגיה"]];
-const KIND={long:"לונג ▲",short:"שורט ▼"};
-let tab="long",q="",sec="";
+const TABS=[["pre_long","לפני סוויפ · לונג"],["pre_short","לפני סוויפ · שורט"],["long","אות לונג ▲"],["short","אות שורט ▼"],["all","טבלה מלאה"],["hist","היסטוריה"],["method","מתודולוגיה"]];
+const KIND={long:"אות לונג ▲",short:"אות שורט ▼",pre_long:"לפני סוויפ · לונג",pre_short:"לפני סוויפ · שורט"};
+let tab="pre_long",q="",sec="";
 const f=(x,d=2)=>x==null?"—":Number(x).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
 const sg=x=>`<span class="num ${x>=0?'pos':'neg'}">${x>=0?'+':''}${f(x)}%</span>`;
 const ago=n=>n===0?"היום":n===1?"אתמול":`לפני ${n} ימים`;
@@ -91,13 +93,14 @@ function chart(r){
    <div class="legend"><span><i style="background:#58a6ff"></i>בולינגר ${D.params.bb_len}/${D.params.bb_mult}</span><span><i style="background:#e6edf3"></i>סגירה (60 יום)</span><span>● SAR: <b style="color:#3fb950">מתחת</b>/<b style="color:#f85149">מעל</b> למחיר</span></div>`;
 }
 function card(r){
-  const band=r.kind==="long"?"התחתונה":"העליונה";
+  const pre=r.kind.startsWith("pre_"),isL=r.kind.endsWith("long"),band=isL?"התחתונה":"העליונה";
   return `<div class="card"><div class="top"><div><div class="sym">${r.sym}</div><div class="nm">${r.name} · ${r.sector}</div></div>
    <div style="text-align:left"><span class="badge b-${r.kind}">${KIND[r.kind]}</span><div class="num" style="margin-top:6px">$${f(r.close)} ${sg(r.chg)}</div></div></div>
+   ${pre?`<div class="alert">🔔 רמת התראה: הרצועה ${band} <b class="num">$${f(r.alert)}</b> · מרחק <b class="num">${f(r.dist_atr)}</b> ATR (<span class="num">${f(r.dist_pct)}%</span>)</div>`:""}
    ${chart(r)}
    <div class="st" style="margin-top:8px">
-    <div><span>נגיעה ברצועה ${band}</span><b>${ago(r.touch_ago)}</b></div>
-    <div><span>SAR (סטופ)</span><b class="num">${f(r.sar)}</b></div>
+    ${pre?`<div><span>ATR(14)</span><b class="num">${f(r.atr)}</b></div>`:`<div><span>נגיעה ברצועה ${band}</span><b>${ago(r.touch_ago)}</b></div>`}
+    <div><span>${pre?"SAR (רמת היפוך)":"SAR (סטופ)"}</span><b class="num">${f(r.sar)}</b></div>
     <div><span>מרחק ל‑SAR</span><b>${sg(r.sar_dist)}</b></div>
     <div><span>BB עליונה / תחתונה</span><b class="num">${f(r.bb_up)} / ${f(r.bb_lo)}</b></div>
     <div><span>%B</span><b class="num">${f(r.pctb,1)}</b></div>
@@ -124,8 +127,8 @@ function render(){
   if(tab==="hist"){m.innerHTML=hist();return;}
   const rows=filtered();
   if(tab==="all"){
-    m.innerHTML=filtersBar()+`<div style="overflow-x:auto"><table><tr><th>סימול</th><th>כיוון</th><th>סגירה</th><th>שינוי</th><th>נגיעה</th><th>SAR</th><th>מרחק SAR</th><th>%B</th><th>ווליום</th><th>RSI14</th><th>SMA200</th><th>סקטור</th></tr>`+
-    rows.map(r=>`<tr><td><b>${r.sym}</b></td><td><span class="badge b-${r.kind}">${KIND[r.kind]}</span></td><td class="num">${f(r.close)}</td><td>${sg(r.chg)}</td><td>${ago(r.touch_ago)}</td><td class="num">${f(r.sar)}</td><td>${sg(r.sar_dist)}</td><td class="num">${f(r.pctb,0)}</td><td class="num">${f(r.vol_ratio)}x</td><td class="num">${f(r.rsi14,0)}</td><td>${r.above200?'מעל':'מתחת'}</td><td>${r.sector}</td></tr>`).join("")+`</table></div>`;
+    m.innerHTML=filtersBar()+`<div style="overflow-x:auto"><table><tr><th>סימול</th><th>כיוון</th><th>סגירה</th><th>שינוי</th><th>נגיעה / מרחק</th><th>SAR</th><th>מרחק SAR</th><th>%B</th><th>ווליום</th><th>RSI14</th><th>SMA200</th><th>סקטור</th></tr>`+
+    rows.map(r=>`<tr><td><b>${r.sym}</b></td><td><span class="badge b-${r.kind}">${KIND[r.kind]}</span></td><td class="num">${f(r.close)}</td><td>${sg(r.chg)}</td><td>${r.kind.startsWith("pre_")?`<span class="num">${f(r.dist_atr)}</span> ATR`:ago(r.touch_ago)}</td><td class="num">${f(r.sar)}</td><td>${sg(r.sar_dist)}</td><td class="num">${f(r.pctb,0)}</td><td class="num">${f(r.vol_ratio)}x</td><td class="num">${f(r.rsi14,0)}</td><td>${r.above200?'מעל':'מתחת'}</td><td>${r.sector}</td></tr>`).join("")+`</table></div>`;
   } else {
     const rs=rows.filter(r=>r.kind===tab);
     m.innerHTML=filtersBar()+(rs.length?`<div class="grid">${rs.map(card).join("")}</div>`:`<div class="empty">אין מניות שעונות על התנאים בכיוון הזה היום.</div>`);
@@ -134,8 +137,9 @@ function render(){
   const si=document.getElementById("sec");if(si){si.onchange=e=>{sec=e.target.value;render();};}
 }
 function hist(){
-  return `<table><tr><th>תאריך</th><th>לונג ▲</th><th>שורט ▼</th></tr>`+
-   D.history.map(h=>`<tr><td class="num">${h.date}</td><td><span class="num pos">${h.long.length}</span> · ${h.long.join(", ")||"—"}</td><td><span class="num neg">${h.short.length}</span> · ${h.short.join(", ")||"—"}</td></tr>`).join("")+`</table>`;
+  const cell=(a,cl)=>a?`<span class="num ${cl}">${a.length}</span> · ${a.join(", ")||"—"}`:"—";
+  return `<table><tr><th>תאריך</th><th>לפני סוויפ · לונג</th><th>לפני סוויפ · שורט</th><th>אות לונג ▲</th><th>אות שורט ▼</th></tr>`+
+   D.history.map(h=>`<tr><td class="num">${h.date}</td><td>${cell(h.pre_long,"")}</td><td>${cell(h.pre_short,"")}</td><td>${cell(h.long,"pos")}</td><td>${cell(h.short,"neg")}</td></tr>`).join("")+`</table>`;
 }
 function method(){
   const p=D.params;
@@ -146,6 +150,11 @@ function method(){
   <li><b>בולינגר:</b> ממוצע SMA של ${p.bb_len} ימים, ±${p.bb_mult} סטיות תקן (סטיית תקן של אוכלוסייה, כמו ב‑TradingView).</li>
   <li><b>Parabolic SAR:</b> התחלה ${p.sar[0]}, צעד ${p.sar[1]}, מקסימום ${p.sar[2]}. החישוב הוא העתקה מדויקת של ta.sar ב‑TradingView. ערך ה‑SAR של היום יכול לשמש כרמת סטופ.</li>
   <li><b>מיון:</b> לפי יחס הווליום של היום לממוצע 50 הימים.</li></ul>
+  <h3>לפני הסוויפ (רשימת מעקב)</h3>
+  <ul><li><b>לונג:</b> הסגירה של היום מעל הרצועה התחתונה ובמרחק של עד ${p.pre_atr} ATR(14) ממנה, השפל של היום עוד לא נגע בה, ו‑%B ירד ${p.pre_days} ימים ברצף, כלומר המחיר בדרך אל הרצועה.${p.pre_sar?" ה‑SAR עדיין מעל המחיר, ולכן סוויפ שאחריו היפוך יהפוך אותו ויוליד אות מלא.":""}</li>
+  <li><b>שורט:</b> בדיוק ההפך, על הרצועה העליונה.</li>
+  <li><b>רמת ההתראה</b> היא ערך הרצועה הערב. מחר הרצועה תזוז מעט עם הסגירה, בדרך כלל בשבר אחוז <span class="conf c-e">הסקה</span>. המיון הוא לפי המרחק מהרצועה ב‑ATR, מהקרוב לרחוק.</li>
+  <li>מניה שמופיעה כאן ואחרי יום או יומיים עוברת ללשונית "אות", השלימה את התבנית: סוויפ, חזרה פנימה, והיפוך SAR.</li></ul>
   <h3>רמת ודאות ומקורות</h3>
   <p>מחירים, רצועות, SAR ו‑RSI <span class="conf c-f">עובדה</span>, מ‑Yahoo Finance. המחירים מתואמים לפיצולים בלבד ולא לדיבידנדים, כמו ברירת המחדל ב‑TradingView וב‑Finviz.</p>
   <p>ה‑SAR תלוי בכל ההיסטוריה שקדמה לו. הסורק מחשב אותו על כ‑14 חודשים, ו‑TradingView על כל ההיסטוריה הזמינה, ולכן ייתכנו הבדלים קטנים מאוד בערך. מועד ההיפוך עצמו כמעט תמיד זהה <span class="conf c-e">הערכה</span>.</p>
@@ -155,11 +164,11 @@ function method(){
 (function init(){
   const c=k=>D.results.filter(r=>r.kind===k).length;
   document.getElementById("sub").innerHTML=(D.intraday?`<div style="background:#d2992226;color:#d29922;padding:8px 12px;border-radius:8px;margin-bottom:6px">⚠️ הרצת בדיקה במהלך יום המסחר. הנתונים חלקיים ויוחלפו בסריקה של 23:10.</div>`:"")+`נתוני סגירה ל‑<span class="num">${D.asof}</span> · נסרקו <span class="num">${D.scanned}</span> מניות · BB ${D.params.bb_len}/${D.params.bb_mult} · SAR ${D.params.sar.join("/")} · עודכן ${D.generated}`;
-  document.getElementById("kpis").innerHTML=[["אותות היום",D.results.length],["לונג ▲",c("long")],["שורט ▼",c("short")]].map(([a,b])=>`<div class="kpi"><span>${a}</span><b class="num">${b}</b></div>`).join("");
-  const cnt={long:c("long"),short:c("short"),all:D.results.length};
+  document.getElementById("kpis").innerHTML=[["לפני סוויפ · לונג",c("pre_long")],["לפני סוויפ · שורט",c("pre_short")],["אות לונג ▲",c("long")],["אות שורט ▼",c("short")]].map(([a,b])=>`<div class="kpi"><span>${a}</span><b class="num">${b}</b></div>`).join("");
+  const cnt={pre_long:c("pre_long"),pre_short:c("pre_short"),long:c("long"),short:c("short"),all:D.results.length};
   document.getElementById("tabs").innerHTML=TABS.map(([k,v])=>`<button data-t="${k}">${v}${cnt[k]!=null?`<span class="ct num">${cnt[k]}</span>`:""}</button>`).join("");
   document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{tab=b.dataset.t;render();});
-  if(!cnt.long&&cnt.short)tab="short";
+  if(!cnt.pre_long)tab=["pre_short","long","short"].find(k=>cnt[k])||"pre_long";
   render();
 })();
 </script>
