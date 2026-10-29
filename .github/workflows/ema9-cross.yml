@@ -1,0 +1,63 @@
+name: Daily EMA9 / SMA9 cross scan
+
+on:
+  schedule:
+    # 23:10 Israel time. GitHub cron is UTC only, so both offsets are scheduled
+    # and the "gate" step keeps only the one that matches Israel's current offset:
+    - cron: "10 20 * * 1-5"   # Israel summer time (UTC+3)
+    - cron: "10 21 * * 1-5"   # Israel winter time (UTC+2)
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Run even if today's bar is missing (holiday/test)"
+        default: "0"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ema9-cross
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Gate on Israel time
+        id: gate
+        run: |
+          OFF=$(TZ=Asia/Jerusalem date +%z)
+          S="${{ github.event.schedule }}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] \
+             || { [ "$S" = "10 20 * * 1-5" ] && [ "$OFF" = "+0300" ]; } \
+             || { [ "$S" = "10 21 * * 1-5" ] && [ "$OFF" = "+0200" ]; }; then
+            echo "go=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "Not 23:10 in Israel for this trigger (offset $OFF) - skipping"
+          fi
+      - if: steps.gate.outputs.go == '1'
+        uses: actions/checkout@v4
+      - if: steps.gate.outputs.go == '1'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - if: steps.gate.outputs.go == '1'
+        run: pip install -r requirements.txt
+      - if: steps.gate.outputs.go == '1'
+        run: python ema9_cross.py
+        env:
+          FORCE: ${{ github.event.inputs.force }}
+      - if: steps.gate.outputs.go == '1'
+        name: Publish results
+        run: |
+          git config user.name  "scanner-bot"
+          git config user.email "scanner-bot@users.noreply.github.com"
+          git add docs
+          git diff --cached --quiet && exit 0
+          git commit -m "EMA9/SMA9 cross results $(date -u +%F)"
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin main && git push && break
+            sleep $((i * 7))
+          done
