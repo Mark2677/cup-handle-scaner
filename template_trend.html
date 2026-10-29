@@ -115,7 +115,7 @@ function filtered(){return D.results.filter(r=>(!q||r.sym.includes(q.toUpperCase
 let only="";
 function filtersBar(){const secs=[...new Set(D.results.map(r=>r.sector))].sort();
   return `<div class="filters"><input id="q" placeholder="חיפוש סימול / שם" value="${q}"><select id="sec"><option value="">כל הסקטורים</option>${secs.map(s=>`<option ${s===sec?'selected':''}>${s}</option>`).join("")}</select>
-   <select id="only"><option value="">RSI: חצייה + לפני חצייה</option><option value="cross" ${only==="cross"?"selected":""}>רק RSI שחצה היום</option><option value="near" ${only==="near"?"selected":""}>רק RSI לפני חצייה</option></select></div>`;}
+   ${D.params.approach>0?`<select id="only"><option value="">RSI: חצייה + לפני חצייה</option><option value="cross" ${only==="cross"?"selected":""}>רק RSI שחצה היום</option><option value="near" ${only==="near"?"selected":""}>רק RSI לפני חצייה</option></select>`:""}</div>`;}
 function render(){
   const m=document.getElementById("main");
   document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===tab));
@@ -142,18 +142,17 @@ function method(){
   return `<div class="prose"><h3>מה הסורק בודק</h3>
   <p>בכל יום מסחר בשעה 23:10 שעון ישראל, אחרי הסגירה בוול סטריט, נסרקות כל מניות ה‑S&P 500 על נרות יומיים. כדי שמניה תיכנס לרשימה, שני התנאים צריכים להתקיים בסגירה של היום.</p>
   <ul><li><b>לונג ▲, תנאי מגמה:</b> EMA${p.ema_fast} מעל EMA${p.ema_slow}. אם החצייה כלפי מעלה קרתה היום, מסומן "EMA30 חצה היום".</li>
-  <li><b>לונג ▲, טריגר RSI:</b> RSI(${p.rsi_len}) <b>חצה היום</b> את ה‑EMA${p.rsi_sig} שלו כלפי מעלה, <b>או</b> שהוא <b>לפני חצייה</b>: עדיין מתחת לממוצע, במרחק של עד ${p.approach} נקודות RSI, והפער הצטמצם לעומת אתמול.</li>
-  <li><b>שורט ▼:</b> בדיוק ההפך. EMA${p.ema_fast} מתחת ל‑EMA${p.ema_slow}, ו‑RSI(${p.rsi_len}) חצה היום את ה‑EMA${p.rsi_sig} שלו כלפי מטה, או שהוא עדיין מעליו במרחק של עד ${p.approach} נקודות והפער מצטמצם.</li>
-  <li><b>מיון:</b> קודם מניות שבהן EMA30 חצה היום, אחר כך מניות שבהן RSI חצה היום, ואחריהן מניות לפני חצייה. בתוך כל קבוצה המיון לפי ווליום.</li></ul>
+  <li><b>לונג ▲, טריגר RSI:</b> RSI(${p.rsi_len}) <b>חצה היום</b> את ה‑EMA${p.rsi_sig} שלו כלפי מעלה, כלומר היום הוא מעל הממוצע ואתמול היה מתחתיו או שווה לו.${p.approach>0?` בנוסף נכללות מניות <b>לפני חצייה</b>: עדיין מתחת לממוצע, במרחק של עד ${p.approach} נקודות RSI, והפער הצטמצם.`:""}</li>
+  <li><b>שורט ▼:</b> בדיוק ההפך. EMA${p.ema_fast} מתחת ל‑EMA${p.ema_slow}, ו‑RSI(${p.rsi_len}) חצה היום את ה‑EMA${p.rsi_sig} שלו כלפי מטה.</li>
+  <li><b>מיון:</b> קודם מניות שבהן גם EMA30 חצה היום, ואחריהן השאר, לפי ווליום.</li></ul>
   <h3>רמת ודאות ומקורות</h3>
   <p>מחירים, ממוצעים ו‑RSI <span class="conf c-f">עובדה</span>, מ‑Yahoo Finance. המחירים מתואמים לפיצולים בלבד, כמו ב‑TradingView וב‑Finviz. ה‑RSI מחושב בשיטת Wilder.</p>
-  <p>ההגדרה של "לפני חצייה" (עד ${p.approach} נקודות, והפער מצטמצם) היא הגדרה שלי <span class="conf c-e">הערכה</span>. אפשר להדק אותה או להרחיב אותה.</p>
   <p class="sub">מקור הרשימה: ${D.source} · נסרקו ${D.scanned} מתוך ${D.universe}${D.stale?` · ${D.stale} ללא נתונים מספקים`:""} · נוצר ${D.generated}</p></div>`;
 }
 (function init(){
   const c=(k,s)=>D.results.filter(r=>r.kind===k&&(!s||r.rsi_state===s)).length;
   document.getElementById("sub").innerHTML=(D.intraday?`<div style="background:#d2992226;color:#d29922;padding:8px 12px;border-radius:8px;margin-bottom:6px">⚠️ הרצת בדיקה במהלך יום המסחר. הנתונים חלקיים ויוחלפו בסריקה של 23:10.</div>`:"")+`נתוני סגירה ל‑<span class="num">${D.asof}</span> · נסרקו <span class="num">${D.scanned}</span> מניות · עודכן ${D.generated}`;
-  document.getElementById("kpis").innerHTML=[["לונג: RSI חצה",c("long","cross")],["לונג: לפני חצייה",c("long","near")],["שורט: RSI חצה",c("short","cross")],["שורט: לפני חצייה",c("short","near")],["EMA30 חצה היום",D.results.filter(r=>r.ema_cross).length]].map(([a,b])=>`<div class="kpi"><span>${a}</span><b class="num">${b}</b></div>`).join("");
+  document.getElementById("kpis").innerHTML=(D.params.approach>0?[["לונג: RSI חצה",c("long","cross")],["לונג: לפני חצייה",c("long","near")],["שורט: RSI חצה",c("short","cross")],["שורט: לפני חצייה",c("short","near")]]:[["אותות היום",D.results.length],["לונג ▲",c("long")],["שורט ▼",c("short")]]).concat([["EMA30 חצה היום",D.results.filter(r=>r.ema_cross).length]]).map(([a,b])=>`<div class="kpi"><span>${a}</span><b class="num">${b}</b></div>`).join("");
   const cnt={long:c("long"),short:c("short"),all:D.results.length};
   document.getElementById("tabs").innerHTML=TABS.map(([k,v])=>`<button data-t="${k}">${v}${cnt[k]!=null?`<span class="ct num">${cnt[k]}</span>`:""}</button>`).join("");
   document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{tab=b.dataset.t;render();});

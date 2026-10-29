@@ -27,7 +27,7 @@ OUT = os.path.join(HERE, "docs", "trend")
 
 EMA_FAST, EMA_SLOW = 30, 50
 RSI_LEN, RSI_SIG = 35, 10
-APPROACH = float(os.environ.get("APPROACH", "1.0"))   # max RSI-points below/above its EMA10
+APPROACH = float(os.environ.get("APPROACH", "0"))   # 0 = only real crosses; >0 also lists "about to cross" (RSI points)
 
 
 def run():
@@ -63,14 +63,14 @@ def run():
         if t0 > 0:                                   # long side
             if g0 > 0 >= g1:
                 rsi_state = "cross"
-            elif -APPROACH <= g0 < 0 and g0 > g1:
+            elif APPROACH > 0 and -APPROACH <= g0 < 0 and g0 > g1:
                 rsi_state = "near"
             if rsi_state:
                 kind, ema_cross = "long", t1 <= 0
         elif t0 < 0:                                 # short side
             if g0 < 0 <= g1:
                 rsi_state = "cross"
-            elif 0 < g0 <= APPROACH and g0 < g1:
+            elif APPROACH > 0 and 0 < g0 <= APPROACH and g0 < g1:
                 rsi_state = "near"
             if rsi_state:
                 kind, ema_cross = "short", t1 >= 0
