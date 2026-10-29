@@ -1,14 +1,11 @@
 """
-Daily S&P 500 scanner: EMA30/EMA50 trend + RSI(35) vs its EMA(10) trigger.
+Daily S&P 500 scanner: EMA30 crosses EMA50 (no RSI condition).
 Runs in GitHub Actions at 23:10 Israel time on US trading days.
 Writes docs/trend/index.html (Hebrew dashboard) and docs/trend/data/<date>.json.
 
-LONG  (both must hold at today's close):
-  A. EMA30 > EMA50                         (tagged "cross" if it crossed up today)
-  B. RSI35 crossed above its EMA10 today   -> "rsi_cross"
-     or RSI35 is still below its EMA10, the gap is <= APPROACH points
-     and the gap narrowed vs yesterday     -> "rsi_near"  (just before the cross)
-SHORT: mirror image (EMA30 < EMA50; RSI35 crossing / about to cross below its EMA10).
+LONG  : EMA30 > EMA50 at today's close and EMA30 <= EMA50 at yesterday's close.
+SHORT : EMA30 < EMA50 at today's close and EMA30 >= EMA50 at yesterday's close.
+RSI(35)/EMA(10) values are shown on the dashboard for information only.
 Prices are split-adjusted, not dividend-adjusted (matches TradingView / Finviz).
 """
 import json
@@ -59,21 +56,13 @@ def run():
         g0, g1 = r35.iloc[-1] - sig.iloc[-1], r35.iloc[-2] - sig.iloc[-2]
         if any(np.isnan(x) for x in (t0, t1, g0, g1)):
             continue
-        kind = rsi_state = None
-        if t0 > 0:                                   # long side
-            if g0 > 0 >= g1:
-                rsi_state = "cross"
-            elif APPROACH > 0 and -APPROACH <= g0 < 0 and g0 > g1:
-                rsi_state = "near"
-            if rsi_state:
-                kind, ema_cross = "long", t1 <= 0
-        elif t0 < 0:                                 # short side
-            if g0 < 0 <= g1:
-                rsi_state = "cross"
-            elif APPROACH > 0 and 0 < g0 <= APPROACH and g0 < g1:
-                rsi_state = "near"
-            if rsi_state:
-                kind, ema_cross = "short", t1 >= 0
+        rsi_state = None                             # RSI is informational only
+        if t0 > 0 >= t1:
+            kind, ema_cross = "long", True           # EMA30 crossed above EMA50 today
+        elif t0 < 0 <= t1:
+            kind, ema_cross = "short", True          # EMA30 crossed below EMA50 today
+        else:
+            kind = None
         if not kind:
             continue
         close = float(c.iloc[-1])
@@ -87,6 +76,10 @@ def run():
         while k >= 0 and side[k] == side[-1]:
             k -= 1
         trend_days = len(side) - 1 - k
+        k2 = k                                        # length of the previous (opposite) regime
+        while k2 >= 0 and side[k2] == side[k]:
+            k2 -= 1
+        prior_days = k - k2
         rnd = lambda a: [round(float(x), 2) for x in a]  # noqa: E731
         results.append(dict(
             sym=row["sym"], name=row["name"], kind=kind,
@@ -94,7 +87,7 @@ def run():
             ema_cross=bool(ema_cross), rsi_state=rsi_state,
             close=round(close, 2), chg=round((close / float(c.iloc[-2]) - 1) * 100, 2),
             ema30=round(float(e30.iloc[-1]), 2), ema50_t=round(float(e50.iloc[-1]), 2),
-            trend_gap=round(t0 / float(e50.iloc[-1]) * 100, 2), trend_days=int(trend_days),
+            trend_gap=round(t0 / float(e50.iloc[-1]) * 100, 2), trend_days=int(trend_days), prior_days=int(prior_days),
             rsi35=round(float(r35.iloc[-1]), 2), rsi35_sig=round(float(sig.iloc[-1]), 2),
             rsi_gap=round(float(g0), 2),
             vol_ratio=round(float(v.iloc[-1]) / vol50, 2) if vol50 else None,
@@ -105,8 +98,7 @@ def run():
             chart=dict(c=rnd(c.iloc[-90:]), e30=rnd(e30.iloc[-90:]), e50=rnd(e50.iloc[-90:]),
                        r=rnd(r35.iloc[-90:]), s=rnd(sig.iloc[-90:])),
         ))
-    rank = {"cross": 0, "near": 1}
-    results.sort(key=lambda x: (not x["ema_cross"], rank[x["rsi_state"]], -(x["vol_ratio"] or 0)))
+    results.sort(key=lambda x: -(x["vol_ratio"] or 0))
     payload = dict(
         asof=asof, generated=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         intraday=bool(last == now_ny.date() and now_ny.hour < 16),
@@ -131,9 +123,8 @@ def run():
         tpl = f.read()
     with open(os.path.join(OUT, "index.html"), "w", encoding="utf-8") as f:
         f.write(tpl.replace("/*__DATA__*/null", json.dumps(payload, ensure_ascii=False)))
-    by = lambda k, s: sum(r["kind"] == k and r["rsi_state"] == s for r in results)  # noqa: E731
-    print(f"{asof}: long {by('long','cross')} cross + {by('long','near')} near | "
-          f"short {by('short','cross')} cross + {by('short','near')} near")
+    print(f"{asof}: {sum(r['kind'] == 'long' for r in results)} cross up, "
+          f"{sum(r['kind'] == 'short' for r in results)} cross down")
 
 
 if __name__ == "__main__":

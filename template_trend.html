@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>סורק מגמה ו-RSI35</title>
+<title>סורק חציית EMA30/EMA50</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -62,17 +62,17 @@ a{color:var(--blu)}
 </head>
 <body>
 <header>
-  <h1>📈 מגמת EMA30/EMA50 + טריגר RSI(35) — S&amp;P 500</h1>
+  <h1>📈 חציית EMA30 / EMA50 — S&amp;P 500</h1>
   <div class="sub" id="sub"></div>
-  <div class="xnav"><a href="../trend/">📈 EMA30/50 + RSI35</a><a href="../cross20/">✂️ EMA20/SMA20 + RSI10</a><a href="../bbsar/">🎯 בולינגר + SAR</a></div>
+  <div class="xnav"><a href="../trend/">📈 חציית EMA30/50</a><a href="../cross20/">✂️ EMA20/SMA20 + RSI10</a><a href="../bbsar/">🎯 בולינגר + SAR</a></div>
   <div class="kpis" id="kpis"></div>
 </header>
 <nav><div class="in" id="tabs"></div></nav>
 <main id="main"></main>
 <script>
 const D = /*__DATA__*/null;
-const TABS=[["long","לונג ▲"],["short","שורט ▼"],["all","טבלה מלאה"],["hist","היסטוריה"],["method","מתודולוגיה"]];
-const KIND={long:"לונג ▲",short:"שורט ▼"};
+const TABS=[["long","חצייה מעלה ▲"],["short","חצייה מטה ▼"],["all","טבלה מלאה"],["hist","היסטוריה"],["method","מתודולוגיה"]];
+const KIND={long:"חצייה מעלה ▲",short:"חצייה מטה ▼"};
 const RS={cross:"RSI חצה היום",near:"RSI לפני חצייה"};
 let tab="long",q="",sec="";
 const f=(x,d=2)=>x==null?"—":Number(x).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -86,21 +86,18 @@ function panel(series,H,cols,ws,mark){
 }
 function chart(r){
   const k=r.chart;
-  return panel([k.c,k.e50,k.e30],120,["#8b98a8","#d29922","#58a6ff"],[1,1.6,1.6],2)+
-   panel([k.s,k.r],60,["#d29922","#bc8cff"],[1.4,1.6],1)+
-   `<div class="legend"><span><i style="background:#58a6ff"></i>EMA30</span><span><i style="background:#d29922"></i>EMA50 / EMA10 של RSI</span><span><i style="background:#bc8cff"></i>RSI(35)</span><span><i style="background:#8b98a8"></i>מחיר (90 יום)</span></div>`;
+  return panel([k.c,k.e50,k.e30],150,["#8b98a8","#d29922","#58a6ff"],[1,1.6,1.6],2)+
+   `<div class="legend"><span><i style="background:#58a6ff"></i>EMA30</span><span><i style="background:#d29922"></i>EMA50</span><span><i style="background:#8b98a8"></i>מחיר (90 יום)</span></div>`;
 }
 function card(r){
   return `<div class="card"><div class="top"><div><div class="sym">${r.sym}</div><div class="nm">${r.name} · ${r.sector}</div></div>
    <div style="text-align:left"><span class="badge b-${r.kind}">${KIND[r.kind]}</span><div class="num" style="margin-top:6px">$${f(r.close)} ${sg(r.chg)}</div></div></div>
-   <div class="tags" style="margin:8px 0 0">${r.ema_cross?`<span class="tag ok">EMA30 חצה היום</span>`:`<span class="tag">EMA30 ${r.kind==="long"?"מעל":"מתחת"} EMA50 כבר <span class="num">${r.trend_days}</span> ימים</span>`}
-    <span class="tag ${r.rsi_state==="cross"?"ok":""}">${RS[r.rsi_state]}</span></div>
+   <div class="tags" style="margin:8px 0 0"><span class="tag">המצב הקודם נמשך <span class="num">${r.prior_days}</span> ימים</span></div>
    ${chart(r)}
    <div class="st" style="margin-top:8px">
     <div><span>EMA30 / EMA50</span><b class="num">${f(r.ema30)} / ${f(r.ema50_t)}</b></div>
     <div><span>פער EMA30–EMA50</span><b>${sg(r.trend_gap)}</b></div>
     <div><span>RSI(35) / EMA10</span><b class="num">${f(r.rsi35)} / ${f(r.rsi35_sig)}</b></div>
-    <div><span>פער RSI מה‑EMA10</span><b class="num">${r.rsi_gap>0?'+':''}${f(r.rsi_gap)}</b></div>
     <div><span>ווליום / ממוצע 50</span><b class="num">${f(r.vol_ratio)}x</b></div>
     <div><span>RSI(14)</span><b class="num">${f(r.rsi14,1)}</b></div>
     <div><span>EMA20 / EMA200</span><b class="num">${f(r.ema20)} / ${f(r.ema200)}</b></div>
@@ -123,8 +120,8 @@ function render(){
   if(tab==="hist"){m.innerHTML=hist();return;}
   const rows=filtered();
   if(tab==="all"){
-    m.innerHTML=filtersBar()+`<div style="overflow-x:auto"><table><tr><th>סימול</th><th>כיוון</th><th>EMA30/50</th><th>RSI35</th><th>סגירה</th><th>שינוי</th><th>RSI35</th><th>EMA10 של RSI</th><th>פער EMA</th><th>ווליום</th><th>SMA200</th><th>סקטור</th></tr>`+
-    rows.map(r=>`<tr><td><b>${r.sym}</b></td><td><span class="badge b-${r.kind}">${KIND[r.kind]}</span></td><td>${r.ema_cross?'חצה היום':`${r.trend_days} ימים`}</td><td>${RS[r.rsi_state]}</td><td class="num">${f(r.close)}</td><td>${sg(r.chg)}</td><td class="num">${f(r.rsi35)}</td><td class="num">${f(r.rsi35_sig)}</td><td>${sg(r.trend_gap)}</td><td class="num">${f(r.vol_ratio)}x</td><td>${r.above200?'מעל':'מתחת'}</td><td>${r.sector}</td></tr>`).join("")+`</table></div>`;
+    m.innerHTML=filtersBar()+`<div style="overflow-x:auto"><table><tr><th>סימול</th><th>כיוון</th><th>סגירה</th><th>שינוי</th><th>EMA30</th><th>EMA50</th><th>פער EMA</th><th>ווליום</th><th>SMA200</th><th>סקטור</th></tr>`+
+    rows.map(r=>`<tr><td><b>${r.sym}</b></td><td><span class="badge b-${r.kind}">${KIND[r.kind]}</span></td><td class="num">${f(r.close)}</td><td>${sg(r.chg)}</td><td class="num">${f(r.ema30)}</td><td class="num">${f(r.ema50_t)}</td><td>${sg(r.trend_gap)}</td><td class="num">${f(r.vol_ratio)}x</td><td>${r.above200?'מעל':'מתחת'}</td><td>${r.sector}</td></tr>`).join("")+`</table></div>`;
   } else {
     const rs=rows.filter(r=>r.kind===tab);
     m.innerHTML=filtersBar()+(rs.length?`<div class="grid">${rs.map(card).join("")}</div>`:`<div class="empty">אין מניות שעונות על התנאים בכיוון הזה היום.</div>`);
@@ -140,19 +137,20 @@ function hist(){
 function method(){
   const p=D.params;
   return `<div class="prose"><h3>מה הסורק בודק</h3>
-  <p>בכל יום מסחר בשעה 23:10 שעון ישראל, אחרי הסגירה בוול סטריט, נסרקות כל מניות ה‑S&P 500 על נרות יומיים. כדי שמניה תיכנס לרשימה, שני התנאים צריכים להתקיים בסגירה של היום.</p>
-  <ul><li><b>לונג ▲, תנאי מגמה:</b> EMA${p.ema_fast} מעל EMA${p.ema_slow}. אם החצייה כלפי מעלה קרתה היום, מסומן "EMA30 חצה היום".</li>
-  <li><b>לונג ▲, טריגר RSI:</b> RSI(${p.rsi_len}) <b>חצה היום</b> את ה‑EMA${p.rsi_sig} שלו כלפי מעלה, כלומר היום הוא מעל הממוצע ואתמול היה מתחתיו או שווה לו.${p.approach>0?` בנוסף נכללות מניות <b>לפני חצייה</b>: עדיין מתחת לממוצע, במרחק של עד ${p.approach} נקודות RSI, והפער הצטמצם.`:""}</li>
-  <li><b>שורט ▼:</b> בדיוק ההפך. EMA${p.ema_fast} מתחת ל‑EMA${p.ema_slow}, ו‑RSI(${p.rsi_len}) חצה היום את ה‑EMA${p.rsi_sig} שלו כלפי מטה.</li>
-  <li><b>מיון:</b> קודם מניות שבהן גם EMA30 חצה היום, ואחריהן השאר, לפי ווליום.</li></ul>
+  <p>בכל יום מסחר בשעה 23:10 שעון ישראל, אחרי הסגירה בוול סטריט, נסרקות כל מניות ה‑S&P 500 על נרות יומיים.</p>
+  <ul><li><b>חצייה מעלה ▲:</b> בסגירה של היום EMA${p.ema_fast} מעל EMA${p.ema_slow}, ובסגירה של אתמול הוא היה מתחתיו או שווה לו.</li>
+  <li><b>חצייה מטה ▼:</b> בדיוק ההפך.</li>
+  <li><b>אין תנאי RSI.</b> ערכי RSI(14) ו‑RSI(35)/EMA(10) מוצגים בכרטיס לידיעה בלבד.</li>
+  <li><b>"המצב הקודם נמשך":</b> כמה ימים EMA30 היה בצד השני לפני החצייה. מספר קטן מרמז על דשדוש.</li>
+  <li><b>מיון:</b> לפי ווליום ביחס לממוצע 50 הימים.</li></ul>
   <h3>רמת ודאות ומקורות</h3>
-  <p>מחירים, ממוצעים ו‑RSI <span class="conf c-f">עובדה</span>, מ‑Yahoo Finance. המחירים מתואמים לפיצולים בלבד, כמו ב‑TradingView וב‑Finviz. ה‑RSI מחושב בשיטת Wilder.</p>
+  <p>מחירים, ממוצעים ו‑RSI <span class="conf c-f">עובדה</span>, מ‑Yahoo Finance. המחירים מתואמים לפיצולים בלבד, כמו ב‑TradingView וב‑Finviz.</p>
   <p class="sub">מקור הרשימה: ${D.source} · נסרקו ${D.scanned} מתוך ${D.universe}${D.stale?` · ${D.stale} ללא נתונים מספקים`:""} · נוצר ${D.generated}</p></div>`;
 }
 (function init(){
   const c=(k,s)=>D.results.filter(r=>r.kind===k&&(!s||r.rsi_state===s)).length;
   document.getElementById("sub").innerHTML=(D.intraday?`<div style="background:#d2992226;color:#d29922;padding:8px 12px;border-radius:8px;margin-bottom:6px">⚠️ הרצת בדיקה במהלך יום המסחר. הנתונים חלקיים ויוחלפו בסריקה של 23:10.</div>`:"")+`נתוני סגירה ל‑<span class="num">${D.asof}</span> · נסרקו <span class="num">${D.scanned}</span> מניות · עודכן ${D.generated}`;
-  document.getElementById("kpis").innerHTML=(D.params.approach>0?[["לונג: RSI חצה",c("long","cross")],["לונג: לפני חצייה",c("long","near")],["שורט: RSI חצה",c("short","cross")],["שורט: לפני חצייה",c("short","near")]]:[["אותות היום",D.results.length],["לונג ▲",c("long")],["שורט ▼",c("short")]]).concat([["EMA30 חצה היום",D.results.filter(r=>r.ema_cross).length]]).map(([a,b])=>`<div class="kpi"><span>${a}</span><b class="num">${b}</b></div>`).join("");
+  document.getElementById("kpis").innerHTML=[["חציות היום",D.results.length],["חצייה מעלה ▲",c("long")],["חצייה מטה ▼",c("short")]].map(([a,b])=>`<div class="kpi"><span>${a}</span><b class="num">${b}</b></div>`).join("");
   const cnt={long:c("long"),short:c("short"),all:D.results.length};
   document.getElementById("tabs").innerHTML=TABS.map(([k,v])=>`<button data-t="${k}">${v}${cnt[k]!=null?`<span class="ct num">${cnt[k]}</span>`:""}</button>`).join("");
   document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{tab=b.dataset.t;render();});
