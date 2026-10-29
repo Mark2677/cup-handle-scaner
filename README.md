@@ -1,9 +1,13 @@
-# סורק ספל וידית — S&P 500
+# סורקי S&P 500 יומיים
+
+> סורק ספל וידית הופסק ב‑29.10.2026 והוחלף בסורק EMA30/50 + RSI35. הדשבורד וההיסטוריה שלו נשארו בכתובת ‎/cup/.
+
+## סורק ספל וידית (מופסק)
 
 סריקה אוטומטית כל יום מסחר בשעה 23:10 שעון ישראל, אחרי הסגירה בוול סטריט, של כל מניות ה‑S&P 500,
 לזיהוי תבנית ספל וידית לפי כללי ויליאם אוניל.
 
-* **הדשבורד:** https://mark2677.github.io/cup-handle-scaner/
+* **הדשבורד:** https://mark2677.github.io/cup-handle-scaner/cup/
 * **הרצה ידנית:** Actions ← Daily cup-and-handle scan ← Run workflow
 * **פרמטרים:** בראש הקובץ `scanner.py` (מילון `P`)
 
@@ -28,3 +32,13 @@
 * **הדשבורד:** https://mark2677.github.io/cup-handle-scaner/bbsar/
 * **הרצה ידנית:** Actions ← Daily Bollinger rejection + SAR flip scan ← Run workflow
 * **פרמטרים:** בראש הקובץ `bb_sar.py`
+
+## סורק מגמת EMA30/EMA50 + טריגר RSI(35)
+
+כל יום מסחר בשעה 23:10 שעון ישראל.
+**לונג:** EMA30 מעל EMA50 (או חצה היום כלפי מעלה), ו‑RSI(35) חצה היום את ה‑EMA10 שלו כלפי מעלה, או שהוא נמצא לפני חצייה (עד נקודה אחת מתחתיו, והפער מצטמצם).
+**שורט:** בדיוק ההפך.
+
+* **הדשבורד:** https://mark2677.github.io/cup-handle-scaner/trend/ (גם הכתובת הראשית מפנה אליו)
+* **הרצה ידנית:** Actions ← Daily EMA30/50 trend + RSI35 trigger scan ← Run workflow
+* **פרמטרים:** בראש הקובץ `trend_rsi.py`

@@ -313,7 +313,8 @@ def run():
     with open(os.path.join(HERE, "template.html"), encoding="utf-8") as f:
         tpl = f.read()
     html = tpl.replace("/*__DATA__*/null", json.dumps(payload, ensure_ascii=False))
-    with open(os.path.join(DOCS, "index.html"), "w", encoding="utf-8") as f:
+    os.makedirs(os.path.join(DOCS, "cup"), exist_ok=True)
+    with open(os.path.join(DOCS, "cup", "index.html"), "w", encoding="utf-8") as f:
         f.write(html)
     print(f"{asof}: {len(results)} patterns "
           f"({sum(r['status'] == 'breakout' for r in results)} breakouts)")
