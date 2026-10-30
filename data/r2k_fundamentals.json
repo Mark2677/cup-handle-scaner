@@ -407,6 +407,18 @@
 "short_sh": 5336767,
 "ts": 1793353051.1460133
 },
+"AVBP": {
+"beta_y": 1.349,
+"float_sh": 29631973,
+"industry": "Biotechnology",
+"inst_own": 100.41,
+"mcap": 733205888,
+"short_date": 1792022400,
+"short_float": 14.64,
+"short_ratio": 3.56,
+"short_sh": 6806605,
+"ts": 1793396819.3473735
+},
 "AXTI": {
 "beta_y": 1.86,
 "float_sh": 61608463,
@@ -2578,6 +2590,18 @@
 "short_ratio": 4.83,
 "short_sh": 40132413,
 "ts": 1793353051.1460133
+},
+"SDGR": {
+"beta_y": 1.623,
+"float_sh": 57334026,
+"industry": "Health Information Services",
+"inst_own": 97.84,
+"mcap": 2030224768,
+"short_date": 1792022400,
+"short_float": 24.79,
+"short_ratio": 3.16,
+"short_sh": 10402258,
+"ts": 1793396819.3473735
 },
 "SERV": {
 "beta_y": 2.5,
