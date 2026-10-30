@@ -60,45 +60,59 @@ UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.3
 
 def _ishares():
     import requests
-    ses = requests.Session()
-    ses.headers.update(UA)
     page = "https://www.ishares.com/us/products/239710/ishares-russell-2000-etf"
-    ses.get(page + "?switchLocale=y&siteEntryPassthrough=true", timeout=60)
-    url = (page + "/1467271812596.ajax?fileType=csv&fileName=IWM_holdings&dataType=fund"
-           "&siteEntryPassthrough=true")
-    r = ses.get(url, headers={"Referer": page}, timeout=60)
-    txt = r.content.decode("utf-8-sig", errors="replace")
-    print(f"iShares: HTTP {r.status_code}, {len(txt)} chars, starts {txt[:80]!r}")
-    lines = txt.splitlines()
-    start = next(i for i, ln in enumerate(lines) if ln.lstrip('"').startswith("Ticker"))
-    df = pd.read_csv(io.StringIO("\n".join(lines[start:])), on_bad_lines="skip")
-    df = df[df["Asset Class"] == "Equity"]
-    return pd.DataFrame({"sym": df["Ticker"].astype(str).str.strip(),
-                         "name": df["Name"].astype(str).str.title(), "sector": df["Sector"]})
+    base = page + "/1467271812596.ajax"
+    variants = [
+        (base + "?fileType=csv&fileName=IWM_holdings&dataType=fund",
+         {"User-Agent": UA["User-Agent"], "Accept": "*/*", "X-Requested-With": "XMLHttpRequest",
+          "Referer": page}),
+        (base + "?fileType=csv&fileName=IWM_holdings&dataType=fund", {"User-Agent": "curl/8.5.0",
+                                                                      "Accept": "*/*"}),
+        (base + "?tab=all&fileType=json", {"User-Agent": UA["User-Agent"], "Accept": "application/json",
+                                           "X-Requested-With": "XMLHttpRequest", "Referer": page}),
+    ]
+    for url, hd in variants:
+        r = requests.get(url, headers=hd, timeout=60)
+        txt = r.content.decode("utf-8-sig", errors="replace")
+        print(f"iShares variant: HTTP {r.status_code}, {len(txt)} chars, starts {txt[:60]!r}")
+        if txt.lstrip().startswith("<"):
+            continue
+        if "fileType=json" in url:
+            rows = json.loads(txt)["aaData"]
+            return pd.DataFrame({"sym": [x[0] for x in rows if x[3] == "Equity"],
+                                 "name": [str(x[1]).title() for x in rows if x[3] == "Equity"],
+                                 "sector": [x[2] for x in rows if x[3] == "Equity"]})
+        lines = txt.splitlines()
+        start = next(i for i, ln in enumerate(lines) if ln.lstrip('"').startswith("Ticker"))
+        df = pd.read_csv(io.StringIO("\n".join(lines[start:])), on_bad_lines="skip")
+        df = df[df["Asset Class"] == "Equity"]
+        return pd.DataFrame({"sym": df["Ticker"].astype(str).str.strip(),
+                             "name": df["Name"].astype(str).str.title(), "sector": df["Sector"]})
+    raise ValueError("all iShares variants returned HTML")
 
 
-def _vanguard():
+def _nasdaq_proxy():
+    """Fallback: US-listed common stocks with Russell-2000-like market caps ($150M - $7B)."""
     import requests
-    rows, start = [], 1
-    while start < 3000:
-        url = ("https://investor.vanguard.com/investment-products/etfs/profile/api/VTWO/"
-               f"portfolio-holding/stock?start={start}&count=500")
-        r = requests.get(url, headers=UA, timeout=60)
-        print(f"Vanguard: HTTP {r.status_code}, {len(r.text)} chars")
-        ent = r.json().get("fund", {}).get("entity", [])
-        if not ent:
-            break
-        rows += [dict(sym=e.get("ticker"), name=str(e.get("longName", "")).title(),
-                      sector=e.get("sectorName") or e.get("sector") or "") for e in ent]
-        start += 500
-    return pd.DataFrame(rows)
+    r = requests.get("https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=10000&download=true",
+                     headers={"User-Agent": UA["User-Agent"], "Accept": "application/json"}, timeout=90)
+    print(f"Nasdaq screener: HTTP {r.status_code}, {len(r.text)} chars")
+    rows = r.json()["data"]["rows"]
+    df = pd.DataFrame(rows)
+    df["mc"] = pd.to_numeric(df["marketCap"], errors="coerce")
+    df = df[(df["mc"] >= 150e6) & (df["mc"] <= 7e9) & (df["country"] == "United States")]
+    df = df[~df["name"].str.contains(r"Warrant|Preferred|Depositary|Units?\b|Rights?\b|Notes? due",
+                                     case=False, regex=True)]
+    return pd.DataFrame({"sym": df["symbol"].str.strip(), "name": df["name"].str.slice(0, 60),
+                         "sector": df["sector"]})
 
 
 def get_universe():
     os.makedirs(DATA, exist_ok=True)
     cache = os.path.join(DATA, "r2000.csv")
     df, source = None, None
-    for name, fn in (("iShares IWM", _ishares), ("Vanguard VTWO", _vanguard)):
+    for name, fn in (("iShares IWM", _ishares),
+                     ("Russell-2000 proxy (US stocks $150M-$7B, Nasdaq screener)", _nasdaq_proxy)):
         try:
             d = fn()
             d = d[d["sym"].astype(str).str.match(r"^[A-Z][A-Z0-9.\- ]*$")]
