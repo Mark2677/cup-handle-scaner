@@ -66,6 +66,20 @@ def _ishares():
                      timeout=60)
     txt = r.content.decode("utf-8-sig", errors="replace")
     print(f"iShares: HTTP {r.status_code}, {len(txt)} chars, starts {txt[:80]!r}")
+    if txt.lstrip().startswith("<"):                       # got the product page: find the CSV link
+        import re
+        m = re.search(r'href="([^"]*\.ajax\?fileType=csv[^"]*IWM_holdings[^"]*)"', txt)
+        if not m:
+            m = re.search(r'"([^"]*\.ajax\?fileType=csv[^"]*)"', txt)
+        if not m:
+            raise ValueError("no CSV link on iShares page")
+        link = m.group(1).replace("&amp;", "&")
+        if link.startswith("/"):
+            link = "https://www.ishares.com" + link
+        print("iShares CSV link:", link)
+        r = requests.get(link, headers={**UA, "Referer": url}, timeout=60)
+        txt = r.content.decode("utf-8-sig", errors="replace")
+        print(f"iShares CSV: HTTP {r.status_code}, {len(txt)} chars, starts {txt[:80]!r}")
     lines = txt.splitlines()
     start = next(i for i, ln in enumerate(lines) if ln.lstrip('"').startswith("Ticker"))
     df = pd.read_csv(io.StringIO("\n".join(lines[start:])), on_bad_lines="skip")
