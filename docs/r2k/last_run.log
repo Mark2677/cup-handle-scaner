@@ -1,2 +1,5 @@
-iShares download failed, using cached list: 
+iShares: HTTP 200, 1519349 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" prefix="og: http://og'
+iShares IWM failed: StopIteration 
+Vanguard: HTTP 404, 72344 chars
+Vanguard VTWO failed: JSONDecodeError Expecting value: line 1 column 1 (char 0)
 No Russell 2000 list available
