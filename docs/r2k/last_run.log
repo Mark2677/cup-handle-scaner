@@ -1,6 +1,4 @@
-iShares: HTTP 200, 1519349 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" prefix="og: http://og'
-iShares CSV link: https://www.ishares.com/us/products/239710/ishares-russell-2000-etf/1467271812596.ajax?fileType=csv&fileName=IWM_holdings&dataType=fund
-iShares CSV: HTTP 200, 1519349 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" prefix="og: http://og'
+iShares: HTTP 200, 1519375 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" prefix="og: http://og'
 iShares IWM failed: StopIteration 
 Vanguard: HTTP 404, 72344 chars
 Vanguard VTWO failed: JSONDecodeError Expecting value: line 1 column 1 (char 0)
