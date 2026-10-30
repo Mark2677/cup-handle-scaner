@@ -52,31 +52,65 @@ SECTOR_HE = {
 
 
 # ------------------------------------------------------------------ universe
+UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                    "(KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+      "Accept": "text/csv,application/json,text/html;q=0.9,*/*;q=0.8",
+      "Accept-Language": "en-US,en;q=0.9"}
+
+
+def _ishares():
+    import requests
+    url = ("https://www.ishares.com/us/products/239710/ishares-russell-2000-etf/"
+           "1467271812596.ajax?fileType=csv&fileName=IWM_holdings&dataType=fund")
+    r = requests.get(url, headers={**UA, "Referer": "https://www.ishares.com/us/products/239710/"},
+                     timeout=60)
+    txt = r.content.decode("utf-8-sig", errors="replace")
+    print(f"iShares: HTTP {r.status_code}, {len(txt)} chars, starts {txt[:80]!r}")
+    lines = txt.splitlines()
+    start = next(i for i, ln in enumerate(lines) if ln.lstrip('"').startswith("Ticker"))
+    df = pd.read_csv(io.StringIO("\n".join(lines[start:])), on_bad_lines="skip")
+    df = df[df["Asset Class"] == "Equity"]
+    return pd.DataFrame({"sym": df["Ticker"].astype(str).str.strip(),
+                         "name": df["Name"].astype(str).str.title(), "sector": df["Sector"]})
+
+
+def _vanguard():
+    import requests
+    rows, start = [], 1
+    while start < 3000:
+        url = ("https://investor.vanguard.com/investment-products/etfs/profile/api/VTWO/"
+               f"portfolio-holding/stock?start={start}&count=500")
+        r = requests.get(url, headers=UA, timeout=60)
+        print(f"Vanguard: HTTP {r.status_code}, {len(r.text)} chars")
+        ent = r.json().get("fund", {}).get("entity", [])
+        if not ent:
+            break
+        rows += [dict(sym=e.get("ticker"), name=str(e.get("longName", "")).title(),
+                      sector=e.get("sectorName") or e.get("sector") or "") for e in ent]
+        start += 500
+    return pd.DataFrame(rows)
+
+
 def get_universe():
     os.makedirs(DATA, exist_ok=True)
     cache = os.path.join(DATA, "r2000.csv")
-    url = ("https://www.ishares.com/us/products/239710/ishares-russell-2000-etf/"
-           "1467271812596.ajax?fileType=csv&fileName=IWM_holdings&dataType=fund")
-    try:
-        import requests
-        txt = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=60).text
-        lines = txt.splitlines()
-        start = next(i for i, ln in enumerate(lines) if ln.startswith("Ticker,"))
-        df = pd.read_csv(io.StringIO("\n".join(lines[start:])), on_bad_lines="skip")
-        df = df[df["Asset Class"] == "Equity"]
-        df = df[df["Ticker"].astype(str).str.match(r"^[A-Z][A-Z0-9.\- ]*$")]
-        df = pd.DataFrame({"sym": df["Ticker"].str.strip(), "name": df["Name"].str.title(),
-                           "sector": df["Sector"]})
-        if len(df) < 1500:
-            raise ValueError(f"only {len(df)} rows")
+    df, source = None, None
+    for name, fn in (("iShares IWM", _ishares), ("Vanguard VTWO", _vanguard)):
+        try:
+            d = fn()
+            d = d[d["sym"].astype(str).str.match(r"^[A-Z][A-Z0-9.\- ]*$")]
+            if len(d) >= 1500:
+                df, source = d, name
+                break
+            print(f"{name}: only {len(d)} rows")
+        except Exception as e:  # noqa: BLE001
+            print(f"{name} failed: {type(e).__name__} {e}")
+    if df is not None:
         df.to_csv(cache, index=False)
-        source = "iShares IWM"
-    except Exception as e:  # noqa: BLE001
-        print("iShares download failed, using cached list:", e)
-        if not os.path.exists(cache):
-            sys.exit("No Russell 2000 list available")
-        df = pd.read_csv(cache)
-        source = "iShares IWM (cached)"
+    elif os.path.exists(cache):
+        df, source = pd.read_csv(cache), "cached list"
+    else:
+        sys.exit("No Russell 2000 list available")
     df["yf"] = df["sym"].str.replace(r"[. ]", "-", regex=True)
     print(f"Universe: {len(df)} ({source})")
     return df.reset_index(drop=True), source
