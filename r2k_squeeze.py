@@ -60,26 +60,15 @@ UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.3
 
 def _ishares():
     import requests
-    url = ("https://www.ishares.com/us/products/239710/ishares-russell-2000-etf/"
-           "1467271812596.ajax?fileType=csv&fileName=IWM_holdings&dataType=fund")
-    r = requests.get(url, headers={**UA, "Referer": "https://www.ishares.com/us/products/239710/"},
-                     timeout=60)
+    ses = requests.Session()
+    ses.headers.update(UA)
+    page = "https://www.ishares.com/us/products/239710/ishares-russell-2000-etf"
+    ses.get(page + "?switchLocale=y&siteEntryPassthrough=true", timeout=60)
+    url = (page + "/1467271812596.ajax?fileType=csv&fileName=IWM_holdings&dataType=fund"
+           "&siteEntryPassthrough=true")
+    r = ses.get(url, headers={"Referer": page}, timeout=60)
     txt = r.content.decode("utf-8-sig", errors="replace")
     print(f"iShares: HTTP {r.status_code}, {len(txt)} chars, starts {txt[:80]!r}")
-    if txt.lstrip().startswith("<"):                       # got the product page: find the CSV link
-        import re
-        m = re.search(r'href="([^"]*\.ajax\?fileType=csv[^"]*IWM_holdings[^"]*)"', txt)
-        if not m:
-            m = re.search(r'"([^"]*\.ajax\?fileType=csv[^"]*)"', txt)
-        if not m:
-            raise ValueError("no CSV link on iShares page")
-        link = m.group(1).replace("&amp;", "&")
-        if link.startswith("/"):
-            link = "https://www.ishares.com" + link
-        print("iShares CSV link:", link)
-        r = requests.get(link, headers={**UA, "Referer": url}, timeout=60)
-        txt = r.content.decode("utf-8-sig", errors="replace")
-        print(f"iShares CSV: HTTP {r.status_code}, {len(txt)} chars, starts {txt[:80]!r}")
     lines = txt.splitlines()
     start = next(i for i, ln in enumerate(lines) if ln.lstrip('"').startswith("Ticker"))
     df = pd.read_csv(io.StringIO("\n".join(lines[start:])), on_bad_lines="skip")
