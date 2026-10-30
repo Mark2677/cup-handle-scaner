@@ -37,7 +37,7 @@ FUND_MAX_AGE_DAYS = 7
 MIN_PRICE = 1.0
 
 # pattern parameters
-MB = dict(lookback=150, swing=5, tol=0.05, min_sep=10, min_rally=0.10, recent=60)
+MB = dict(lookback=150, swing=5, tol=0.05, min_sep=10, min_rally=0.10, recent=60, max_depth=0.60)
 FB = dict(min_len=25, max_len=65, max_range=0.20)   # + no trend inside the base
 NEAR = 0.05          # "near pivot" = within 5% below
 BREAKOUT_VOL = 1.4   # breakout volume vs 50-day average
@@ -251,7 +251,7 @@ def multi_bottom(df):
         neck = h[grp[0]:grp[-1] + 1].max()
         if neck / max(l[g] for g in grp) - 1 < MB["min_rally"]:
             continue
-        if c[-1] <= floor:
+        if c[-1] <= floor or neck / floor - 1 > MB["max_depth"]:   # a spike, not a base
             continue
         cand = dict(type="multi_bottom", bottoms=grp, pivot=float(neck),
                     floor=float(floor), count=len(grp), start=grp[0], end=n - 1,
