@@ -51,3 +51,13 @@
 * **הדשבורד:** https://mark2677.github.io/cup-handle-scaner/trend/ (גם הכתובת הראשית מפנה אליו)
 * **הרצה ידנית:** Actions ← Daily EMA30 / EMA50 cross scan ← Run workflow
 * **פרמטרים:** בראש הקובץ `trend_rsi.py`
+
+## סורק ראסל 2000: שורט גבוה + תבנית ביסוס
+
+כל יום מסחר בשעה 23:10 שעון ישראל.
+**סינון:** Beta מעל 2, Short Float מעל 20%, Short Ratio מעל 2, Inst Own מתחת ל‑50%, Avg Volume מעל 500K.
+**תבניות:** ספל וידית, דאבל/טריפל/מולטי בוטום, בסיס שטוח.
+
+* **הדשבורד:** https://mark2677.github.io/cup-handle-scaner/r2k/
+* **הרצה ידנית:** Actions ← Daily Russell 2000 short + base-pattern scan ← Run workflow
+* **פרמטרים:** בראש הקובץ `r2k_squeeze.py`

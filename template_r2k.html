@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>סורק ראסל 2000</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--panel2:#1c2330;--line:#2a3340;--txt:#e6edf3;--mut:#8b98a8;
+--grn:#3fb950;--red:#f85149;--amb:#d29922;--blu:#58a6ff;--pur:#bc8cff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:Heebo,system-ui,sans-serif;font-size:15px}
+.num{font-family:"JetBrains Mono",monospace;direction:ltr;unicode-bidi:isolate}
+header{padding:22px 16px 10px;max-width:1200px;margin:auto}
+h1{margin:0;font-size:24px}
+.sub{color:var(--mut);margin-top:6px;font-size:13px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:16px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px}
+.kpi b{display:block;font-size:24px;margin-top:4px}
+.kpi span{color:var(--mut);font-size:12px}
+nav{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);z-index:5}
+nav .in{max-width:1200px;margin:auto;display:flex;gap:4px;overflow-x:auto;padding:0 16px}
+nav button{background:none;border:0;color:var(--mut);padding:12px 14px;font:inherit;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent}
+nav button.on{color:var(--txt);border-color:var(--blu)}
+nav .ct{background:var(--panel2);border-radius:9px;padding:1px 7px;font-size:12px;margin-inline-start:5px}
+main{max-width:1200px;margin:auto;padding:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.sym{font-size:20px;font-weight:700}
+.nm{color:var(--mut);font-size:12px}
+.badge{font-size:12px;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.b-breakout{background:#3fb95026;color:var(--grn)}.b-above{background:#58a6ff26;color:var(--blu)}
+.b-near{background:#d2992226;color:var(--amb)}.b-forming{background:#8b98a826;color:var(--mut)}
+svg{width:100%;height:150px;display:block;margin:10px 0 6px}
+.st{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 10px;font-size:12px}
+.st div>span{color:var(--mut);display:block}
+.st div b{font-weight:600}
+.tags{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;border:1px solid var(--line);border-radius:6px;padding:2px 6px;color:var(--mut)}
+.tag.ok{color:var(--grn);border-color:#3fb95055}.tag.no{color:var(--red);border-color:#f8514955}
+.empty{color:var(--mut);padding:40px;text-align:center;background:var(--panel);border-radius:12px}
+.pos{color:var(--grn)}.neg{color:var(--red)}
+table{width:100%;border-collapse:collapse;background:var(--panel);border-radius:12px;overflow:hidden;font-size:13px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right}
+th{color:var(--mut);font-weight:500}
+.prose{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;line-height:1.7}
+.prose h3{margin-top:0}
+.conf{font-size:11px;padding:1px 6px;border-radius:5px;margin-inline-start:6px}
+.c-f{background:#3fb95022;color:var(--grn)}.c-e{background:#d2992222;color:var(--amb)}
+.filters{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.filters input,.filters select{background:var(--panel);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:7px 10px;font:inherit}
+a{color:var(--blu)}
+@media(max-width:420px){.grid{grid-template-columns:1fr}}
+</style>
+<style>
+.b-long{background:#3fb95026;color:var(--grn)}.b-short{background:#f8514926;color:var(--red)}
+.b-pre_long{background:#58a6ff26;color:var(--blu)}.b-pre_short{background:#d2992226;color:var(--amb)}
+.alert{background:var(--panel2);border:1px dashed var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:13px}
+.legend{display:flex;gap:12px;font-size:11px;color:var(--mut);flex-wrap:wrap}.legend i{display:inline-block;width:14px;height:2px;vertical-align:middle;margin-inline-end:4px}
+.xnav{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;margin-top:8px}
+</style>
+</head>
+<body>
+<header>
+  <h1>🔎 ראסל 2000: שורט גבוה + תבנית ביסוס</h1>
+  <div class="sub" id="sub"></div>
+  <div class="xnav"><a href="../trend/">📈 חציית EMA30/50</a><a href="../cross9/">✂️ חציית EMA9/SMA9</a><a href="../bbsar/">🎯 בולינגר + SAR</a><a href="../r2k/">🔎 ראסל 2000 · שורט + ביסוס</a></div>
+  <div class="kpis" id="kpis"></div>
+</header>
+<nav><div class="in" id="tabs"></div></nav>
+<main id="main"></main>
+<script>
+const D = /*__DATA__*/null;
+const PT={cup:"ספל וידית",multi_bottom:"מולטי בוטום",flat_base:"בסיס שטוח"};
+const ST={breakout:"פריצה היום",above:"מעל הפיבוט",near:"קרוב לפיבוט",forming:"בהתהוות"};
+const TABS=[["pat","כל התבניות"],["breakout","פריצות היום"],["cup","ספל וידית"],["multi_bottom","דאבל / טריפל / מולטי בוטום"],["flat_base","בסיס שטוח"],["none","עברו סינון, ללא תבנית"],["all","טבלה מלאה"],["hist","היסטוריה"],["method","מתודולוגיה"]];
+let tab="pat",q="",sec="";
+const f=(x,d=2)=>x==null?"—":Number(x).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const sg=x=>`<span class="num ${x>=0?'pos':'neg'}">${x>=0?'+':''}${f(x)}%</span>`;
+const big=x=>x==null?"—":x>=1e9?f(x/1e9,1)+"B":x>=1e6?f(x/1e6,1)+"M":f(x/1e3,0)+"K";
+const mbName=n=>n===2?"דאבל בוטום":n===3?"טריפל בוטום":`מולטי בוטום (${n})`;
+const pname=p=>p.type==="multi_bottom"?mbName(p.count):PT[p.type];
+function chart(r){
+  const c=r.chart.c,n=c.length,W=340,H=150,pad=6,p=r.patterns[0];
+  const vals=p?[...c,p.pivot]:c,lo=Math.min(...vals)*0.98,hi=Math.max(...vals)*1.02;
+  const X=i=>pad+(W-2*pad)*i/(n-1),Y=v=>H-pad-(H-2*pad)*(v-lo)/(hi-lo);
+  const path=c.map((v,i)=>`${i?'L':'M'}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join("");
+  let extra="";
+  if(p){extra+=`<rect x="${X(p.s)}" y="0" width="${X(n-1)-X(p.s)}" height="${H}" fill="#58a6ff10"/>`+
+    `<line x1="${X(p.s)}" x2="${W}" y1="${Y(p.pivot)}" y2="${Y(p.pivot)}" stroke="#d29922" stroke-dasharray="4 3"/>`;
+    if(p.floor)extra+=`<line x1="${X(p.s)}" x2="${W}" y1="${Y(p.floor)}" y2="${Y(p.floor)}" stroke="#f8514966" stroke-dasharray="2 3"/>`;
+    p.marks.forEach(i=>{if(i>=0&&i<n)extra+=`<circle cx="${X(i)}" cy="${Y(c[i])}" r="3.5" fill="#f85149"/>`;});
+    p.rims.forEach(i=>{if(i>=0&&i<n)extra+=`<circle cx="${X(i)}" cy="${Y(c[i])}" r="3.5" fill="#58a6ff"/>`;});}
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-label="גרף ${r.sym}">${extra}<path d="${path}" fill="none" stroke="#e6edf3" stroke-width="1.3"/></svg>
+  <div class="legend"><span><i style="background:#d29922"></i>פיבוט</span><span><i style="background:#f85149"></i>רצפה / תחתיות</span><span>אזור התבנית מוצלל</span></div>`;
+}
+function card(r){
+  const p=r.patterns[0];
+  return `<div class="card"><div class="top"><div><div class="sym">${r.sym}</div><div class="nm">${r.name} · ${r.sector}${r.industry?" · "+r.industry:""}</div></div>
+   <div style="text-align:left">${p?`<span class="badge b-${p.status}">${ST[p.status]}</span>`:`<span class="badge b-forming">ללא תבנית</span>`}<div class="num" style="margin-top:6px">$${f(r.close)} ${sg(r.chg)}</div></div></div>
+   <div class="tags" style="margin:8px 0 0">${r.patterns.map(x=>`<span class="tag ${x.status==="breakout"?"ok":""}">${pname(x)} · <span class="num">${x.dist>0?"+":""}${f(x.dist,1)}%</span> מהפיבוט</span>`).join("")||'<span class="tag">אין תבנית ביסוס מזוהה</span>'}</div>
+   ${chart(r)}
+   <div class="st" style="margin-top:8px">
+    <div><span>Short Float</span><b class="num">${f(r.short_float,1)}%</b></div>
+    <div><span>Short Ratio</span><b class="num">${f(r.short_ratio,2)}</b></div>
+    <div><span>Inst Own</span><b class="num">${f(r.inst_own,1)}%</b></div>
+    <div><span>Beta</span><b class="num">${f(r.beta)}</b></div>
+    <div><span>Avg Volume (3M)</span><b class="num">${big(r.avg_vol)}</b></div>
+    <div><span>שווי שוק</span><b class="num">${big(r.mcap)}</b></div>
+    ${p?`<div><span>פיבוט (נק' פריצה)</span><b class="num">$${f(p.pivot)}</b></div>
+    <div><span>עומק / אורך</span><b class="num">${f(p.depth,1)}% / ${f(p.weeks,0)}ש'</b></div>
+    <div><span>רצפה</span><b class="num">${p.floor?"$"+f(p.floor):"—"}</b></div>`:""}
+    <div><span>ווליום / ממוצע 50</span><b class="num">${f(r.vol_ratio)}x</b></div>
+    <div><span>RSI(14)</span><b class="num">${f(r.rsi14,1)}</b></div>
+    <div><span>RSI(35)/EMA(10)</span><b class="num">${f(r.rsi35_ema10,1)}</b></div>
+    <div><span>EMA20 / EMA30</span><b class="num">${f(r.ema20)} / ${f(r.ema30)}</b></div>
+    <div><span>EMA50 / EMA200</span><b class="num">${f(r.ema50)} / ${f(r.ema200)}</b></div>
+    <div><span>SMA20 / SMA150</span><b class="num">${f(r.sma20)} / ${f(r.sma150)}</b></div>
+   </div>
+   <div class="tags"><a class="tag" href="https://finviz.com/quote.ashx?t=${r.sym}&ty=si" target="_blank" rel="noopener">Finviz שורט ↗</a>
+    <a class="tag" href="https://www.tradingview.com/chart/?symbol=${r.sym}" target="_blank" rel="noopener">TradingView ↗</a></div></div>`;
+}
+function filtered(){return D.results.filter(r=>(!q||r.sym.includes(q.toUpperCase())||r.name.toUpperCase().includes(q.toUpperCase()))&&(!sec||r.sector===sec));}
+function filtersBar(){const secs=[...new Set(D.results.map(r=>r.sector))].sort();
+  return `<div class="filters"><input id="q" placeholder="חיפוש סימול / שם" value="${q}"><select id="sec"><option value="">כל הסקטורים</option>${secs.map(s=>`<option ${s===sec?'selected':''}>${s}</option>`).join("")}</select></div>`;}
+function pick(rows,t){
+  if(t==="pat")return rows.filter(r=>r.patterns.length);
+  if(t==="none")return rows.filter(r=>!r.patterns.length);
+  if(t==="breakout")return rows.filter(r=>r.patterns.some(p=>p.status==="breakout"));
+  return rows.filter(r=>r.patterns.some(p=>p.type===t)).map(r=>({...r,patterns:[r.patterns.find(p=>p.type===t),...r.patterns.filter(p=>p.type!==t)]}));
+}
+function render(){
+  const m=document.getElementById("main");
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===tab));
+  if(tab==="method"){m.innerHTML=method();return;}
+  if(tab==="hist"){m.innerHTML=hist();return;}
+  const rows=filtered();
+  if(tab==="all"){
+    m.innerHTML=filtersBar()+`<div style="overflow-x:auto"><table><tr><th>סימול</th><th>תבנית</th><th>סטטוס</th><th>מהפיבוט</th><th>סגירה</th><th>Short Float</th><th>Short Ratio</th><th>Inst Own</th><th>Beta</th><th>Avg Vol</th><th>סקטור</th></tr>`+
+    rows.map(r=>{const p=r.patterns[0];return `<tr><td><b>${r.sym}</b></td><td>${r.patterns.map(pname).join(", ")||"—"}</td><td>${p?`<span class="badge b-${p.status}">${ST[p.status]}</span>`:"—"}</td><td>${p?sg(p.dist):"—"}</td><td class="num">${f(r.close)}</td><td class="num">${f(r.short_float,1)}%</td><td class="num">${f(r.short_ratio)}</td><td class="num">${f(r.inst_own,1)}%</td><td class="num">${f(r.beta)}</td><td class="num">${big(r.avg_vol)}</td><td>${r.sector}</td></tr>`;}).join("")+`</table></div>`;
+  } else {
+    const rs=pick(rows,tab);
+    m.innerHTML=filtersBar()+(rs.length?`<div class="grid">${rs.map(card).join("")}</div>`:`<div class="empty">אין מניות בקטגוריה הזו היום.</div>`);
+  }
+  const qi=document.getElementById("q");if(qi){qi.oninput=e=>{q=e.target.value;render();const n=document.getElementById("q");n.focus();n.setSelectionRange(q.length,q.length);};}
+  const si=document.getElementById("sec");if(si){si.onchange=e=>{sec=e.target.value;render();};}
+}
+function hist(){
+  return `<table><tr><th>תאריך</th><th>עברו סינון</th><th>עם תבנית</th><th>פריצות</th></tr>`+
+   D.history.map(h=>`<tr><td class="num">${h.date}</td><td class="num">${h.passed}</td><td>${h.patterns.join(", ")||"—"}</td><td>${h.breakout.join(", ")||"—"}</td></tr>`).join("")+`</table>`;
+}
+function method(){
+  const F=D.filters,fu=D.funnel,mb=D.mb,fb=D.fb;
+  return `<div class="prose"><h3>שלב 1: סינון</h3>
+  <p>היקום הוא כל מניות ראסל 2000, לפי רשימת האחזקות של קרן IWM. מתוכן נשארות רק מניות שעומדות בכל התנאים:</p>
+  <ul><li>Beta מעל ${F.beta}</li><li>Short Float מעל ${F.short_float}%</li><li>Short Ratio (ימי כיסוי) מעל ${F.short_ratio}</li><li>Inst Own מתחת ל‑${F.inst_own}%</li><li>Avg Volume (3 חודשים) מעל ${(F.avg_vol/1000).toLocaleString()}K</li></ul>
+  <p><b>המשפך היום:</b> ${D.scanned} מניות נסרקו ← ${fu.liquid} עם ווליום מספיק ← ${fu.beta_pre} עם Beta גבוה ← <b>${fu.passed}</b> עברו את כל התנאים ← <b>${fu.with_pattern}</b> עם תבנית ביסוס.</p>
+  <h3>שלב 2: תבניות ביסוס</h3>
+  <ul><li><b>ספל וידית:</b> אותם כללי אוניל כמו בסורק הספל והידית הקודם.</li>
+  <li><b>דאבל / טריפל / מולטי בוטום:</b> שתי תחתיות או יותר ב‑${mb.lookback} הימים האחרונים, ברמה זהה בטווח של עד ${mb.tol*100}%, עם לפחות ${mb.min_sep} ימים בין תחתית לתחתית. בין כל שתי תחתיות סמוכות יש עלייה של לפחות ${mb.min_rally*100}% (צורת W), והתחתית האחרונה היא מ‑${mb.recent} הימים האחרונים. אחרי התחתית הראשונה המחיר לא שבר את הרצפה. הפיבוט הוא קו הצוואר, כלומר השיא בין התחתיות.</li>
+  <li><b>בסיס שטוח:</b> ${fb.min_len/5}–${fb.max_len/5} שבועות שבהם הטווח בין השיא לשפל הוא עד ${fb.max_range*100}%, והמחיר נע הצידה ולא במגמה, כלומר הסחף בקו המגמה הוא לכל היותר חצי מהטווח. המחיר צריך לבקר לפחות פעמיים ברבע התחתון של הטווח ולפחות פעמיים ברבע העליון שלו. הפיבוט הוא שיא הבסיס.</li>
+  <li><b>סטטוס:</b> "פריצה היום" פירושו סגירה מעל הפיבוט, כשאתמול המחיר היה מתחתיו, בווליום של פי 1.4 לפחות מהממוצע. "קרוב" פירושו עד 5% מתחת לפיבוט.</li></ul>
+  <h3>רמת ודאות ומקורות</h3>
+  <p>מחירים, ווליום ואינדיקטורים <span class="conf c-f">עובדה</span>, מ‑Yahoo Finance.</p>
+  <p>Short Float, Short Ratio, Inst Own ו‑Beta <span class="conf c-f">עובדה</span>, מ‑Yahoo, ומתעדכנים פעם בשבוע. <b>הנתונים יכולים להיות שונים מ‑Finviz</b>, כי כל מקור מחשב את ה‑Float אחרת ומעדכן במועד אחר. לכן מניה שנמצאת ממש על הגבול, למשל Short Float של 19–21%, יכולה להיכלל כאן ולא ב‑Finviz, או להפך. נתוני השורט עצמם מתפרסמים בבורסה רק פעמיים בחודש.</p>
+  <p>זיהוי התבניות הוא <span class="conf c-e">הערכה</span> אלגוריתמית: רשימת מועמדים לבדיקה בעין על הגרף, ולא אות קנייה.</p>
+  <p class="sub">מקור הרשימה: ${D.source} · ${D.universe} מניות ברשימה · נוצר ${D.generated}</p></div>`;
+}
+(function init(){
+  const R=D.results,has=t=>pick(R,t).length;
+  document.getElementById("sub").innerHTML=(D.intraday?`<div style="background:#d2992226;color:#d29922;padding:8px 12px;border-radius:8px;margin-bottom:6px">⚠️ הרצת בדיקה במהלך יום המסחר. הנתונים חלקיים.</div>`:"")+`נתוני סגירה ל‑<span class="num">${D.asof}</span> · ראסל 2000 · Beta&gt;${D.filters.beta} · Short Float&gt;${D.filters.short_float}% · Short Ratio&gt;${D.filters.short_ratio} · Inst Own&lt;${D.filters.inst_own}% · Avg Vol&gt;${D.filters.avg_vol/1000}K · עודכן ${D.generated}`;
+  document.getElementById("kpis").innerHTML=[["עברו את הסינון",R.length],["עם תבנית ביסוס",has("pat")],["פריצות היום",has("breakout")],["ספל וידית",has("cup")],["מולטי בוטום",has("multi_bottom")],["בסיס שטוח",has("flat_base")]].map(([a,b])=>`<div class="kpi"><span>${a}</span><b class="num">${b}</b></div>`).join("");
+  const cnt={pat:has("pat"),breakout:has("breakout"),cup:has("cup"),multi_bottom:has("multi_bottom"),flat_base:has("flat_base"),none:has("none"),all:R.length};
+  document.getElementById("tabs").innerHTML=TABS.map(([k,v])=>`<button data-t="${k}">${v}${cnt[k]!=null?`<span class="ct num">${cnt[k]}</span>`:""}</button>`).join("");
+  document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{tab=b.dataset.t;render();});
+  if(!cnt.pat)tab="none";
+  render();
+})();
+</script>
+</body>
+</html>
