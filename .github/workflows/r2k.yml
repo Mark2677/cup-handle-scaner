@@ -46,10 +46,13 @@ jobs:
       - if: steps.gate.outputs.go == '1'
         run: pip install -r requirements.txt
       - if: steps.gate.outputs.go == '1'
-        run: python r2k_squeeze.py
+        run: |
+          mkdir -p docs/r2k
+          set -o pipefail
+          python -u r2k_squeeze.py 2>&1 | tee docs/r2k/last_run.log
         env:
           FORCE: ${{ github.event.inputs.force }}
-      - if: steps.gate.outputs.go == '1'
+      - if: always() && steps.gate.outputs.go == '1'
         name: Publish results
         run: |
           git config user.name  "scanner-bot"
