@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>סורק תעלות מחיר</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--panel2:#1c2330;--line:#2a3340;--txt:#e6edf3;--mut:#8b98a8;
+--grn:#3fb950;--red:#f85149;--amb:#d29922;--blu:#58a6ff;--pur:#bc8cff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:Heebo,system-ui,sans-serif;font-size:15px}
+.num{font-family:"JetBrains Mono",monospace;direction:ltr;unicode-bidi:isolate}
+header{padding:22px 16px 10px;max-width:1200px;margin:auto}
+h1{margin:0;font-size:24px}
+.sub{color:var(--mut);margin-top:6px;font-size:13px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:16px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px}
+.kpi b{display:block;font-size:24px;margin-top:4px}
+.kpi span{color:var(--mut);font-size:12px}
+nav{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);z-index:5}
+nav .in{max-width:1200px;margin:auto;display:flex;gap:4px;overflow-x:auto;padding:0 16px}
+nav button{background:none;border:0;color:var(--mut);padding:12px 14px;font:inherit;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent}
+nav button.on{color:var(--txt);border-color:var(--blu)}
+nav .ct{background:var(--panel2);border-radius:9px;padding:1px 7px;font-size:12px;margin-inline-start:5px}
+main{max-width:1200px;margin:auto;padding:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.sym{font-size:20px;font-weight:700}
+.nm{color:var(--mut);font-size:12px}
+.badge{font-size:12px;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.b-breakout{background:#3fb95026;color:var(--grn)}.b-above{background:#58a6ff26;color:var(--blu)}
+.b-near{background:#d2992226;color:var(--amb)}.b-forming{background:#8b98a826;color:var(--mut)}
+svg{width:100%;height:150px;display:block;margin:10px 0 6px}
+.st{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 10px;font-size:12px}
+.st div>span{color:var(--mut);display:block}
+.st div b{font-weight:600}
+.tags{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;border:1px solid var(--line);border-radius:6px;padding:2px 6px;color:var(--mut)}
+.tag.ok{color:var(--grn);border-color:#3fb95055}.tag.no{color:var(--red);border-color:#f8514955}
+.empty{color:var(--mut);padding:40px;text-align:center;background:var(--panel);border-radius:12px}
+.pos{color:var(--grn)}.neg{color:var(--red)}
+table{width:100%;border-collapse:collapse;background:var(--panel);border-radius:12px;overflow:hidden;font-size:13px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right}
+th{color:var(--mut);font-weight:500}
+.prose{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;line-height:1.7}
+.prose h3{margin-top:0}
+.conf{font-size:11px;padding:1px 6px;border-radius:5px;margin-inline-start:6px}
+.c-f{background:#3fb95022;color:var(--grn)}.c-e{background:#d2992222;color:var(--amb)}
+.filters{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.filters input,.filters select{background:var(--panel);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:7px 10px;font:inherit}
+a{color:var(--blu)}
+@media(max-width:420px){.grid{grid-template-columns:1fr}}
+</style>
+<style>
+.b-up_low{background:#3fb95026;color:var(--grn)}.b-up_high{background:#d2992226;color:var(--amb)}
+.b-down_low{background:#58a6ff26;color:var(--blu)}.b-down_high{background:#f8514926;color:var(--red)}
+.ix{font-size:10px;border:1px solid var(--line);border-radius:5px;padding:1px 5px;color:var(--mut);margin-inline-start:4px}
+.alert{background:var(--panel2);border:1px dashed var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:13px}
+.legend{display:flex;gap:12px;font-size:11px;color:var(--mut);flex-wrap:wrap}.legend i{display:inline-block;width:14px;height:2px;vertical-align:middle;margin-inline-end:4px}
+.xnav{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;margin-top:8px}
+</style>
+</head>
+<body>
+<header>
+  <h1>📐 תעלות מחיר: בגבול התחתון או העליון — S&amp;P 500 · נאסד"ק 100 · דאו ג'ונס</h1>
+  <div class="sub" id="sub"></div>
+  <div class="xnav"><a href="../trend/">📈 חציית EMA30/50</a><a href="../cross9/">✂️ חציית EMA9/SMA9</a><a href="../channel/">📐 תעלות מחיר</a><a href="../r2k/">🔎 ראסל 2000 · שורט + ביסוס</a></div>
+  <div class="kpis" id="kpis"></div>
+</header>
+<nav><div class="in" id="tabs"></div></nav>
+<main id="main"></main>
+<script>
+const D = /*__DATA__*/null;
+const KIND={up_low:"עולה · בתחתית",up_high:"עולה · בגבול העליון",down_low:"יורדת · בתחתית",down_high:"יורדת · בגבול העליון"};
+const HINT={up_low:"עם המגמה: אזור קנייה אפשרי בתוך תעלה עולה",up_high:"נגד המגמה: התנגדות של תעלה עולה (מימוש / פריצה)",down_low:"נגד המגמה: תמיכה של תעלה יורדת (ריבאונד / שבירה)",down_high:"עם המגמה: אזור שורט אפשרי בתוך תעלה יורדת"};
+const TABS=[["up_low","📈 עולה · בתחתית"],["up_high","📈 עולה · בגבול העליון"],["down_low","📉 יורדת · בתחתית"],["down_high","📉 יורדת · בגבול העליון"],["all","טבלה מלאה"],["hist","היסטוריה"],["method","מתודולוגיה"]];
+let tab="up_low",q="",sec="",ix="";
+const f=(x,d=2)=>x==null?"—":Number(x).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const sg=x=>`<span class="num ${x>=0?'pos':'neg'}">${x>=0?'+':''}${f(x)}%</span>`;
+function chart(r){
+  const k=r.chart,n=k.c.length,W=340,H=160,pad=6,o=k.off;
+  const LO=k.c.map((_,i)=>i<o?null:k.lo[i-o]),UP=k.c.map((_,i)=>i<o?null:k.up[i-o]);
+  const all=[...k.h,...k.l,...LO,...UP].filter(x=>x!=null),lo=Math.min(...all),hi=Math.max(...all);
+  const X=i=>pad+(W-2*pad)*i/(n-1),Y=v=>H-pad-(H-2*pad)*(v-lo)/(hi-lo);
+  const line=(a,col,w)=>{let p="",m=true;a.forEach((v,i)=>{if(v==null){m=true;return;}p+=`${m?'M':'L'}${X(i).toFixed(1)},${Y(v).toFixed(1)}`;m=false;});return `<path d="${p}" fill="none" stroke="${col}" stroke-width="${w}"/>`;};
+  const top=UP.map((v,i)=>v==null?null:[X(i),Y(v)]).filter(Boolean),bot=LO.map((v,i)=>v==null?null:[X(i),Y(v)]).filter(Boolean).reverse();
+  const band=`<path d="M${[...top,...bot].map(p=>p.map(z=>z.toFixed(1)).join(",")).join("L")}Z" fill="${r.trend==='up'?'#3fb95010':'#f8514910'}"/>`;
+  const wick=k.c.map((v,i)=>`<line x1="${X(i)}" x2="${X(i)}" y1="${Y(k.h[i])}" y2="${Y(k.l[i])}" stroke="#8b98a866" stroke-width="1"/>`).join("");
+  const col=r.trend==='up'?'#3fb950':'#f85149';
+  const tds=[...k.tl.map(i=>[i,k.l[i]]),...k.tu.map(i=>[i,k.h[i]])].map(([i,v])=>`<circle cx="${X(i)}" cy="${Y(v)}" r="2.6" fill="none" stroke="#d29922" stroke-width="1.3"/>`).join("");
+  const today=`<circle cx="${X(n-1)}" cy="${Y(k.c[n-1])}" r="3.6" fill="#58a6ff"/>`;
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-label="גרף ${r.sym}">${band}${line(UP,col,1.3)}${line(LO,col,1.3)}${wick}${line(k.c,"#e6edf3",1.3)}${tds}${today}</svg>
+   <div class="legend"><span><i style="background:${col}"></i>קווי התעלה</span><span><i style="background:#e6edf3"></i>סגירה</span><span>○ <b style="color:#d29922">נגיעות</b></span><span>● <b style="color:#58a6ff">היום</b></span></div>`;
+}
+function card(r){
+  const ed=r.edge==="low"?"התחתון":"העליון",ot=r.edge==="low"?"העליון":"התחתון";
+  return `<div class="card"><div class="top"><div><div class="sym">${r.sym}</div><div class="nm">${r.name} · ${r.sector}</div><div style="margin-top:3px">${r.idx.map(x=>`<span class="ix" style="margin:0 0 0 4px">${x}</span>`).join("")}</div></div>
+   <div style="text-align:left"><span class="badge b-${r.kind}">${KIND[r.kind]}</span><div class="num" style="margin-top:6px">$${f(r.close)} ${sg(r.chg)}</div></div></div>
+   <div class="alert">🔔 הקו ${ed} היום: <b class="num">$${f(r.line)}</b> · מרחק <b class="num">${f(r.dist_atr)}</b> ATR (<span class="num">${f(r.dist_pct)}%</span>)${r.dist_atr<0?" · <b>מעט מחוץ לתעלה</b>":""}${r.touched?" · נגע היום":""}<div class="nm" style="margin-top:4px">${HINT[r.kind]}</div></div>
+   ${chart(r)}
+   <div class="st" style="margin-top:8px">
+    <div><span>הקו ${ot}</span><b class="num">${f(r.other)}</b></div>
+    <div><span>מיקום בתעלה</span><b class="num">${f(r.pos,0)}%</b></div>
+    <div><span>רוחב תעלה</span><b class="num">${f(r.width_pct)}%</b></div>
+    <div><span>שיפוע לחודש</span><b>${sg(r.slope_m)}</b></div>
+    <div><span>גיל התעלה</span><b class="num">${r.life} ימים</b></div>
+    <div><span>נגיעות תחתון / עליון</span><b class="num">${r.t_low} / ${r.t_up}</b></div>
+    <div><span>ATR(14)</span><b class="num">${f(r.atr)}</b></div>
+    <div><span>ווליום / ממוצע 50</span><b class="num">${f(r.vol_ratio)}x</b></div>
+    <div><span>RSI(14)</span><b class="num">${f(r.rsi14,1)}</b></div>
+    <div><span>RSI(35)/EMA(10)</span><b class="num">${f(r.rsi35_ema10,1)}</b></div>
+    <div><span>EMA20 / EMA30</span><b class="num">${f(r.ema20)} / ${f(r.ema30)}</b></div>
+    <div><span>EMA50 / EMA200</span><b class="num">${f(r.ema50)} / ${f(r.ema200)}</b></div>
+    <div><span>SMA20 / SMA150</span><b class="num">${f(r.sma20)} / ${f(r.sma150)}</b></div>
+   </div>
+   <div class="tags"><span class="tag ${r.above50?'ok':'no'}">${r.above50?'מעל':'מתחת'} SMA50</span>
+    <span class="tag ${r.above200?'ok':'no'}">${r.above200?'מעל':'מתחת'} SMA200</span>
+    <a class="tag" href="https://finviz.com/quote.ashx?t=${r.sym}" target="_blank" rel="noopener">Finviz ↗</a>
+    <a class="tag" href="https://www.tradingview.com/chart/?symbol=${r.sym}" target="_blank" rel="noopener">TradingView ↗</a></div></div>`;
+}
+function filtered(){return D.results.filter(r=>(!q||r.sym.includes(q.toUpperCase())||r.name.toUpperCase().includes(q.toUpperCase()))&&(!sec||r.sector===sec)&&(!ix||r.idx.includes(ix)));}
+function filtersBar(){const secs=[...new Set(D.results.map(r=>r.sector))].sort();
+  return `<div class="filters"><input id="q" placeholder="חיפוש סימול / שם" value="${q}"><select id="ix"><option value="">כל המדדים</option>${["S&P 500","Nasdaq-100","Dow 30"].map(s=>`<option ${s===ix?'selected':''}>${s}</option>`).join("")}</select><select id="sec"><option value="">כל הסקטורים</option>${secs.map(s=>`<option ${s===sec?'selected':''}>${s}</option>`).join("")}</select></div>`;}
+function render(){
+  const m=document.getElementById("main");
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===tab));
+  if(tab==="method"){m.innerHTML=method();return;}
+  if(tab==="hist"){m.innerHTML=hist();return;}
+  const rows=filtered();
+  if(tab==="all"){
+    m.innerHTML=filtersBar()+`<div style="overflow-x:auto"><table><tr><th>סימול</th><th>מצב</th><th>סגירה</th><th>שינוי</th><th>קו</th><th>מרחק ATR</th><th>מרחק %</th><th>מיקום</th><th>שיפוע/חודש</th><th>גיל</th><th>נגיעות</th><th>RSI14</th><th>מדדים</th><th>סקטור</th></tr>`+
+    rows.map(r=>`<tr><td><b>${r.sym}</b></td><td><span class="badge b-${r.kind}">${KIND[r.kind]}</span></td><td class="num">${f(r.close)}</td><td>${sg(r.chg)}</td><td class="num">${f(r.line)}</td><td class="num">${f(r.dist_atr)}</td><td>${sg(r.dist_pct)}</td><td class="num">${f(r.pos,0)}%</td><td>${sg(r.slope_m)}</td><td class="num">${r.life}</td><td class="num">${r.t_low}/${r.t_up}</td><td class="num">${f(r.rsi14,0)}</td><td>${r.idx.join(", ")}</td><td>${r.sector}</td></tr>`).join("")+`</table></div>`;
+  } else {
+    const rs=rows.filter(r=>r.kind===tab);
+    m.innerHTML=filtersBar()+(rs.length?`<div class="grid">${rs.map(card).join("")}</div>`:`<div class="empty">אין היום מניות במצב הזה.</div>`);
+  }
+  const qi=document.getElementById("q");if(qi){qi.oninput=e=>{q=e.target.value;render();const n=document.getElementById("q");n.focus();n.setSelectionRange(q.length,q.length);};}
+  const si=document.getElementById("sec");if(si){si.onchange=e=>{sec=e.target.value;render();};}
+  const xi=document.getElementById("ix");if(xi){xi.onchange=e=>{ix=e.target.value;render();};}
+}
+function hist(){
+  const cell=(a,cl)=>a?`<span class="num ${cl}">${a.length}</span> · ${a.join(", ")||"—"}`:"—";
+  return `<table><tr><th>תאריך</th><th>עולה · בתחתית</th><th>עולה · בגבול העליון</th><th>יורדת · בתחתית</th><th>יורדת · בגבול העליון</th></tr>`+
+   D.history.map(h=>`<tr><td class="num">${h.date}</td><td>${cell(h.up_low,"pos")}</td><td>${cell(h.up_high,"")}</td><td>${cell(h.down_low,"")}</td><td>${cell(h.down_high,"neg")}</td></tr>`).join("")+`</table>`;
+}
+function method(){
+  const p=D.params;
+  return `<div class="prose"><h3>מה הסורק בודק</h3>
+  <p>בכל יום מסחר בשעה 23:10 שעון ישראל נסרקות כל המניות של S&P 500, נאסד"ק 100 ודאו ג'ונס 30 (מניה שנמצאת בכמה מדדים נסרקת פעם אחת), על נרות יומיים.</p>
+  <ul><li><b>איך נבנית תעלה:</b> כמו שמשרטטים ידנית. קו אחד עובר דרך שתי תחתיות (או שני שיאים) בטווח של ${p.min_len} עד ${p.max_len} ימי מסחר (כ‑2 עד 6 חודשים), עם לפחות ${p.min_gap} ימים ביניהן. הקו השני מקביל לו ועובר דרך הקצה הנגדי של אותה תקופה. תחתית או שיא = הנקודה הקיצונית ביותר בטווח של ${p.swing} נרות לכל צד.</li>
+  <li><b>תנאים לתעלה תקפה:</b> כל הנרות מאז הנקודה הראשונה בתוך התעלה. פתיל רשאי לחרוג עד ${p.pierce} ATR וסגירה עד ${p.close_out} ATR. לפחות ${p.min_side} נגיעות נפרדות בכל קו ולפחות ${p.min_total} בסך הכול, לא כולל היום (נגיעה = עד ${p.touch} ATR מהקו). רוחב של לפחות ${p.min_width} ATR. והתעלה באמת משופעת: העלייה או הירידה לאורך חייה היא לפחות ${p.trend} מהרוחב שלה, כך שתעלה אופקית לא נכללת.</li>
+  <li><b>בחירת התעלה:</b> מכל המועמדות נבחרת התעלה עם הכי הרבה נגיעות, ובשוויון הארוכה יותר. רק אז נבדק אם המחיר בגבול, כדי שלא לבחור תעלה "נוחה".</li>
+  <li><b>"בגבול":</b> הסגירה של היום בתוך התעלה ובמרחק של עד ${p.near_in} ATR(14) מהקו, או מעט מחוצה לו, עד ${p.near_out} ATR. סגירה רחוקה יותר מחוץ לתעלה היא כבר פריצה או שבירה, ולא מופיעה.</li>
+  <li><b>ארבעה מצבים:</b> עולה + בתחתית (עם המגמה, לונג), יורדת + בגבול העליון (עם המגמה, שורט), ושני מצבים נגד המגמה: עולה + בגבול העליון ויורדת + בתחתית.</li>
+  <li><b>מיון:</b> מהקרוב לקו אל הרחוק, ובשוויון לפי מספר הנגיעות.</li></ul>
+  <h3>רמת ודאות ומקורות</h3>
+  <p>מחירים, ATR ו‑RSI <span class="conf c-f">עובדה</span>, מ‑Yahoo Finance. המחירים מתואמים לפיצולים בלבד, כמו ב‑TradingView וב‑Finviz.</p>
+  <p>התעלה עצמה היא פרשנות <span class="conf c-e">הסקה</span>. סוחר שמשרטט ידנית עשוי לבחור נקודות עיגון אחרות ולקבל קו שונה במעט. כדאי לאשר בגרף לפני כניסה. רמת הקו היא הערך של היום; בתעלה משופעת הקו זז מדי יום לפי השיפוע.</p>
+  <p class="sub">מקור הרשימות: ${D.source} · נסרקו ${D.scanned} מתוך ${D.universe}${D.stale?` · ${D.stale} ללא נר של היום`:""} · ${D.with_channel} מניות נמצאות כרגע בתעלה תקפה · נוצר ${D.generated}</p></div>`;
+}
+(function init(){
+  const c=k=>D.results.filter(r=>r.kind===k).length;
+  document.getElementById("sub").innerHTML=(D.intraday?`<div style="background:#d2992226;color:#d29922;padding:8px 12px;border-radius:8px;margin-bottom:6px">⚠️ הרצת בדיקה במהלך יום המסחר. הנתונים חלקיים ויוחלפו בסריקה של 23:10.</div>`:"")+`נתוני סגירה ל‑<span class="num">${D.asof}</span> · נסרקו <span class="num">${D.scanned}</span> מניות · <span class="num">${D.with_channel}</span> בתעלה תקפה · עודכן ${D.generated}`;
+  document.getElementById("kpis").innerHTML=[["בתעלה תקפה",D.with_channel],["עולה · בתחתית",c("up_low")],["עולה · בגבול העליון",c("up_high")],["יורדת · בתחתית",c("down_low")],["יורדת · בגבול העליון",c("down_high")]].map(([a,b])=>`<div class="kpi"><span>${a}</span><b class="num">${b}</b></div>`).join("");
+  const cnt={up_low:c("up_low"),up_high:c("up_high"),down_low:c("down_low"),down_high:c("down_high"),all:D.results.length};
+  document.getElementById("tabs").innerHTML=TABS.map(([k,v])=>`<button data-t="${k}">${v}${cnt[k]!=null?`<span class="ct num">${cnt[k]}</span>`:""}</button>`).join("");
+  document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{tab=b.dataset.t;render();});
+  if(!cnt.up_low)tab=["down_high","up_high","down_low"].find(k=>cnt[k])||"up_low";
+  render();
+})();
+</script>
+</body>
+</html>
