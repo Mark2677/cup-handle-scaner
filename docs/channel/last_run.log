@@ -1,11 +1,6 @@
 Universe: 503 tickers (Wikipedia)
-Nasdaq-100: Wikipedia failed (no constituents table); using bundled list
-Dow 30: Wikipedia failed (no constituents table); using bundled list
-Universe: 519 unique tickers (S&P 500: Wikipedia · Nasdaq-100: fallback · Dow 30: fallback)
-HTTP Error 404: {"quoteSummary":{"result":null,"error":{"code":"Not Found","description":"Quote not found for symbol: ANSS"}}}
-$ANSS: No data found, symbol may be delisted
-
-1 Failed download:
-['ANSS']: No data found, symbol may be delisted
-Downloaded 515/519
+Nasdaq-100: Wikipedia failed (no constituents table; page 226027 chars; tables [(41, ['Year', 'Closing level', 'Change in Index in Points', 'Change in Index in\xa0%']), (31, ['Milestone (closing)[13]', 'Date of Record (closing)[13]', 'Trading Days[13]']), (34, ['vteStock market indices', 'vteStock market indices.1'])]); using bundled list
+Dow 30: Wikipedia failed (no constituents table; page 292297 chars; tables [(131, ['Year', 'Closing value', 'Net change', 'Percentage change']), (34, ['vteStock market indices', 'vteStock market indices.1']), (55, ['vteNews Corp', 'vteNews Corp.1', 'Unnamed: 2']), (27, ['vteNews Corp Australia', 'vteNews Corp Australia.1'])]); using bundled list
+Universe: 518 unique tickers (S&P 500: Wikipedia · Nasdaq-100: fallback · Dow 30: fallback)
+Downloaded 515/518
 2026-11-02: 70 stocks in a channel; at an edge today: {'up_low': 2, 'up_high': 2, 'down_low': 2, 'down_high': 6}
