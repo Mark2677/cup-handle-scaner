@@ -54,12 +54,19 @@ DOW_FALLBACK = """AAPL AMGN AMZN AXP BA CAT CRM CSCO CVX DIS GS HD HON IBM JNJ J
 PG SHW TRV UNH V VZ WMT""".split()
 
 
-def _wiki(page, fallback, label):
-    try:
-        import requests
+UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+      "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
+
+
+def _wiki_tables(pages):
+    import requests
+    for page in pages:
         html = requests.get(f"https://en.wikipedia.org/wiki/{page}",
                             headers={"User-Agent": "Mozilla/5.0 (channel-scanner)"}, timeout=30).text
-        tables = pd.read_html(io.StringIO(html))
+        try:
+            tables = pd.read_html(io.StringIO(html))
+        except ValueError:
+            continue
         for t in tables:
             if isinstance(t.columns, pd.MultiIndex):
                 t.columns = [c[-1] for c in t.columns]
@@ -73,19 +80,41 @@ def _wiki(page, fallback, label):
                                    sector=t[ec].astype(str) if ec is not None else ""))
             df = df[df["sym"].str.fullmatch(r"[A-Z.\-]{1,6}")]
             if len(df) >= 25:
-                print(f"{label}: {len(df)} tickers (Wikipedia)")
-                return df, "Wikipedia"
-        info = [(len(t), [str(c) for c in t.columns][:5]) for t in tables if len(t) >= 20]
-        raise ValueError(f"no constituents table; page {len(html)} chars; tables {info}")
-    except Exception as e:  # noqa: BLE001
-        print(f"{label}: Wikipedia failed ({e}); using bundled list")
-        return pd.DataFrame(dict(sym=fallback, name=fallback, sector="")), "fallback"
+                return df, f"Wikipedia ({page})"
+    raise ValueError("no constituents table on " + ", ".join(pages))
+
+
+def _nasdaq100_api():
+    import requests
+    r = requests.get("https://api.nasdaq.com/api/quote/list-type/nasdaq100",
+                     headers={"User-Agent": UA, "Accept": "application/json"}, timeout=30)
+    rows = r.json()["data"]["data"]["rows"]
+    df = pd.DataFrame(dict(sym=[x["symbol"].strip() for x in rows],
+                           name=[x.get("companyName", x["symbol"]) for x in rows], sector=""))
+    if not 90 <= len(df) <= 110:
+        raise ValueError(f"{len(df)} rows")
+    return df, "Nasdaq.com"
+
+
+def _index(label, fallback, sources):
+    for fn in sources:
+        try:
+            df, src = fn()
+            print(f"{label}: {len(df)} tickers ({src})")
+            return df, src
+        except Exception as e:  # noqa: BLE001
+            print(f"{label}: source failed ({str(e)[:200]})")
+    print(f"{label}: using bundled list")
+    return pd.DataFrame(dict(sym=fallback, name=fallback, sector="")), "fallback"
 
 
 def get_universe():
     sp, s1 = sp500_universe()
-    ndx, s2 = _wiki("Nasdaq-100", NDX_FALLBACK, "Nasdaq-100")
-    dow, s3 = _wiki("Dow_Jones_Industrial_Average", DOW_FALLBACK, "Dow 30")
+    ndx, s2 = _index("Nasdaq-100", NDX_FALLBACK, [
+        _nasdaq100_api, lambda: _wiki_tables(["Nasdaq-100", "List_of_Nasdaq-100_companies"])])
+    dow, s3 = _index("Dow 30", DOW_FALLBACK, [lambda: _wiki_tables([
+        "Dow_Jones_Industrial_Average", "List_of_Dow_Jones_Industrial_Average_components",
+        "Historical_components_of_the_Dow_Jones_Industrial_Average"])])
     rows = {}
     for _, r in sp.iterrows():
         rows[r["sym"]] = dict(sym=r["sym"], name=r["name"], sector=r["sector"], idx=["S&P 500"])
