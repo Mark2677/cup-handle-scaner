@@ -1,0 +1,11 @@
+Universe: 503 tickers (Wikipedia)
+Nasdaq-100: Wikipedia failed (no constituents table); using bundled list
+Dow 30: Wikipedia failed (no constituents table); using bundled list
+Universe: 519 unique tickers (S&P 500: Wikipedia · Nasdaq-100: fallback · Dow 30: fallback)
+HTTP Error 404: {"quoteSummary":{"result":null,"error":{"code":"Not Found","description":"Quote not found for symbol: ANSS"}}}
+$ANSS: No data found, symbol may be delisted
+
+1 Failed download:
+['ANSS']: No data found, symbol may be delisted
+Downloaded 515/519
+2026-11-02: 70 stocks in a channel; at an edge today: {'up_low': 2, 'up_high': 2, 'down_low': 2, 'down_high': 6}
