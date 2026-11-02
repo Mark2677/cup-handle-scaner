@@ -45,7 +45,7 @@ P = dict(
     near_out=0.25,             # ... or at most 0.25 ATR outside it
 )
 
-NDX_FALLBACK = """AAPL ABNB ADBE ADI ADP ADSK AEP AMAT AMD AMGN AMZN ANSS APP ARM ASML AVGO AXON AZN BIIB BKNG
+NDX_FALLBACK = """AAPL ABNB ADBE ADI ADP ADSK AEP AMAT AMD AMGN AMZN APP ARM ASML AVGO AXON AZN BIIB BKNG
 BKR CCEP CDNS CDW CEG CHTR CMCSA COST CPRT CRWD CSCO CSGP CSX CTAS CTSH DASH DDOG DXCM EA EXC FANG FAST
 FTNT GEHC GFS GILD GOOG GOOGL HON IDXX INTC INTU ISRG KDP KHC KLAC LIN LRCX LULU MAR MCHP MDLZ MELI META
 MNST MRVL MSFT MSTR MU NFLX NVDA NXPI ODFL ON ORLY PANW PAYX PCAR PDD PEP PLTR PYPL QCOM REGN ROP ROST
@@ -59,7 +59,10 @@ def _wiki(page, fallback, label):
         import requests
         html = requests.get(f"https://en.wikipedia.org/wiki/{page}",
                             headers={"User-Agent": "Mozilla/5.0 (channel-scanner)"}, timeout=30).text
-        for t in pd.read_html(io.StringIO(html)):
+        tables = pd.read_html(io.StringIO(html))
+        for t in tables:
+            if isinstance(t.columns, pd.MultiIndex):
+                t.columns = [c[-1] for c in t.columns]
             cols = {str(c).strip(): c for c in t.columns}
             sc = next((cols[k] for k in ("Ticker", "Symbol") if k in cols), None)
             if sc is None or not (25 <= len(t) <= 120):
@@ -72,7 +75,8 @@ def _wiki(page, fallback, label):
             if len(df) >= 25:
                 print(f"{label}: {len(df)} tickers (Wikipedia)")
                 return df, "Wikipedia"
-        raise ValueError("no constituents table")
+        info = [(len(t), [str(c) for c in t.columns][:5]) for t in tables if len(t) >= 20]
+        raise ValueError(f"no constituents table; page {len(html)} chars; tables {info}")
     except Exception as e:  # noqa: BLE001
         print(f"{label}: Wikipedia failed ({e}); using bundled list")
         return pd.DataFrame(dict(sym=fallback, name=fallback, sector="")), "fallback"
