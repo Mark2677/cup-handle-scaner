@@ -46,7 +46,9 @@ jobs:
       - if: steps.gate.outputs.go == '1'
         run: pip install -r requirements.txt
       - if: steps.gate.outputs.go == '1'
-        run: python channel.py
+        run: |
+          mkdir -p docs/channel; set -o pipefail
+          python -u channel.py 2>&1 | grep -v -E 'Pandas4Warning|pandas.pydata|inplace=True' | tee docs/channel/last_run.log
         env:
           FORCE: ${{ github.event.inputs.force }}
       - if: steps.gate.outputs.go == '1'

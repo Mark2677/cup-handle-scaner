@@ -40,6 +40,7 @@ P = dict(
     min_width=2.5,             # channel at least 2.5 ATR wide
     trend=0.75,                # move over the channel life >= 0.75 x width
     min_side=2, min_total=5,   # touches per line / in total (before today)
+    follow=0.5,                # closes' own trend >= 50% of the channel slope
     near_in=0.5,               # today's close at most 0.5 ATR inside the line ...
     near_out=0.25,             # ... or at most 0.25 ATR outside it
 )
@@ -162,6 +163,14 @@ def find_channel(h, l, c, atr):
                 tl = visits(l[seg] <= lo_h + P["touch"] * a)
                 tu = visits(h[seg] >= up_h - P["touch"] * a)
                 if min(len(tl), len(tu)) < P["min_side"] or len(tl) + len(tu) < P["min_total"]:
+                    continue
+                # both lines must be tested in the first AND the second half of the channel's life
+                half = (n - 1 - p) / 2
+                if not all(min(x) < half and max(x) >= half for x in (tl, tu)):
+                    continue
+                # price itself must travel with the channel (not drift sideways inside a wide one)
+                ps = np.polyfit(np.arange(len(cs)), cs, 1)[0]
+                if ps / slope < P["follow"]:
                     continue
                 score = (len(tl) + len(tu), life)
                 if best is None or score > best["score"]:
