@@ -3,11 +3,12 @@ Daily S&P 500 scanner: EMA(20) crosses SMA(20) + RSI(10) filter.
 Runs in GitHub Actions at 23:10 Israel time on US trading days.
 Writes docs/cross20/index.html (Hebrew dashboard) and docs/cross20/data/<date>.json.
 
-Cross up   : EMA20 > SMA20 at today's close, and EMA20 <= SMA20 at yesterday's close.
-Cross down : EMA20 < SMA20 at today's close, and EMA20 >= SMA20 at yesterday's close.
-Above      : EMA20 > SMA20 today and also yesterday (no cross today).
-Below      : EMA20 < SMA20 today and also yesterday.
-Filter     : RSI(10) at today's close between RSI_LO and RSI_HI (inclusive), both directions.
+Goal: stocks at the START of a momentum move.
+Long : EMA20 crossed above SMA20 today or in the last FRESH bars, after the opposite regime lasted
+       >= PRIOR_MIN bars; RSI(10) in 40-60 and rising; close above EMA20 and SMA20 but at most
+       MAX_EXT_ATR ATR above SMA20; close not in the top of its 60-day range; long-term uptrend
+       (EMA50 > EMA200, close > EMA200).
+Short: mirror image.
 Prices are split-adjusted but NOT dividend-adjusted, to match TradingView / Finviz charts.
 """
 import json
@@ -17,6 +18,7 @@ from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
 import numpy as np
+import pandas as pd
 
 from ema_cross import download
 from scanner import SECTOR_HE, get_universe, rsi
@@ -26,9 +28,13 @@ OUT = os.path.join(HERE, "docs", "cross20")
 
 FAST, SLOW = 20, 20          # EMA length, SMA length
 RSI_LEN, RSI_LO, RSI_HI = 10, 40.0, 60.0
-TREND = True     # long: EMA50 > EMA200 and close > EMA200 (short: mirror), all tabs
-STACK = True     # above/below tabs: EMA20 > EMA50 > EMA200 (short: mirror)
-FRESH = 5        # above/below tabs: the cross happened within the last FRESH bars
+TREND = True     # long: EMA50 > EMA200 and close > EMA200 (short: mirror)
+# "start of momentum" rules
+FRESH = 2        # EMA20 crossed SMA20 today or in the last FRESH bars (0 = today only)
+PRIOR_MIN = 10   # the opposite regime before the cross lasted at least this many bars
+RSI_SLOPE = 3    # RSI10 rising (long) / falling (short) vs this many bars ago
+MAX_EXT_ATR = 1.5  # close at most this many ATR(14) away from SMA20 (not extended yet)
+RANGE_DAYS, RANGE_MAX = 60, 70.0  # long: close in the lower 70% of the 60-day range; short: upper 70%
 
 
 def run():
@@ -43,7 +49,7 @@ def run():
         return
     asof = last.strftime("%Y-%m-%d")
 
-    results, stale, filtered_out, trend_out, fresh_out = [], 0, 0, 0, 0
+    results, stale, filtered_out, trend_out, fresh_out = [], 0, 0, 0, {}
     for _, row in uni.iterrows():
         df = data.get(row["yf"])
         if df is None:
@@ -57,16 +63,20 @@ def run():
         d0, d1 = e9.iloc[-1] - s20.iloc[-1], e9.iloc[-2] - s20.iloc[-2]
         if np.isnan(d0) or np.isnan(d1):
             continue
-        if d0 > 0 >= d1:
-            kind = "up"
-        elif d0 < 0 <= d1:
-            kind = "down"
-        elif d0 > 0:
-            kind = "above"
-        elif d0 < 0:
-            kind = "below"
-        else:
+        if d0 == 0:
             continue
+        kind = "up" if d0 > 0 else "down"
+        sign = np.sign((e9 - s20).dropna().to_numpy())
+        j = len(sign) - 1
+        while j >= 0 and sign[j] == sign[-1]:
+            j -= 1
+        since = len(sign) - 2 - j                 # 0 = crossed today
+        if since > FRESH:
+            continue
+        k = j
+        while k >= 0 and sign[k] == sign[j]:
+            k -= 1
+        prior_days = j - k                        # length of the regime before the cross
         r10 = float(rsi(c, RSI_LEN).iloc[-1])
         if not (RSI_LO <= r10 <= RSI_HI):
             filtered_out += 1
@@ -75,13 +85,33 @@ def run():
         e20n = float(e9.iloc[-1])
         e50n = float(c.ewm(span=50, adjust=False).mean().iloc[-1])
         e200n = float(c.ewm(span=200, adjust=False).mean().iloc[-1])
-        bull = kind in ("up", "above")
+        bull = kind == "up"
         if TREND and not ((e50n > e200n and close > e200n) if bull else (e50n < e200n and close < e200n)):
             trend_out += 1
             continue
-        if STACK and kind in ("above", "below") and not (
-                (e20n > e50n > e200n) if bull else (e20n < e50n < e200n)):
-            trend_out += 1
+        h, l = df["High"].to_numpy(float), df["Low"].to_numpy(float)
+        cn = c.to_numpy(float)
+        tr = np.maximum(h[1:] - l[1:], np.maximum(abs(h[1:] - cn[:-1]), abs(l[1:] - cn[:-1])))
+        atr = float(pd.Series(tr).ewm(alpha=1 / 14, adjust=False).mean().iloc[-1])
+        r10s = rsi(c, RSI_LEN)
+        rsi_d = float(r10s.iloc[-1] - r10s.iloc[-1 - RSI_SLOPE])
+        s20n = float(s20.iloc[-1])
+        ext = (close - s20n) / atr
+        hi60, lo60 = float(h[-RANGE_DAYS:].max()), float(l[-RANGE_DAYS:].min())
+        pos60 = (close - lo60) / (hi60 - lo60) * 100 if hi60 > lo60 else 50.0
+        why = None
+        if prior_days < PRIOR_MIN:
+            why = "prior"                         # whipsaw, not a turn
+        elif (rsi_d <= 0) if bull else (rsi_d >= 0):
+            why = "rsi"                           # momentum not building
+        elif (close <= max(e20n, s20n)) if bull else (close >= min(e20n, s20n)):
+            why = "side"                          # price not on the momentum side of both averages
+        elif (ext > MAX_EXT_ATR) if bull else (ext < -MAX_EXT_ATR):
+            why = "ext"                           # already ran away from SMA20
+        elif (pos60 > RANGE_MAX) if bull else (pos60 < 100 - RANGE_MAX):
+            why = "range"                         # already at the far end of its 60-day range
+        if why:
+            fresh_out[why] = fresh_out.get(why, 0) + 1
             continue
         ema = lambda n: float(c.ewm(span=n, adjust=False).mean().iloc[-1])  # noqa: E731
         sma = lambda n: float(c.rolling(n).mean().iloc[-1]) if len(c) >= n else None  # noqa: E731
@@ -89,20 +119,6 @@ def run():
         sma50, sma200 = sma(50), sma(200)
         r14 = rsi(c, 14)
         vol50 = float(v.iloc[-51:-1].mean())
-        # days since the previous opposite cross (how long the prior regime lasted)
-        sign = np.sign((e9 - s20).dropna().to_numpy())
-        k = len(sign) - 2
-        while k >= 0 and sign[k] == sign[-2]:
-            k -= 1
-        prior_days = len(sign) - 2 - k
-        # days on the current side (0 = crossed today)
-        j = len(sign) - 1
-        while j >= 0 and sign[j] == sign[-1]:
-            j -= 1
-        since = len(sign) - 2 - j
-        if kind in ("above", "below") and since > FRESH:
-            fresh_out += 1
-            continue
         seg = df.iloc[-60:]
         results.append(dict(
             sym=row["sym"], name=row["name"], kind=kind,
@@ -119,6 +135,7 @@ def run():
             ema200=round(ema(200), 2), sma150=round(sma(150), 2) if sma(150) else None,
             above50=bool(sma50 and close > sma50), above200=bool(sma200 and close > sma200),
             prior_days=int(prior_days), since=int(since),
+            atr=round(atr, 2), ext=round(ext, 2), pos60=round(pos60, 1), rsi_d=round(rsi_d, 1),
             chart=dict(
                 d=[x.strftime("%m-%d") for x in seg.index],
                 c=[round(float(x), 2) for x in seg["Close"]],
@@ -132,7 +149,8 @@ def run():
         intraday=bool(last == today_ny and datetime.now(ZoneInfo("America/New_York")).hour < 16),
         filtered_out=filtered_out, trend_out=trend_out, fresh_out=fresh_out,
         params=dict(fast=FAST, slow=SLOW, rsi_len=RSI_LEN, rsi_lo=RSI_LO, rsi_hi=RSI_HI,
-                    trend=TREND, stack=STACK, fresh=FRESH),
+                    trend=TREND, fresh=FRESH, prior_min=PRIOR_MIN, rsi_slope=RSI_SLOPE,
+                    max_ext=MAX_EXT_ATR, range_days=RANGE_DAYS, range_max=RANGE_MAX),
         scanned=len(data) - stale, universe=len(uni), stale=stale, source=source,
         results=results,
     )
@@ -146,14 +164,14 @@ def run():
                 p = json.load(f)
             hist.append(dict(date=p["asof"],
                              **{k: [r["sym"] for r in p["results"] if r["kind"] == k]
-                                for k in ("up", "down", "above", "below")}))
+                                for k in ("up", "down")}))
     payload["history"] = hist
     with open(os.path.join(HERE, "template_cross20.html"), encoding="utf-8") as f:
         tpl = f.read()
     with open(os.path.join(OUT, "index.html"), "w", encoding="utf-8") as f:
         f.write(tpl.replace("/*__DATA__*/null", json.dumps(payload, ensure_ascii=False)))
     print(f"{asof}: " + ", ".join(f"{k} {sum(r['kind'] == k for r in results)}"
-                                  for k in ("up", "down", "above", "below")))
+                                  for k in ("up", "down")) + f" | rejected {fresh_out}")
 
 
 if __name__ == "__main__":
