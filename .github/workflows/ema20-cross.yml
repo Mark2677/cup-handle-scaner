@@ -46,7 +46,9 @@ jobs:
       - if: steps.gate.outputs.go == '1'
         run: pip install -r requirements.txt
       - if: steps.gate.outputs.go == '1'
-        run: python ema20_cross.py
+        run: |
+          mkdir -p docs/cross20; set -o pipefail
+          python -u ema20_cross.py 2>&1 | grep -v -E 'Pandas4Warning|pandas.pydata|inplace=True' | tee docs/cross20/last_run.log
         env:
           FORCE: ${{ github.event.inputs.force }}
       - if: steps.gate.outputs.go == '1'

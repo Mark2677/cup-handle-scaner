@@ -36,6 +36,32 @@ RSI_SLOPE = 3    # RSI10 rising (long) / falling (short) vs this many bars ago
 MAX_EXT_ATR = 1.5  # close at most this many ATR(14) away from SMA20 (not extended yet)
 RANGE_DAYS, RANGE_MAX = 60, 70.0  # long: close in the lower 70% of the 60-day range; short: upper 70%
 
+FRESH_MAX = 5    # crosses up to this old are collected (for the variant report in the log)
+
+
+def reject(m, rsi_l=(RSI_LO, RSI_HI), rsi_s=(RSI_LO, RSI_HI), trend=TREND, fresh=FRESH):
+    """Return the first rule a candidate fails (None = passes). m = metrics dict."""
+    b = m["bull"]
+    lo, hi = rsi_l if b else rsi_s
+    if m["since"] > fresh:
+        return "fresh"
+    if not lo <= m["r10"] <= hi:
+        return "rsi_range"
+    if trend and not ((m["e50"] > m["e200"] and m["close"] > m["e200"]) if b
+                      else (m["e50"] < m["e200"] and m["close"] < m["e200"])):
+        return "trend"
+    if m["prior"] < PRIOR_MIN:
+        return "prior"                            # whipsaw, not a turn
+    if (m["rsi_d"] <= 0 or m["rsi_d1"] <= 0) if b else (m["rsi_d"] >= 0 or m["rsi_d1"] >= 0):
+        return "rsi"                              # momentum not building, or turning against us today
+    if (m["close"] <= max(m["e20"], m["s20"])) if b else (m["close"] >= min(m["e20"], m["s20"])):
+        return "side"                             # price not on the momentum side of both averages
+    if (m["ext"] > MAX_EXT_ATR) if b else (m["ext"] < -MAX_EXT_ATR):
+        return "ext"                              # already ran away from SMA20
+    if (m["pos"] > RANGE_MAX) if b else (m["pos"] < 100 - RANGE_MAX):
+        return "range"                            # already at the far end of its 60-day range
+    return None
+
 
 def run():
     uni, source = get_universe()
@@ -49,7 +75,7 @@ def run():
         return
     asof = last.strftime("%Y-%m-%d")
 
-    results, stale, filtered_out, trend_out, fresh_out = [], 0, 0, 0, {}
+    results, stale, filtered_out, trend_out, fresh_out, cands = [], 0, 0, 0, {}, []
     for _, row in uni.iterrows():
         df = data.get(row["yf"])
         if df is None:
@@ -71,45 +97,41 @@ def run():
         while j >= 0 and sign[j] == sign[-1]:
             j -= 1
         since = len(sign) - 2 - j                 # 0 = crossed today
-        if since > FRESH:
+        if since > FRESH_MAX:
             continue
         k = j
         while k >= 0 and sign[k] == sign[j]:
             k -= 1
         prior_days = j - k                        # length of the regime before the cross
-        r10 = float(rsi(c, RSI_LEN).iloc[-1])
-        if not (RSI_LO <= r10 <= RSI_HI):
-            filtered_out += 1
-            continue
+        r10s = rsi(c, RSI_LEN)
+        r10 = float(r10s.iloc[-1])
         close = float(c.iloc[-1])
         e20n = float(e9.iloc[-1])
         e50n = float(c.ewm(span=50, adjust=False).mean().iloc[-1])
         e200n = float(c.ewm(span=200, adjust=False).mean().iloc[-1])
         bull = kind == "up"
-        if TREND and not ((e50n > e200n and close > e200n) if bull else (e50n < e200n and close < e200n)):
-            trend_out += 1
-            continue
         h, l = df["High"].to_numpy(float), df["Low"].to_numpy(float)
         cn = c.to_numpy(float)
         tr = np.maximum(h[1:] - l[1:], np.maximum(abs(h[1:] - cn[:-1]), abs(l[1:] - cn[:-1])))
         atr = float(pd.Series(tr).ewm(alpha=1 / 14, adjust=False).mean().iloc[-1])
-        r10s = rsi(c, RSI_LEN)
         rsi_d = float(r10s.iloc[-1] - r10s.iloc[-1 - RSI_SLOPE])
+        rsi_d1 = float(r10s.iloc[-1] - r10s.iloc[-2])
         s20n = float(s20.iloc[-1])
         ext = (close - s20n) / atr
         hi60, lo60 = float(h[-RANGE_DAYS:].max()), float(l[-RANGE_DAYS:].min())
         pos60 = (close - lo60) / (hi60 - lo60) * 100 if hi60 > lo60 else 50.0
-        why = None
-        if prior_days < PRIOR_MIN:
-            why = "prior"                         # whipsaw, not a turn
-        elif (rsi_d <= 0) if bull else (rsi_d >= 0):
-            why = "rsi"                           # momentum not building
-        elif (close <= max(e20n, s20n)) if bull else (close >= min(e20n, s20n)):
-            why = "side"                          # price not on the momentum side of both averages
-        elif (ext > MAX_EXT_ATR) if bull else (ext < -MAX_EXT_ATR):
-            why = "ext"                           # already ran away from SMA20
-        elif (pos60 > RANGE_MAX) if bull else (pos60 < 100 - RANGE_MAX):
-            why = "range"                         # already at the far end of its 60-day range
+        m = dict(sym=row["sym"], bull=bull, since=since, prior=prior_days, r10=r10, rsi_d=rsi_d,
+                 rsi_d1=rsi_d1, close=close, e20=e20n, s20=s20n, e50=e50n, e200=e200n, ext=ext, pos=pos60)
+        cands.append(m)
+        why = reject(m)
+        if why == "fresh":
+            continue
+        if why == "rsi_range":
+            filtered_out += 1
+            continue
+        if why == "trend":
+            trend_out += 1
+            continue
         if why:
             fresh_out[why] = fresh_out.get(why, 0) + 1
             continue
@@ -136,6 +158,7 @@ def run():
             above50=bool(sma50 and close > sma50), above200=bool(sma200 and close > sma200),
             prior_days=int(prior_days), since=int(since),
             atr=round(atr, 2), ext=round(ext, 2), pos60=round(pos60, 1), rsi_d=round(rsi_d, 1),
+            rsi_d1=round(rsi_d1, 1),
             chart=dict(
                 d=[x.strftime("%m-%d") for x in seg.index],
                 c=[round(float(x), 2) for x in seg["Close"]],
@@ -144,6 +167,16 @@ def run():
             ),
         ))
     results.sort(key=lambda x: (x["since"], -(x["vol_ratio"] or 0)))
+    variants = {
+        "A: RSI 40-70 long / 30-60 short": dict(rsi_l=(40, 70), rsi_s=(30, 60)),
+        "B: no long-term trend filter": dict(trend=False),
+        "C: cross within 5 days": dict(fresh=4),
+        "A+C": dict(rsi_l=(40, 70), rsi_s=(30, 60), fresh=4),
+        "A+B+C": dict(rsi_l=(40, 70), rsi_s=(30, 60), fresh=4, trend=False),
+    }
+    for name, kw in variants.items():
+        ok = [m for m in cands if reject(m, **kw) is None]
+        print(f"variant {name}: long {[x['sym'] for x in ok if x['bull']]} short {[x['sym'] for x in ok if not x['bull']]}")
     payload = dict(
         asof=asof, generated=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         intraday=bool(last == today_ny and datetime.now(ZoneInfo("America/New_York")).hour < 16),
