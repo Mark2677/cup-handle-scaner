@@ -1451,6 +1451,18 @@
 "short_sh": 126646046,
 "ts": 1793353051.1460133
 },
+"HUT": {
+"beta_y": 6.082,
+"float_sh": 103036287,
+"industry": "Capital Markets",
+"inst_own": 82.32,
+"mcap": 7857791488,
+"short_date": 1792022400,
+"short_float": 16.1,
+"short_ratio": 3.09,
+"short_sh": 18154959,
+"ts": 1793742751.7462585
+},
 "HYLN": {
 "beta_y": 3.573,
 "float_sh": 124709079,
@@ -1558,6 +1570,18 @@
 "short_ratio": 3.87,
 "short_sh": 7448928,
 "ts": 1793656155.503219
+},
+"INO": {
+"beta_y": 1.725,
+"float_sh": 95787461,
+"industry": "Biotechnology",
+"inst_own": 46.77,
+"mcap": 171639872,
+"short_date": 1792022400,
+"short_float": 22.86,
+"short_ratio": 7.27,
+"short_sh": 21304238,
+"ts": 1793742751.7462585
 },
 "INOD": {
 "beta_y": 2.982,
@@ -1918,6 +1942,18 @@
 "short_ratio": 1.77,
 "short_sh": 2501175,
 "ts": 1793656155.503219
+},
+"MP": {
+"beta_y": 2.108,
+"float_sh": 144321060,
+"industry": "Other Industrial Metals & Mining",
+"inst_own": 78.28,
+"mcap": 6737583104,
+"short_date": 1792022400,
+"short_float": 22.13,
+"short_ratio": 6.49,
+"short_sh": 36236316,
+"ts": 1793742751.7462585
 },
 "MRAM": {
 "beta_y": 1.888,
