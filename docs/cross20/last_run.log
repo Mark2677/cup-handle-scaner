@@ -1,0 +1,8 @@
+Universe: 503 tickers (Wikipedia)
+Downloaded 501/503
+variant A: RSI 40-70 long / 30-60 short: long ['DAL'] short ['EXE']
+variant B: no long-term trend filter: long [] short ['CNC', 'ELV', 'KMI', 'OXY', 'WMB']
+variant C: cross within 5 days: long ['BEN'] short []
+variant A+C: long ['DAL', 'BEN'] short ['EXE']
+variant A+B+C: long ['DAL', 'BEN', 'UAL'] short ['CNC', 'ELV', 'EXE', 'HUM', 'KMI', 'OXY', 'WMB']
+2026-11-02: up 0, down 0 | rejected {'rsi': 9}
