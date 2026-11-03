@@ -5,6 +5,8 @@ Writes docs/cross20/index.html (Hebrew dashboard) and docs/cross20/data/<date>.j
 
 Cross up   : EMA20 > SMA20 at today's close, and EMA20 <= SMA20 at yesterday's close.
 Cross down : EMA20 < SMA20 at today's close, and EMA20 >= SMA20 at yesterday's close.
+Above      : EMA20 > SMA20 today and also yesterday (no cross today).
+Below      : EMA20 < SMA20 today and also yesterday.
 Filter     : RSI(10) at today's close between RSI_LO and RSI_HI (inclusive), both directions.
 Prices are split-adjusted but NOT dividend-adjusted, to match TradingView / Finviz charts.
 """
@@ -23,7 +25,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "docs", "cross20")
 
 FAST, SLOW = 20, 20          # EMA length, SMA length
-RSI_LEN, RSI_LO, RSI_HI = 10, 35.0, 60.0
+RSI_LEN, RSI_LO, RSI_HI = 10, 40.0, 60.0
 
 
 def run():
@@ -56,6 +58,10 @@ def run():
             kind = "up"
         elif d0 < 0 <= d1:
             kind = "down"
+        elif d0 > 0:
+            kind = "above"
+        elif d0 < 0:
+            kind = "below"
         else:
             continue
         r10 = float(rsi(c, RSI_LEN).iloc[-1])
@@ -74,6 +80,11 @@ def run():
         while k >= 0 and sign[k] == sign[-2]:
             k -= 1
         prior_days = len(sign) - 2 - k
+        # days on the current side (0 = crossed today)
+        j = len(sign) - 1
+        while j >= 0 and sign[j] == sign[-1]:
+            j -= 1
+        since = len(sign) - 2 - j
         seg = df.iloc[-60:]
         results.append(dict(
             sym=row["sym"], name=row["name"], kind=kind,
@@ -89,7 +100,7 @@ def run():
             ema20=round(ema(20), 2), ema30=round(ema(30), 2), ema50=round(ema(50), 2),
             ema200=round(ema(200), 2), sma150=round(sma(150), 2) if sma(150) else None,
             above50=bool(sma50 and close > sma50), above200=bool(sma200 and close > sma200),
-            prior_days=int(prior_days),
+            prior_days=int(prior_days), since=int(since),
             chart=dict(
                 d=[x.strftime("%m-%d") for x in seg.index],
                 c=[round(float(x), 2) for x in seg["Close"]],
@@ -97,7 +108,7 @@ def run():
                 s20=[None if np.isnan(x) else round(float(x), 2) for x in s20.iloc[-60:]],
             ),
         ))
-    results.sort(key=lambda x: -(x["vol_ratio"] or 0))
+    results.sort(key=lambda x: (x["since"], -(x["vol_ratio"] or 0)))
     payload = dict(
         asof=asof, generated=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         intraday=bool(last == today_ny and datetime.now(ZoneInfo("America/New_York")).hour < 16),
@@ -115,15 +126,15 @@ def run():
             with open(os.path.join(OUT, "data", fn)) as f:
                 p = json.load(f)
             hist.append(dict(date=p["asof"],
-                             up=[r["sym"] for r in p["results"] if r["kind"] == "up"],
-                             down=[r["sym"] for r in p["results"] if r["kind"] == "down"]))
+                             **{k: [r["sym"] for r in p["results"] if r["kind"] == k]
+                                for k in ("up", "down", "above", "below")}))
     payload["history"] = hist
     with open(os.path.join(HERE, "template_cross20.html"), encoding="utf-8") as f:
         tpl = f.read()
     with open(os.path.join(OUT, "index.html"), "w", encoding="utf-8") as f:
         f.write(tpl.replace("/*__DATA__*/null", json.dumps(payload, ensure_ascii=False)))
-    print(f"{asof}: {sum(r['kind'] == 'up' for r in results)} up, "
-          f"{sum(r['kind'] == 'down' for r in results)} down")
+    print(f"{asof}: " + ", ".join(f"{k} {sum(r['kind'] == k for r in results)}"
+                                  for k in ("up", "down", "above", "below")))
 
 
 if __name__ == "__main__":
