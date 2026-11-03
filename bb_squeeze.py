@@ -117,7 +117,7 @@ def run():
         kind = None
         if days_today >= P["min_days"] and pct <= P["width_pct"] and contracting:
             # bias from momentum (sign + direction) and trend
-            bull_pts = (mom[-1] > 0) + mom_up + (close > e50) + (e50 > e200)
+            bull_pts = int(mom[-1] > 0) + int(mom_up) + int(close > e50) + int(e50 > e200)
             kind = "sq_bull" if bull_pts >= 3 else "sq_bear" if bull_pts <= 1 else "sq_neutral"
             sq_days = days_today
         elif days_today == 0 and days_yday >= P["min_days"]:
