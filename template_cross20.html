@@ -143,6 +143,10 @@ function method(){
   <li><b>חצייה מטה ▼:</b> בסגירה של היום EMA20 מתחת ל‑SMA20, ובסגירה של אתמול EMA20 היה מעליו או שווה לו.</li>
   <li><b>EMA20 מעל SMA20:</b> EMA20 מעל SMA20 גם היום וגם אתמול, כלומר החצייה מעלה קרתה בעבר. <b>EMA20 מתחת SMA20:</b> ההפך.</li>
   <li><b>מסנן RSI:</b> בכל ארבע הלשוניות, RSI(${D.params.rsi_len}) בסגירה של היום חייב להיות בין ${D.params.rsi_lo} ל‑${D.params.rsi_hi}, כולל הקצוות. היום סוננו בגלל זה <span class="num">${D.filtered_out}</span> מניות. RSI מחושב בשיטת Wilder, כמו ב‑TradingView.</li>
+  <li><b>מגמה ארוכה (כל הלשוניות):</b> לונג (חצייה מעלה / מעל) רק כש‑EMA50 מעל EMA200 והמחיר מעל EMA200. שורט (חצייה מטה / מתחת) רק כש‑EMA50 מתחת ל‑EMA200 והמחיר מתחת ל‑EMA200.</li>
+  <li><b>סדר ממוצעים (לשוניות מעל / מתחת):</b> לונג EMA20 &gt; EMA50 &gt; EMA200, שורט EMA20 &lt; EMA50 &lt; EMA200. בחציות עצמן לא נדרש סדר מלא, כי חצייה מעלה מתרחשת בדרך כלל אחרי תיקון, כש‑EMA20 עדיין מתחת ל‑EMA50.</li>
+  <li><b>חצייה טרייה (לשוניות מעל / מתחת):</b> החצייה הייתה ב‑${D.params.fresh??5} ימי המסחר האחרונים.</li>
+  <li>היום סוננו <span class="num">${D.trend_out??0}</span> מניות בגלל המגמה / סדר הממוצעים, ו‑<span class="num">${D.fresh_out??0}</span> בגלל חצייה ישנה.</li>
   <li><b>מיון:</b> קודם לפי מספר הימים מאז החצייה, מהחדשה לישנה, ואחר כך לפי יחס הווליום של היום לממוצע 50 הימים. בלשוניות "מעל" ו"מתחת" המניות שחצו לאחרונה מופיעות ראשונות.</li>
   <li><b>"המצב הקודם נמשך":</b> כמה ימים EMA20 היה בצד השני לפני החצייה. מספר קטן מרמז על דשדוש וחציות שווא חוזרות.</li></ul>
   <h3>רמת ודאות ומקורות</h3>
@@ -153,7 +157,7 @@ function method(){
 (function init(){
   const c=k=>D.results.filter(r=>r.kind===k).length;
   document.getElementById("sub").innerHTML=(D.intraday?`<div style="background:#d2992226;color:#d29922;padding:8px 12px;border-radius:8px;margin-bottom:6px">⚠️ הרצת בדיקה במהלך יום המסחר. הנתונים חלקיים ויוחלפו בסריקה של 23:10.</div>`:"")+`נתוני סגירה ל‑<span class="num">${D.asof}</span> · נסרקו <span class="num">${D.scanned}</span> מניות · RSI(${D.params.rsi_len}) ${D.params.rsi_lo}–${D.params.rsi_hi} · עודכן ${D.generated}`;
-  document.getElementById("kpis").innerHTML=[["חצייה מעלה ▲",c("up")],["חצייה מטה ▼",c("down")],["EMA20 מעל SMA20",c("above")],["EMA20 מתחת SMA20",c("below")],["סוננו ע״י RSI",D.filtered_out]].map(([a,b])=>`<div class="kpi"><span>${a}</span><b class="num">${b}</b></div>`).join("");
+  document.getElementById("kpis").innerHTML=[["חצייה מעלה ▲",c("up")],["חצייה מטה ▼",c("down")],["EMA20 מעל SMA20",c("above")],["EMA20 מתחת SMA20",c("below")],["סוננו ע״י RSI",D.filtered_out],["סוננו ע״י מגמה / ממוצעים",D.trend_out??0],["חצייה ישנה (מעל 5 ימים)",D.fresh_out??0]].map(([a,b])=>`<div class="kpi"><span>${a}</span><b class="num">${b}</b></div>`).join("");
   const cnt={up:c("up"),down:c("down"),above:c("above"),below:c("below"),all:D.results.length};
   document.getElementById("tabs").innerHTML=TABS.map(([k,v])=>`<button data-t="${k}">${v}${cnt[k]!=null?`<span class="ct num">${cnt[k]}</span>`:""}</button>`).join("");
   document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{tab=b.dataset.t;render();});

@@ -26,6 +26,9 @@ OUT = os.path.join(HERE, "docs", "cross20")
 
 FAST, SLOW = 20, 20          # EMA length, SMA length
 RSI_LEN, RSI_LO, RSI_HI = 10, 40.0, 60.0
+TREND = True     # long: EMA50 > EMA200 and close > EMA200 (short: mirror), all tabs
+STACK = True     # above/below tabs: EMA20 > EMA50 > EMA200 (short: mirror)
+FRESH = 5        # above/below tabs: the cross happened within the last FRESH bars
 
 
 def run():
@@ -40,7 +43,7 @@ def run():
         return
     asof = last.strftime("%Y-%m-%d")
 
-    results, stale, filtered_out = [], 0, 0
+    results, stale, filtered_out, trend_out, fresh_out = [], 0, 0, 0, 0
     for _, row in uni.iterrows():
         df = data.get(row["yf"])
         if df is None:
@@ -68,6 +71,18 @@ def run():
         if not (RSI_LO <= r10 <= RSI_HI):
             filtered_out += 1
             continue
+        close = float(c.iloc[-1])
+        e20n = float(e9.iloc[-1])
+        e50n = float(c.ewm(span=50, adjust=False).mean().iloc[-1])
+        e200n = float(c.ewm(span=200, adjust=False).mean().iloc[-1])
+        bull = kind in ("up", "above")
+        if TREND and not ((e50n > e200n and close > e200n) if bull else (e50n < e200n and close < e200n)):
+            trend_out += 1
+            continue
+        if STACK and kind in ("above", "below") and not (
+                (e20n > e50n > e200n) if bull else (e20n < e50n < e200n)):
+            trend_out += 1
+            continue
         ema = lambda n: float(c.ewm(span=n, adjust=False).mean().iloc[-1])  # noqa: E731
         sma = lambda n: float(c.rolling(n).mean().iloc[-1]) if len(c) >= n else None  # noqa: E731
         close = float(c.iloc[-1])
@@ -85,6 +100,9 @@ def run():
         while j >= 0 and sign[j] == sign[-1]:
             j -= 1
         since = len(sign) - 2 - j
+        if kind in ("above", "below") and since > FRESH:
+            fresh_out += 1
+            continue
         seg = df.iloc[-60:]
         results.append(dict(
             sym=row["sym"], name=row["name"], kind=kind,
@@ -112,8 +130,9 @@ def run():
     payload = dict(
         asof=asof, generated=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         intraday=bool(last == today_ny and datetime.now(ZoneInfo("America/New_York")).hour < 16),
-        filtered_out=filtered_out,
-        params=dict(fast=FAST, slow=SLOW, rsi_len=RSI_LEN, rsi_lo=RSI_LO, rsi_hi=RSI_HI),
+        filtered_out=filtered_out, trend_out=trend_out, fresh_out=fresh_out,
+        params=dict(fast=FAST, slow=SLOW, rsi_len=RSI_LEN, rsi_lo=RSI_LO, rsi_hi=RSI_HI,
+                    trend=TREND, stack=STACK, fresh=FRESH),
         scanned=len(data) - stale, universe=len(uni), stale=stale, source=source,
         results=results,
     )
