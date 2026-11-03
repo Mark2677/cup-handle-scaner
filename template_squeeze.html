@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>סורק התכווצות בולינגר</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--panel2:#1c2330;--line:#2a3340;--txt:#e6edf3;--mut:#8b98a8;
+--grn:#3fb950;--red:#f85149;--amb:#d29922;--blu:#58a6ff;--pur:#bc8cff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:Heebo,system-ui,sans-serif;font-size:15px}
+.num{font-family:"JetBrains Mono",monospace;direction:ltr;unicode-bidi:isolate}
+header{padding:22px 16px 10px;max-width:1200px;margin:auto}
+h1{margin:0;font-size:24px}
+.sub{color:var(--mut);margin-top:6px;font-size:13px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:16px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px}
+.kpi b{display:block;font-size:24px;margin-top:4px}
+.kpi span{color:var(--mut);font-size:12px}
+nav{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);z-index:5}
+nav .in{max-width:1200px;margin:auto;display:flex;gap:4px;overflow-x:auto;padding:0 16px}
+nav button{background:none;border:0;color:var(--mut);padding:12px 14px;font:inherit;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent}
+nav button.on{color:var(--txt);border-color:var(--blu)}
+nav .ct{background:var(--panel2);border-radius:9px;padding:1px 7px;font-size:12px;margin-inline-start:5px}
+main{max-width:1200px;margin:auto;padding:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.sym{font-size:20px;font-weight:700}
+.nm{color:var(--mut);font-size:12px}
+.badge{font-size:12px;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.b-breakout{background:#3fb95026;color:var(--grn)}.b-above{background:#58a6ff26;color:var(--blu)}
+.b-near{background:#d2992226;color:var(--amb)}.b-forming{background:#8b98a826;color:var(--mut)}
+svg{width:100%;height:150px;display:block;margin:10px 0 6px}
+.st{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 10px;font-size:12px}
+.st div>span{color:var(--mut);display:block}
+.st div b{font-weight:600}
+.tags{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;border:1px solid var(--line);border-radius:6px;padding:2px 6px;color:var(--mut)}
+.tag.ok{color:var(--grn);border-color:#3fb95055}.tag.no{color:var(--red);border-color:#f8514955}
+.empty{color:var(--mut);padding:40px;text-align:center;background:var(--panel);border-radius:12px}
+.pos{color:var(--grn)}.neg{color:var(--red)}
+table{width:100%;border-collapse:collapse;background:var(--panel);border-radius:12px;overflow:hidden;font-size:13px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right}
+th{color:var(--mut);font-weight:500}
+.prose{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;line-height:1.7}
+.prose h3{margin-top:0}
+.conf{font-size:11px;padding:1px 6px;border-radius:5px;margin-inline-start:6px}
+.c-f{background:#3fb95022;color:var(--grn)}.c-e{background:#d2992222;color:var(--amb)}
+.filters{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.filters input,.filters select{background:var(--panel);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:7px 10px;font:inherit}
+a{color:var(--blu)}
+@media(max-width:420px){.grid{grid-template-columns:1fr}}
+</style>
+<style>
+.b-sq_bull{background:#3fb95026;color:var(--grn)}.b-sq_bear{background:#f8514926;color:var(--red)}.b-sq_neutral{background:#8b98a826;color:var(--mut)}
+.b-fire_up{background:#3fb950;color:#0d1117}.b-fire_down{background:#f85149;color:#0d1117}
+.ix{font-size:10px;border:1px solid var(--line);border-radius:5px;padding:1px 5px;color:var(--mut);margin-inline-start:4px}
+.alert{background:var(--panel2);border:1px dashed var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:13px}
+.legend{display:flex;gap:12px;font-size:11px;color:var(--mut);flex-wrap:wrap}.legend i{display:inline-block;width:14px;height:2px;vertical-align:middle;margin-inline-end:4px}
+.xnav{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;margin-top:8px}
+</style>
+</head>
+<body>
+<header>
+  <h1>🗜️ התכווצות בולינגר: לפני פריצה או שבירה — S&amp;P 500 · נאסד"ק 100 · דאו ג'ונס</h1>
+  <div class="sub" id="sub"></div>
+  <div class="xnav"><a href="../trend/">📈 חציית EMA30/50</a><a href="../cross20/">✂️ EMA20/SMA20 + RSI10</a><a href="../channel/">📐 תעלות מחיר</a><a href="../squeeze/">🗜️ התכווצות בולינגר</a><a href="../r2k/">🔎 ראסל 2000 · שורט + ביסוס</a></div>
+  <div class="kpis" id="kpis"></div>
+</header>
+<nav><div class="in" id="tabs"></div></nav>
+<main id="main"></main>
+<script>
+const D = /*__DATA__*/null;
+const KIND={sq_bull:"התכווצות · נטייה לפריצה",sq_bear:"התכווצות · נטייה לשבירה",sq_neutral:"התכווצות · ניטרלי",fire_up:"פרץ היום ▲",fire_down:"נשבר היום ▼"};
+const TABS=[["sq_bull","🟢 לפני פריצה"],["sq_bear","🔴 לפני שבירה"],["sq_neutral","⚪ ניטרלי"],["fire_up","🚀 פרץ היום"],["fire_down","💥 נשבר היום"],["all","טבלה מלאה"],["hist","היסטוריה"],["method","מתודולוגיה"]];
+let tab="sq_bull",q="",sec="",ix="";
+const f=(x,d=2)=>x==null?"—":Number(x).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const sg=x=>`<span class="num ${x>=0?'pos':'neg'}">${x>=0?'+':''}${f(x)}%</span>`;
+function chart(r){
+  const k=r.chart,n=k.c.length,W=340,H=170,pad=6,bot=14;
+  const all=[...k.h,...k.l,...k.bu,...k.bl,...k.ku,...k.kl].filter(x=>x!=null),lo=Math.min(...all),hi=Math.max(...all);
+  const X=i=>pad+(W-2*pad)*i/(n-1),Y=v=>H-bot-pad-(H-bot-2*pad)*(v-lo)/(hi-lo);
+  const line=(a,col,w,dash)=>{let p="",m=true;a.forEach((v,i)=>{if(v==null){m=true;return;}p+=`${m?'M':'L'}${X(i).toFixed(1)},${Y(v).toFixed(1)}`;m=false;});return `<path d="${p}" fill="none" stroke="${col}" stroke-width="${w}" ${dash?'stroke-dasharray="3 3"':''}/>`;};
+  const top=k.bu.map((v,i)=>v==null?null:[X(i),Y(v)]).filter(Boolean),bt=k.bl.map((v,i)=>v==null?null:[X(i),Y(v)]).filter(Boolean).reverse();
+  const band=`<path d="M${[...top,...bt].map(p=>p.map(z=>z.toFixed(1)).join(",")).join("L")}Z" fill="#58a6ff12"/>`;
+  const wick=k.c.map((v,i)=>`<line x1="${X(i)}" x2="${X(i)}" y1="${Y(k.h[i])}" y2="${Y(k.l[i])}" stroke="#8b98a855" stroke-width="1"/>`).join("");
+  const dots=k.on.map((o,i)=>`<circle cx="${X(i)}" cy="${H-6}" r="1.8" fill="${o?'#f85149':'#3fb950'}"/>`).join("");
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-label="גרף ${r.sym}">${band}${line(k.ku,"#d29922",1,true)}${line(k.kl,"#d29922",1,true)}${line(k.bu,"#58a6ff",1.2)}${line(k.bl,"#58a6ff",1.2)}${wick}${line(k.c,"#e6edf3",1.3)}${dots}</svg>
+   <div class="legend"><span><i style="background:#58a6ff"></i>בולינגר 20/2</span><span><i style="background:#d29922"></i>קלטנר 20/1.5</span><span>● <b style="color:#f85149">התכווצות</b> / <b style="color:#3fb950">שחרור</b></span></div>`;
+}
+function card(r){
+  const fired=r.kind.startsWith("fire");
+  return `<div class="card"><div class="top"><div><div class="sym">${r.sym}</div><div class="nm">${r.name} · ${r.sector}</div><div style="margin-top:3px">${r.idx.map(x=>`<span class="ix" style="margin:0 0 0 4px">${x}</span>`).join("")}</div></div>
+   <div style="text-align:left"><span class="badge b-${r.kind}">${KIND[r.kind]}</span><div class="num" style="margin-top:6px">$${f(r.close)} ${sg(r.chg)}</div></div></div>
+   <div class="alert">🔔 פריצה מעל <b class="num">$${f(r.sq_hi)}</b> (${sg(r.to_up)}) · שבירה מתחת <b class="num">$${f(r.sq_lo)}</b> (${sg(r.to_lo)})<div class="nm" style="margin-top:4px">${fired?`ההתכווצות נמשכה ${r.sq_days} ימים ושוחררה היום`:`בהתכווצות ${r.sq_days} ימים · רוחב הרצועה באחוזון ${f(r.width_pct,0)} של חצי השנה`}</div></div>
+   ${chart(r)}
+   <div class="st" style="margin-top:8px">
+    <div><span>רוחב בולינגר</span><b class="num">${f(r.width)}%</b></div>
+    <div><span>מינימום חצי שנה</span><b class="num">${f(r.width_min)}%</b></div>
+    <div><span>מומנטום (TTM)</span><b class="num ${r.mom>=0?'pos':'neg'}">${f(r.mom,2)} ${r.mom_up?'↑':'↓'}</b></div>
+    <div><span>BB עליונה / תחתונה</span><b class="num">${f(r.bb_up)} / ${f(r.bb_lo)}</b></div>
+    <div><span>ווליום היום / 50</span><b class="num">${f(r.vol_ratio)}x</b></div>
+    <div><span>ווליום 10 ימים / 50</span><b class="num">${f(r.vol10)}x</b></div>
+    <div><span>ATR(14)</span><b class="num">${f(r.atr)}</b></div>
+    <div><span>RSI(14)</span><b class="num">${f(r.rsi14,1)}</b></div>
+    <div><span>RSI(35)/EMA(10)</span><b class="num">${f(r.rsi35_ema10,1)}</b></div>
+    <div><span>EMA20 / EMA30</span><b class="num">${f(r.ema20)} / ${f(r.ema30)}</b></div>
+    <div><span>EMA50 / EMA200</span><b class="num">${f(r.ema50)} / ${f(r.ema200)}</b></div>
+    <div><span>SMA20 / SMA150</span><b class="num">${f(r.sma20)} / ${f(r.sma150)}</b></div>
+   </div>
+   <div class="tags"><span class="tag ${r.above50?'ok':'no'}">${r.above50?'מעל':'מתחת'} SMA50</span>
+    <span class="tag ${r.above200?'ok':'no'}">${r.above200?'מעל':'מתחת'} SMA200</span>
+    ${r.vol10!=null&&r.vol10<0.8?`<span class="tag ok">ווליום מתייבש</span>`:""}
+    <a class="tag" href="https://finviz.com/quote.ashx?t=${r.sym}" target="_blank" rel="noopener">Finviz ↗</a>
+    <a class="tag" href="https://www.tradingview.com/chart/?symbol=${r.sym}" target="_blank" rel="noopener">TradingView ↗</a></div></div>`;
+}
+function filtered(){return D.results.filter(r=>(!q||r.sym.includes(q.toUpperCase())||r.name.toUpperCase().includes(q.toUpperCase()))&&(!sec||r.sector===sec)&&(!ix||r.idx.includes(ix)));}
+function filtersBar(){const secs=[...new Set(D.results.map(r=>r.sector))].sort();
+  return `<div class="filters"><input id="q" placeholder="חיפוש סימול / שם" value="${q}"><select id="ix"><option value="">כל המדדים</option>${["S&P 500","Nasdaq-100","Dow 30"].map(s=>`<option ${s===ix?'selected':''}>${s}</option>`).join("")}</select><select id="sec"><option value="">כל הסקטורים</option>${secs.map(s=>`<option ${s===sec?'selected':''}>${s}</option>`).join("")}</select></div>`;}
+function render(){
+  const m=document.getElementById("main");
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===tab));
+  if(tab==="method"){m.innerHTML=method();return;}
+  if(tab==="hist"){m.innerHTML=hist();return;}
+  const rows=filtered();
+  if(tab==="all"){
+    m.innerHTML=filtersBar()+`<div style="overflow-x:auto"><table><tr><th>סימול</th><th>מצב</th><th>סגירה</th><th>שינוי</th><th>ימים</th><th>רוחב</th><th>אחוזון</th><th>מומנטום</th><th>פריצה</th><th>שבירה</th><th>ווליום 10/50</th><th>RSI14</th><th>מדדים</th><th>סקטור</th></tr>`+
+    rows.map(r=>`<tr><td><b>${r.sym}</b></td><td><span class="badge b-${r.kind}">${KIND[r.kind]}</span></td><td class="num">${f(r.close)}</td><td>${sg(r.chg)}</td><td class="num">${r.sq_days}</td><td class="num">${f(r.width)}%</td><td class="num">${f(r.width_pct,0)}</td><td class="num ${r.mom>=0?'pos':'neg'}">${f(r.mom)} ${r.mom_up?'↑':'↓'}</td><td class="num">${f(r.sq_hi)}</td><td class="num">${f(r.sq_lo)}</td><td class="num">${f(r.vol10)}x</td><td class="num">${f(r.rsi14,0)}</td><td>${r.idx.join(", ")}</td><td>${r.sector}</td></tr>`).join("")+`</table></div>`;
+  } else {
+    const rs=rows.filter(r=>r.kind===tab);
+    m.innerHTML=filtersBar()+(rs.length?`<div class="grid">${rs.map(card).join("")}</div>`:`<div class="empty">אין היום מניות במצב הזה.</div>`);
+  }
+  const qi=document.getElementById("q");if(qi){qi.oninput=e=>{q=e.target.value;render();const n=document.getElementById("q");n.focus();n.setSelectionRange(q.length,q.length);};}
+  const si=document.getElementById("sec");if(si){si.onchange=e=>{sec=e.target.value;render();};}
+  const xi=document.getElementById("ix");if(xi){xi.onchange=e=>{ix=e.target.value;render();};}
+}
+function hist(){
+  const cell=(a,cl)=>a?`<span class="num ${cl}">${a.length}</span> · ${a.join(", ")||"—"}`:"—";
+  return `<table><tr><th>תאריך</th><th>לפני פריצה</th><th>לפני שבירה</th><th>ניטרלי</th><th>פרץ</th><th>נשבר</th></tr>`+
+   D.history.map(h=>`<tr><td class="num">${h.date}</td><td>${cell(h.sq_bull,"pos")}</td><td>${cell(h.sq_bear,"neg")}</td><td>${cell(h.sq_neutral,"")}</td><td>${cell(h.fire_up,"pos")}</td><td>${cell(h.fire_down,"neg")}</td></tr>`).join("")+`</table>`;
+}
+function method(){
+  const p=D.params;
+  return `<div class="prose"><h3>מה הסורק בודק</h3>
+  <p>בכל יום מסחר בשעה 23:10 שעון ישראל נסרקות כל המניות של S&P 500, נאסד"ק 100 ודאו ג'ונס, על נרות יומיים.</p>
+  <ul><li><b>התכווצות (שלושה תנאים יחד):</b> (1) רצועות בולינגר ${p.bb_len}/${p.bb_mult} נמצאות כולן בתוך תעלת קלטנר ${p.kc_len}/${p.kc_mult} ATR, כמו ב‑TTM Squeeze, כבר לפחות ${p.min_days} ימים ברצף. (2) רוחב הבולינגר היום נמצא ב‑${p.width_pct}% הנמוכים של ${p.lookback} הימים האחרונים (כחצי שנה). (3) הרוחב עדיין מצטמצם: היום הוא צר יותר מלפני ${p.width_slope} ימים. כלומר ההתכווצות עדיין בתהליך.</li>
+  <li><b>נטייה:</b> נקבעת לפי ארבעה סימנים: מומנטום TTM חיובי, מומנטום עולה, מחיר מעל EMA50, ו‑EMA50 מעל EMA200. 3–4 סימנים = נטייה לפריצה, 0–1 = נטייה לשבירה, 2 = ניטרלי. הנטייה היא סבירות בלבד, לא כיוון מובטח <span class="conf c-e">הסקה</span>.</li>
+  <li><b>רמות התראה:</b> השיא והשפל מתחילת ההתכווצות. סגירה מעל השיא = פריצה, סגירה מתחת לשפל = שבירה. מוצגות גם הרצועות של היום.</li>
+  <li><b>פרץ / נשבר היום:</b> ההתכווצות נמשכה לפחות ${p.min_days} ימים עד אתמול, והיום הרצועות יצאו מהקלטנר. פריצה = מומנטום חיובי וסגירה מעל אמצע הבולינגר. שבירה = ההפך.</li>
+  <li><b>ווליום מתייבש:</b> ממוצע הווליום של 10 הימים האחרונים נמוך מ‑80% מממוצע 50 הימים. זה סימן קלאסי לאנרגיה שנאגרת לפני תנועה.</li>
+  <li><b>מיון:</b> הפריצות והשבירות של היום ראשונות. אחריהן ההתכווצויות, מהצרה ביותר (אחוזון נמוך) ומהארוכה ביותר.</li></ul>
+  <h3>רמת ודאות ומקורות</h3>
+  <p>מחירים, רצועות, קלטנר ו‑RSI <span class="conf c-f">עובדה</span>, מ‑Yahoo Finance. המחירים מתואמים לפיצולים בלבד, כמו ב‑TradingView וב‑Finviz. מומנטום ה‑TTM מחושב לפי הנוסחה של John Carter: רגרסיה ליניארית של המחיר פחות הממוצע של אמצע הטווח ו‑SMA20.</p>
+  <p class="sub">מקור הרשימות: ${D.source} · נסרקו ${D.scanned} מתוך ${D.universe}${D.stale?` · ${D.stale} ללא נר של היום`:""} · ${D.squeeze_on} מניות עם BB בתוך קלטנר · נוצר ${D.generated}</p></div>`;
+}
+(function init(){
+  const c=k=>D.results.filter(r=>r.kind===k).length;
+  document.getElementById("sub").innerHTML=(D.intraday?`<div style="background:#d2992226;color:#d29922;padding:8px 12px;border-radius:8px;margin-bottom:6px">⚠️ הרצת בדיקה במהלך יום המסחר. הנתונים חלקיים ויוחלפו בסריקה של 23:10.</div>`:"")+`נתוני סגירה ל‑<span class="num">${D.asof}</span> · נסרקו <span class="num">${D.scanned}</span> מניות · BB ${D.params.bb_len}/${D.params.bb_mult} בתוך KC ${D.params.kc_len}/${D.params.kc_mult} · עודכן ${D.generated}`;
+  document.getElementById("kpis").innerHTML=[["לפני פריצה",c("sq_bull")],["לפני שבירה",c("sq_bear")],["ניטרלי",c("sq_neutral")],["פרץ היום",c("fire_up")],["נשבר היום",c("fire_down")]].map(([a,b])=>`<div class="kpi"><span>${a}</span><b class="num">${b}</b></div>`).join("");
+  const cnt={sq_bull:c("sq_bull"),sq_bear:c("sq_bear"),sq_neutral:c("sq_neutral"),fire_up:c("fire_up"),fire_down:c("fire_down"),all:D.results.length};
+  document.getElementById("tabs").innerHTML=TABS.map(([k,v])=>`<button data-t="${k}">${v}${cnt[k]!=null?`<span class="ct num">${cnt[k]}</span>`:""}</button>`).join("");
+  document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{tab=b.dataset.t;render();});
+  if(!cnt.sq_bull)tab=["sq_bear","fire_up","fire_down","sq_neutral"].find(k=>cnt[k])||"sq_bull";
+  render();
+})();
+</script>
+</body>
+</html>
