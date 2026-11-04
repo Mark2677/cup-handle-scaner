@@ -203,6 +203,30 @@
 "short_sh": 10404154,
 "ts": 1793353051.1460133
 },
+"ALGT": {
+"beta_y": 1.645,
+"float_sh": 24299903,
+"industry": "Airlines",
+"inst_own": 99.14,
+"mcap": 2228847104,
+"short_date": 1792022400,
+"short_float": 9.22,
+"short_ratio": 4.45,
+"short_sh": 2122126,
+"ts": 1793829365.0947378
+},
+"ALIT": {
+"beta_y": 1.739,
+"float_sh": 21638818,
+"industry": "Software - Application",
+"inst_own": 76.55,
+"mcap": 598176768,
+"short_date": 1792022400,
+"short_float": 4.7,
+"short_ratio": 2.49,
+"short_sh": 1216666,
+"ts": 1793829365.0947378
+},
 "AMBA": {
 "beta_y": 2.381,
 "float_sh": 42140944,
@@ -2231,6 +2255,18 @@
 "short_sh": 18895777,
 "ts": 1793353051.1460133
 },
+"ORN": {
+"beta_y": 1.566,
+"float_sh": 38310772,
+"industry": "Engineering & Construction",
+"inst_own": 89.05,
+"mcap": 318768512,
+"short_date": 1792022400,
+"short_float": 6.42,
+"short_ratio": 3.97,
+"short_sh": 2142369,
+"ts": 1793829365.0947378
+},
 "OUST": {
 "beta_y": 3.233,
 "float_sh": 69946800,
@@ -2386,6 +2422,18 @@
 "short_ratio": 3.63,
 "short_sh": 10625661,
 "ts": 1793353051.1460133
+},
+"PLBY": {
+"beta_y": 1.954,
+"float_sh": 68455717,
+"industry": "Apparel Manufacturing",
+"inst_own": 39.88,
+"mcap": 164136528,
+"short_date": 1792022400,
+"short_float": 4.38,
+"short_ratio": 4.92,
+"short_sh": 2916425,
+"ts": 1793829365.0947378
 },
 "PLSE": {
 "beta_y": 1.57,
@@ -2590,6 +2638,18 @@
 "short_ratio": 9.23,
 "short_sh": 70016737,
 "ts": 1793353051.1460133
+},
+"RC": {
+"beta_y": 1.6,
+"float_sh": 145404415,
+"industry": "REIT - Mortgage",
+"inst_own": 59.36,
+"mcap": 188682528,
+"short_date": 1792022400,
+"short_float": 12.98,
+"short_ratio": 11.6,
+"short_sh": 21094248,
+"ts": 1793829365.0947378
 },
 "RCAT": {
 "beta_y": 1.515,

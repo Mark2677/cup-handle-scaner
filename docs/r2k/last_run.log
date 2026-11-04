@@ -1,20 +1,14 @@
-iShares variant: HTTP 200, 1537386 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
-iShares variant: HTTP 200, 1537386 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
-iShares variant: HTTP 200, 1537359 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
+iShares variant: HTTP 200, 1537284 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
+iShares variant: HTTP 200, 1537284 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
+iShares variant: HTTP 200, 1537257 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
 iShares IWM failed: ValueError all iShares variants returned HTML
-Nasdaq screener: HTTP 200, 2193839 chars
-Universe: 2118 (Russell-2000 proxy (US stocks $150M-$7B, Nasdaq screener))
-
-1 Failed download:
-['ALKT']: OperationalError('database is locked')
-$PENG: possibly delisted; no price data found  (period=2y)
-
-1 Failed download:
-['PENG']: possibly delisted; no price data found  (period=2y)
-Downloaded 2077/2118 (2y 1d)
-Avg volume > 500,000: 1123
-Downloaded 1055/1124 (5y 1mo)
-Beta pre-filter (>= 1.6): 281
-Fundamentals: 278 cached, fetching 3
+Nasdaq screener: HTTP 200, 2173861 chars
+Universe: 2125 (Russell-2000 proxy (US stocks $150M-$7B, Nasdaq screener))
+Failed to get ticker 'RC' reason: Failed to perform, curl: (28) Operation timed out after 10001 milliseconds with 0 bytes received. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.
+Downloaded 2085/2125 (2y 1d)
+Avg volume > 500,000: 1133
+Downloaded 1065/1134 (5y 1mo)
+Beta pre-filter (>= 1.6): 285
+Fundamentals: 280 cached, fetching 5
 Passed all filters: 14
-2026-11-03: 14 passed filters, 2 with a base pattern
+2026-11-04: 14 passed filters, 1 with a base pattern
