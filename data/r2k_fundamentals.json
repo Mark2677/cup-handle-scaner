@@ -131,6 +131,18 @@
 "short_sh": 11991988,
 "ts": 1793353051.1460133
 },
+"ADTN": {
+"beta_y": 1.56,
+"float_sh": 79392068,
+"industry": "Communication Equipment",
+"inst_own": 111.41,
+"mcap": 336518240,
+"short_date": 1792022400,
+"short_float": 17.52,
+"short_ratio": 7.32,
+"short_sh": 12549794,
+"ts": 1793915680.9271343
+},
 "AEHR": {
 "beta_y": 3.484,
 "float_sh": 31234407,
@@ -815,6 +827,18 @@
 "short_sh": 78749690,
 "ts": 1793353051.1460133
 },
+"COHU": {
+"beta_y": 1.612,
+"float_sh": 46225369,
+"industry": "Semiconductor Equipment & Materials",
+"inst_own": 116.07,
+"mcap": 1652111360,
+"short_date": 1792022400,
+"short_float": 22.81,
+"short_ratio": 8.01,
+"short_sh": 8949519,
+"ts": 1793915680.9271343
+},
 "COMP": {
 "beta_y": 2.319,
 "float_sh": 734758655,
@@ -1066,6 +1090,18 @@
 "short_ratio": 2.4,
 "short_sh": 8294322,
 "ts": 1793353051.1460133
+},
+"DOUG": {
+"beta_y": 1.902,
+"float_sh": 73912133,
+"industry": "Real Estate Services",
+"inst_own": 53.03,
+"mcap": 142698048,
+"short_date": 1792022400,
+"short_float": 3.23,
+"short_ratio": 4.61,
+"short_sh": 2656439,
+"ts": 1793915680.9271343
 },
 "DSGN": {
 "beta_y": 1.686,
@@ -1714,6 +1750,18 @@
 "short_ratio": 5.54,
 "short_sh": 3731221,
 "ts": 1793656155.503219
+},
+"KN": {
+"beta_y": 1.614,
+"float_sh": 83451868,
+"industry": "Electronic Components",
+"inst_own": 104.05,
+"mcap": 2569587712,
+"short_date": 1792022400,
+"short_float": 7.41,
+"short_ratio": 6.57,
+"short_sh": 4307375,
+"ts": 1793915680.9271343
 },
 "KOD": {
 "beta_y": 2.035,
@@ -2458,6 +2506,18 @@
 "short_ratio": 5.86,
 "short_sh": 291955349,
 "ts": 1793353051.1460133
+},
+"POWI": {
+"beta_y": 1.574,
+"float_sh": 55012290,
+"industry": "Semiconductors",
+"inst_own": 113.95,
+"mcap": 2170118912,
+"short_date": 1792022400,
+"short_float": 13.09,
+"short_ratio": 6.52,
+"short_sh": 5161894,
+"ts": 1793915680.9271343
 },
 "PRCH": {
 "beta_y": 3.163,
@@ -3214,6 +3274,18 @@
 "short_ratio": 7.35,
 "short_sh": 14859346,
 "ts": 1793353051.1460133
+},
+"TH": {
+"beta_y": 1.542,
+"float_sh": 79694753,
+"industry": "Specialty Business Services",
+"inst_own": 66.91,
+"mcap": 1020428800,
+"short_date": 1792022400,
+"short_float": 12.21,
+"short_ratio": 1.49,
+"short_sh": 3650255,
+"ts": 1793915680.9271343
 },
 "TLRY": {
 "beta_y": 1.917,

@@ -1,14 +1,13 @@
-iShares variant: HTTP 200, 1537284 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
-iShares variant: HTTP 200, 1537284 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
-iShares variant: HTTP 200, 1537257 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
+iShares variant: HTTP 200, 1508167 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
+iShares variant: HTTP 200, 1508167 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
+iShares variant: HTTP 200, 1508140 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
 iShares IWM failed: ValueError all iShares variants returned HTML
-Nasdaq screener: HTTP 200, 2173861 chars
-Universe: 2125 (Russell-2000 proxy (US stocks $150M-$7B, Nasdaq screener))
-Failed to get ticker 'RC' reason: Failed to perform, curl: (28) Operation timed out after 10001 milliseconds with 0 bytes received. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.
-Downloaded 2085/2125 (2y 1d)
-Avg volume > 500,000: 1133
-Downloaded 1065/1134 (5y 1mo)
-Beta pre-filter (>= 1.6): 285
-Fundamentals: 280 cached, fetching 5
+Nasdaq screener: HTTP 200, 2179769 chars
+Universe: 2116 (Russell-2000 proxy (US stocks $150M-$7B, Nasdaq screener))
+Downloaded 2077/2116 (2y 1d)
+Avg volume > 500,000: 1126
+Downloaded 1059/1127 (5y 1mo)
+Beta pre-filter (>= 1.6): 276
+Fundamentals: 270 cached, fetching 6
 Passed all filters: 14
-2026-11-04: 14 passed filters, 1 with a base pattern
+2026-11-05: 14 passed filters, 0 with a base pattern
