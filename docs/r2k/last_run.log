@@ -1,13 +1,13 @@
-iShares variant: HTTP 200, 1508167 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
-iShares variant: HTTP 200, 1508167 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
-iShares variant: HTTP 200, 1508140 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
+iShares variant: HTTP 200, 1539831 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
+iShares variant: HTTP 200, 1539831 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
+iShares variant: HTTP 200, 1539804 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
 iShares IWM failed: ValueError all iShares variants returned HTML
-Nasdaq screener: HTTP 200, 2179769 chars
-Universe: 2116 (Russell-2000 proxy (US stocks $150M-$7B, Nasdaq screener))
-Downloaded 2077/2116 (2y 1d)
-Avg volume > 500,000: 1126
-Downloaded 1059/1127 (5y 1mo)
-Beta pre-filter (>= 1.6): 276
-Fundamentals: 270 cached, fetching 6
-Passed all filters: 14
-2026-11-05: 14 passed filters, 0 with a base pattern
+Nasdaq screener: HTTP 200, 2226446 chars
+Universe: 2124 (Russell-2000 proxy (US stocks $150M-$7B, Nasdaq screener))
+Downloaded 2085/2124 (2y 1d)
+Avg volume > 500,000: 1142
+Downloaded 1072/1143 (5y 1mo)
+Beta pre-filter (>= 1.6): 283
+Fundamentals: 20 cached, fetching 263
+Passed all filters: 13
+2026-11-06: 13 passed filters, 1 with a base pattern
