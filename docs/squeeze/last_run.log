@@ -4,4 +4,4 @@ Dow 30: source failed (`Import html5lib` failed.  Use pip, conda, or your prefer
 Dow 30: using bundled list
 Universe: 518 unique tickers (S&P 500: Wikipedia · Nasdaq-100: Nasdaq.com · Dow 30: fallback)
 Downloaded 517/518
-2026-11-05: squeeze on 59; sq_bull 5, sq_bear 1, sq_neutral 5, fire_up 3, fire_down 3
+2026-11-06: squeeze on 61; sq_bull 5, sq_bear 2, sq_neutral 3, fire_up 1, fire_down 3
