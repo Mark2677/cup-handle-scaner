@@ -1,6 +1,3 @@
 Universe: 503 tickers (Wikipedia)
-
-1 Failed download:
-['AMZN']: OperationalError('database is locked')
-Downloaded 501/503
-2026-11-06: up 1, above 143
+Downloaded 502/503
+2026-11-09: up 14, above 89
