@@ -36,6 +36,7 @@ P = dict(
     touch=0.3,                 # a swing point within 0.3 ATR of the line is a touch
     pierce=0.25,               # wicks may poke through the line by 0.25 ATR
     near=0.5,                  # watch list: close within 0.5 ATR of the intact line
+    min_move=1.5,              # the line must fall (rise) at least 1.5 ATR over its life
 )
 KINDS = ("break_up", "break_down", "near_up", "near_down")
 
@@ -65,6 +66,8 @@ def best_line(h, l, c, atr, side):
             slope = (src[q] - src[p]) / (q - p)
             if (side == "res" and slope >= 0) or (side == "sup" and slope <= 0):
                 continue
+            if abs(slope) * (n - 1 - p) < P["min_move"] * a:
+                continue                                 # practically flat: not a trendline
             line = src[p] + slope * (t - p)
             hist = slice(p, n - 1)                       # until yesterday
             lh = line[:-1]
