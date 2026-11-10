@@ -2100,16 +2100,16 @@
 "ts": 1793353051.1460133
 },
 "NAGE": {
-"beta_y": 2.017,
-"float_sh": 59074872,
+"beta_y": 2.084,
+"float_sh": 59145155,
 "industry": "Packaged Foods",
-"inst_own": 41.6,
-"mcap": 197815008,
+"inst_own": 41.11,
+"mcap": 170273344,
 "short_date": 1792022400,
-"short_float": 8.13,
+"short_float": 8.14,
 "short_ratio": 7.73,
 "short_sh": 4175152,
-"ts": 1793353051.1460133
+"ts": 1794347312.8384616
 },
 "NCMI": {
 "beta_y": 1.753,
@@ -2436,16 +2436,16 @@
 "ts": 1794001643.3351693
 },
 "PDYN": {
-"beta_y": 3.653,
+"beta_y": 3.889,
 "float_sh": 35821238,
 "industry": "Software - Infrastructure",
-"inst_own": 28.11,
-"mcap": 181565728,
+"inst_own": 28.48,
+"mcap": 176138480,
 "short_date": 1792022400,
 "short_float": 13.86,
 "short_ratio": 6.54,
 "short_sh": 6075075,
-"ts": 1793353051.1460133
+"ts": 1794347312.8384616
 },
 "PENG": {
 "beta_y": 2.881,
@@ -3094,6 +3094,18 @@
 "short_ratio": 4.04,
 "short_sh": 16818480,
 "ts": 1794001643.3351693
+},
+"SKYA": {
+"beta_y": null,
+"float_sh": 39121118,
+"industry": "Software - Infrastructure",
+"inst_own": 27.27,
+"mcap": 150528432,
+"short_date": 1792022400,
+"short_float": 1.93,
+"short_ratio": 0.31,
+"short_sh": 776391,
+"ts": 1794347312.8384616
 },
 "SLDB": {
 "beta_y": 2.629,
