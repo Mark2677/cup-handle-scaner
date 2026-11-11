@@ -229,15 +229,15 @@
 },
 "ALIT": {
 "beta_y": 1.739,
-"float_sh": 21638818,
+"float_sh": 21686178,
 "industry": "Software - Application",
-"inst_own": 76.55,
-"mcap": 598176768,
-"short_date": 1792022400,
-"short_float": 4.7,
-"short_ratio": 2.49,
-"short_sh": 1216666,
-"ts": 1793829365.0947378
+"inst_own": 76.78,
+"mcap": 456069280,
+"short_date": 1793318400,
+"short_float": 3.87,
+"short_ratio": 2.11,
+"short_sh": 1003826,
+"ts": 1794435213.3025272
 },
 "AMBA": {
 "beta_y": 2.362,
@@ -265,15 +265,15 @@
 },
 "AMCX": {
 "beta_y": 1.551,
-"float_sh": 28877042,
+"float_sh": 28813606,
 "industry": "Entertainment",
-"inst_own": 120.53,
-"mcap": 331237280,
-"short_date": 1792022400,
-"short_float": 18.11,
-"short_ratio": 8.43,
-"short_sh": 5377178,
-"ts": 1793656155.503219
+"inst_own": 120.85,
+"mcap": 394718240,
+"short_date": 1793318400,
+"short_float": 17.05,
+"short_ratio": 7.11,
+"short_sh": 5046132,
+"ts": 1794435213.3025272
 },
 "AMPX": {
 "beta_y": 2.379,
@@ -1547,17 +1547,29 @@
 "short_sh": 126646046,
 "ts": 1794001643.3351693
 },
+"HUCK": {
+"beta_y": 1.808,
+"float_sh": 39711690,
+"industry": "Software - Application",
+"inst_own": 66.37,
+"mcap": 159922944,
+"short_date": 1793318400,
+"short_float": 16.88,
+"short_ratio": 8.45,
+"short_sh": 6207615,
+"ts": 1794435213.3025272
+},
 "HUT": {
 "beta_y": 6.082,
-"float_sh": 103036287,
+"float_sh": 99814829,
 "industry": "Capital Markets",
-"inst_own": 82.32,
-"mcap": 7857791488,
-"short_date": 1792022400,
-"short_float": 16.1,
-"short_ratio": 3.09,
-"short_sh": 18154959,
-"ts": 1793742751.7462585
+"inst_own": 84.44,
+"mcap": 7329492992,
+"short_date": 1793318400,
+"short_float": 17.93,
+"short_ratio": 3.18,
+"short_sh": 20062374,
+"ts": 1794435213.3025272
 },
 "HYLN": {
 "beta_y": 3.725,
@@ -1669,15 +1681,15 @@
 },
 "INO": {
 "beta_y": 1.725,
-"float_sh": 95787461,
+"float_sh": 103158670,
 "industry": "Biotechnology",
-"inst_own": 46.77,
-"mcap": 171639872,
-"short_date": 1792022400,
-"short_float": 22.86,
-"short_ratio": 7.27,
-"short_sh": 21304238,
-"ts": 1793742751.7462585
+"inst_own": 33.78,
+"mcap": 264973472,
+"short_date": 1793318400,
+"short_float": 22.1,
+"short_ratio": 2.91,
+"short_sh": 22100943,
+"ts": 1794435213.3025272
 },
 "INOD": {
 "beta_y": null,
@@ -2053,15 +2065,15 @@
 },
 "MP": {
 "beta_y": 2.108,
-"float_sh": 144321060,
+"float_sh": 144487977,
 "industry": "Other Industrial Metals & Mining",
-"inst_own": 78.28,
-"mcap": 6737583104,
-"short_date": 1792022400,
-"short_float": 22.13,
-"short_ratio": 6.49,
-"short_sh": 36236316,
-"ts": 1793742751.7462585
+"inst_own": 79.15,
+"mcap": 6547782144,
+"short_date": 1793318400,
+"short_float": 21.83,
+"short_ratio": 6.75,
+"short_sh": 35773741,
+"ts": 1794435213.3025272
 },
 "MRAM": {
 "beta_y": 2.191,
@@ -2343,13 +2355,13 @@
 "beta_y": 1.566,
 "float_sh": 38310772,
 "industry": "Engineering & Construction",
-"inst_own": 89.05,
-"mcap": 318768512,
-"short_date": 1792022400,
-"short_float": 6.42,
-"short_ratio": 3.97,
-"short_sh": 2142369,
-"ts": 1793829365.0947378
+"inst_own": 86.4,
+"mcap": 315922368,
+"short_date": 1793318400,
+"short_float": 6.38,
+"short_ratio": 3.58,
+"short_sh": 2133674,
+"ts": 1794435213.3025272
 },
 "OUST": {
 "beta_y": 3.489,
@@ -2734,6 +2746,18 @@
 "short_ratio": 9.23,
 "short_sh": 70016737,
 "ts": 1794001643.3351693
+},
+"QUIT": {
+"beta_y": null,
+"float_sh": 79867410,
+"industry": "Biotechnology",
+"inst_own": 83.8,
+"mcap": 665011008,
+"short_date": 1792022400,
+"short_float": 17.37,
+"short_ratio": 12.17,
+"short_sh": 17805384,
+"ts": 1794435213.3025272
 },
 "RC": {
 "beta_y": 1.6,
