@@ -684,16 +684,16 @@
 "ts": 1794001643.3351693
 },
 "CAVA": {
-"beta_y": 1.807,
-"float_sh": 107912574,
+"beta_y": 1.759,
+"float_sh": 107950510,
 "industry": "Restaurants",
-"inst_own": 90.0,
-"mcap": 6916094976,
-"short_date": 1792022400,
-"short_float": 14.66,
-"short_ratio": 4.4,
-"short_sh": 16139567,
-"ts": 1793353051.1460133
+"inst_own": 90.54,
+"mcap": 6700972544,
+"short_date": 1793318400,
+"short_float": 14.32,
+"short_ratio": 5.26,
+"short_sh": 15769619,
+"ts": 1794520459.060786
 },
 "CCCC": {
 "beta_y": 3.156,
@@ -3406,6 +3406,18 @@
 "short_ratio": 11.14,
 "short_sh": 8769040,
 "ts": 1794001643.3351693
+},
+"TPC": {
+"beta_y": 2.115,
+"float_sh": 47309051,
+"industry": "Engineering & Construction",
+"inst_own": 84.35,
+"mcap": 5278833152,
+"short_date": 1793318400,
+"short_float": 4.8,
+"short_ratio": 4.73,
+"short_sh": 1812977,
+"ts": 1794520459.060786
 },
 "TRLV": {
 "beta_y": null,
