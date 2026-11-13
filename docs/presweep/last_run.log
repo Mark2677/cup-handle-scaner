@@ -2,5 +2,5 @@ Universe: 503 tickers (Wikipedia)
 Nasdaq-100: 101 tickers (Nasdaq.com)
 Universe: 518 unique tickers (S&P 500: Wikipedia · Nasdaq-100: Nasdaq.com)
 Downloaded 517/518
-Fundamentals: 14 cached, fetching 31
-2026-11-12: funnel {'price': 510, 'volume': 443, 'setup': 45, 'mcap': 45}; AB 1, A 2, B 42
+Fundamentals: 6 cached, fetching 19
+2026-11-13: funnel {'price': 510, 'volume': 440, 'setup': 25, 'mcap': 25}; AB 0, A 1, B 24
