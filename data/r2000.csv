@@ -117,13 +117,13 @@ AMWL,American Well Corporation Class A Common Stock,Consumer Discretionary
 AN,AutoNation Inc. Common Stock,Consumer Discretionary
 ANAB,AnaptysBio Inc. Common Stock,Health Care
 ANDE,Andersons Inc. (The) Common Stock,Industrials
+ANDG,Andersen Group Inc. Class A Common Stock,Consumer Discretionary
 ANF,Abercrombie & Fitch Company Common Stock,Consumer Discretionary
 ANGI,Angi Inc. Class A Common Stock,Consumer Discretionary
 ANGO,AngioDynamics Inc. Common Stock,Health Care
 ANGX,Angel Studios Inc. Class A Common Stock,Consumer Discretionary
 ANIK,Anika Therapeutics Inc. Common Stock,Health Care
 ANIP,ANI Pharmaceuticals Inc.,Health Care
-ANNA,AleAnna Inc. Class A Common Stock,Energy
 ANNX,Annexon Inc. Common Stock,Health Care
 ANRO,Alto Neuroscience Inc. Common Stock,Health Care
 ANTX,AN2 Therapeutics Inc. Common Stock,Health Care
@@ -186,6 +186,7 @@ ATRC,AtriCure Inc. Common Stock,Health Care
 ATRO,Astronics Corporation Common Stock,Industrials
 ATTO,Attovia Therapeutics Inc. Common Stock,Health Care
 AUB,Atlantic Union Bankshares Corporation Common Stock,Finance
+AUC,ATIF Holdings Limited Ordinary Shares,Consumer Discretionary
 AUGO,Aura Minerals Inc. Common Shares,Basic Materials
 AURA,Aura Biosciences Inc. Common Stock,Health Care
 AVA,Avista Corporation Common Stock,Utilities
@@ -202,6 +203,7 @@ AVNW,Aviat Networks Inc. Common Stock,Technology
 AVO,Mission Produce Inc. Common Stock,Consumer Staples
 AVPT,AvePoint Inc. Class A Common Stock,Technology
 AVR,Anteris Technologies Global Corp. Common Stock,Health Care
+AVT,Avnet Inc. Common Stock,Technology
 AVTX,Avalo Therapeutics Inc. Common Stock,Health Care
 AWR,American States Water Company Common Stock,Utilities
 AX,Axos Financial Inc. Common Stock,Finance
@@ -266,7 +268,6 @@ BIOA,BioAge Labs Inc. Common Stock,Health Care
 BJRI,BJ's Restaurants Inc. Common Stock,Consumer Discretionary
 BKD,Brookdale Senior Living Inc. Common Stock,Health Care
 BKE,Buckle Inc. (The) Common Stock,Consumer Discretionary
-BKH,Black Hills Corporation Common Stock,Utilities
 BKKT,Bakkt Inc. Class A Common Stock,Finance
 BKSY,BlackSky Technology Inc. Class A Common Stock,Technology
 BKT,BlackRock Income Trust Inc. (The),Finance
@@ -339,7 +340,6 @@ CABA,Cabaletta Bio Inc. Common Stock,Health Care
 CAC,Camden National Corporation Common Stock,Finance
 CACC,Credit Acceptance Corporation Common Stock,Finance
 CADL,Candel Therapeutics Inc. Common Stock,Health Care
-CAG,ConAgra Brands Inc. Common Stock,Consumer Staples
 CAI,Caris Life Sciences Inc. Common Stock,Health Care
 CAKE,Cheesecake Factory Incorporated (The) Common Stock,Consumer Discretionary
 CAL,Caleres Inc. Common Stock,Consumer Discretionary
@@ -427,6 +427,7 @@ CLPT,ClearPoint Neuro Inc. Common Stock,Health Care
 CLSK,CleanSpark Inc. Common Stock,Finance
 CLW,Clearwater Paper Corporation Common Stock,Basic Materials
 CLYM,Climb Bio Inc. Common Stock,Health Care
+CMC,Commercial Metals Company Common Stock,Industrials
 CMCO,Columbus McKinnon Corporation Common Stock,Industrials
 CMP,Compass Minerals Intl Inc Common Stock,Industrials
 CMRC,Commerce.com Inc. Series 1 Common Stock,Technology
@@ -457,6 +458,7 @@ COLM,Columbia Sportswear Company Common Stock,Consumer Discretionary
 CON,Concentra Group Holdings Parent Inc. Common Stock,Health Care
 COOK,Traeger Inc. Common Stock,Consumer Discretionary
 CORZ,Core Scientific Inc. Common Stock,Finance
+COSM,Cosmos Health Inc. Common Stock,Health Care
 COSO,CoastalSouth Bancshares Inc. Common Stock,Finance
 COTY,Coty Inc. Class A Common Stock,Consumer Discretionary
 COUR,Coursera Inc. Common Stock,Technology
@@ -557,6 +559,7 @@ DJCO,Daily Journal Corp. (S.C.) Common Stock,Consumer Discretionary
 DJT,Trump Media & Technology Group Corp. Common Stock,Technology
 DK,Delek US Holdings Inc. Common Stock,Energy
 DLB,Dolby Laboratories Common Stock,Miscellaneous
+DLTH,Duluth Holdings Inc. Class B Common Stock,Consumer Discretionary
 DLX,Deluxe Corporation Common Stock,Consumer Discretionary
 DLY,DoubleLine Yield Opportunities Fund Common Shares of Benefic,Finance
 DMAC,DiaMedica Therapeutics Inc. Common Stock,Health Care
@@ -735,6 +738,7 @@ FNWD,Finward Bancorp Common Stock,Finance
 FOA,Finance of America Companies Inc. Class A Common Stock,Finance
 FOF,Cohen & Steers Closed-End Opportunity Fund Inc. Common Stock,Finance
 FOR,Forestar Group Inc Common Stock ,Finance
+FORM,FormFactor Inc. FormFactor Inc. Common Stock,Technology
 FORR,Forrester Research Inc. Common Stock,Industrials
 FOSL,Fossil Group Inc. Common Stock,Consumer Discretionary
 FOUR,Shift4 Payments Inc. Class A Common Stock,Consumer Discretionary
@@ -930,6 +934,7 @@ HUCK,Huckleberry.ai Inc. Class B Common Stock,Technology
 HUMA,Humacyte Inc. Common Stock,Health Care
 HUN,Huntsman Corporation Common Stock,Industrials
 HURN,Huron Consulting Group Inc. Common Stock,Consumer Discretionary
+HUT,Hut 8 Corp. Common Stock,Finance
 HVT,Haverty Furniture Companies Inc. Common Stock,Consumer Discretionary
 HWBK,Hawthorn Bancshares Inc. Common Stock,Finance
 HWC,Hancock Whitney Corporation Common Stock,Finance
@@ -954,6 +959,7 @@ IDR,Idaho Strategic Resources Inc. Common Stock,Basic Materials
 IDT,IDT Corporation Class B Common Stock,Telecommunications
 IDYA,IDEAYA Biosciences Inc. Common Stock,Health Care
 IEP,Icahn Enterprises L.P. Common Stock,Energy
+IESC,IES Holdings Inc. Common Stock,Industrials
 III,Information Services Group Inc. Common Stock,Consumer Discretionary
 IIIN,Insteel Industries Inc. Common Stock,Industrials
 IIIV,i3 Verticals Inc. Class A Common Stock,Technology
@@ -1008,7 +1014,6 @@ IRWD,Ironwood Pharmaceuticals Inc. Class A Common Stock,Health Care
 ISBA,Isabella Bank Corporation Common stock,Finance
 ISTR,Investar Holding Corporation Common Stock,Finance
 ITG,ITG Inc. Class A Common Stock,Industrials
-ITGR,Integer Holdings Corporation Common Stock,Health Care
 ITIC,Investors Title Company Common Stock,Finance
 ITRI,Itron Inc. Common Stock,Industrials
 IVR,INVESCO MORTGAGE CAPITAL INC Common Stock,Real Estate
@@ -1075,7 +1080,6 @@ KRT,Karat Packaging Inc. Common Stock,Industrials
 KRUS,Kura Sushi USA Inc. Class A Common Stock,Consumer Discretionary
 KSS,Kohl's Corporation Common Stock,Consumer Discretionary
 KTB,Kontoor Brands Inc. Common Stock ,Industrials
-KTF,DWS Municipal Income Trust,Finance
 KTOS,Kratos Defense & Security Solutions Inc. Common Stock,Industrials
 KURA,Kura Oncology Inc. Common Stock,Health Care
 KVYO,Klaviyo Inc. Series A Common Stock,Technology
@@ -1235,7 +1239,6 @@ MNRO,Monro Inc. Common Stock,Consumer Discretionary
 MNSB,MainStreet Bancshares Inc. Common Stock,Finance
 MNTN,MNTN Inc. Class A Common Stock,Consumer Discretionary
 MOBI,Mobia Medical Inc. Common Stock,Health Care
-MOD,Modine Manufacturing Company Common Stock,Consumer Discretionary
 MOS,Mosaic Company (The) Common Stock,Industrials
 MOV,Movado Group Inc. Common Stock,Consumer Discretionary
 MOVE,Corvex Inc. Common Stock,Technology
@@ -1370,7 +1373,6 @@ NVEC,NVE Corporation Common Stock,Technology
 NVST,Envista Holdings Corporation Common Stock,Health Care
 NVTS,Navitas Semiconductor Corporation Common Stock,Technology
 NWBI,Northwest Bancshares Inc. Common Stock,Finance
-NWE,NorthWestern Energy Group Inc. Common Stock,Utilities
 NWFL,Norwood Financial Corp. Common Stock,Finance
 NWL,Newell Brands Inc. Common Stock,Industrials
 NWN,Northwest Natural Holding Company Common Stock,Utilities
@@ -1427,7 +1429,6 @@ OPI,Office Properties Income Trust Common shares of beneficial i,Finance
 OPK,OPKO Health Inc. Common Stock,Health Care
 OPLN,OPENLANE Inc. Common Stock,Consumer Discretionary
 OPRT,Oportun Financial Corporation Common Stock,Finance
-OPRX,OptimizeRx Corporation Common Stock,Consumer Discretionary
 OPTU,Optimum Communications Inc. Class A common stock,Telecommunications
 OPTX,Syntec Optics Holdings Inc. Class A Common Stock,Technology
 OPY,Oppenheimer Holdings Inc. Class A Common Stock (DE),Finance
@@ -1520,6 +1521,7 @@ PL,Planet Labs PBC Class A Common Stock,Technology
 PLAB,Photronics Inc. Common Stock,Technology
 PLAY,Dave & Buster's Entertainment Inc. Common Stock,Consumer Discretionary
 PLBC,Plumas Bancorp,Finance
+PLBY,Playboy Inc. Common Stock,Consumer Discretionary
 PLMR,Palomar Holdings Inc. Common stock,Finance
 PLNT,Planet Fitness Inc. Common Stock,Consumer Discretionary
 PLOW,Douglas Dynamics Inc. Common Stock,Industrials
@@ -1642,7 +1644,6 @@ RHI,Robert Half Inc. Common Stock,Consumer Discretionary
 RHLD,Resolute Holdings Management Common Stock ,Finance
 RICK,RCI Hospitality Holdings Inc. Common Stock,Consumer Discretionary
 RIGL,Rigel Pharmaceuticals Inc. Common Stock,Health Care
-RILY,BRC Group Holdings Inc. Common Stock,Finance
 RIOT,Riot Platforms Inc. Common Stock ,Finance
 RITM,Rithm Capital Corp. Common Stock,Real Estate
 RJET,Republic Airways Holdings Inc. Common Stock,Consumer Discretionary
@@ -1679,7 +1680,6 @@ RSVR,Reservoir Media Inc. Common Stock,Consumer Discretionary
 RUM,RUM Group Inc. Class A Common Stock,Technology
 RUN,Sunrun Inc. Common Stock,Miscellaneous
 RUSHA,Rush Enterprises Inc. Common Stock Cl A,Consumer Discretionary
-RUSHB,Rush Enterprises Inc. Class B,Consumer Discretionary
 RVLV,Revolve Group Inc. Class A Common Stock,Consumer Discretionary
 RVT,Royce Small-Cap Trust Inc. Common Stock,Finance
 RWAY,Runway Growth Finance Corp. Common Stock,Finance
@@ -1788,6 +1788,7 @@ SNDR,Schneider National Inc. Common Stock,Industrials
 SNDX,Syndax Pharmaceuticals Inc. Common Stock,Health Care
 SNEX,StoneX Group Inc. Common Stock,Finance
 SNFCA,Security National Financial Corporation Class A Common Stock,Finance
+SOC,Sable Offshore Corp. Common Stock,Energy
 SON,Sonoco Products Company Common Stock,Consumer Discretionary
 SONO,Sonos Inc. Common Stock,Consumer Staples
 SOR,Source Capital Inc. Cmn Shs of BI,Finance
@@ -1835,6 +1836,7 @@ SVRA,Savara Inc. Common Stock,Health Care
 SVV,Savers Value Village Inc. Common Stock,Consumer Discretionary
 SWBI,Smith & Wesson Brands Inc. Common Stock,Industrials
 SWIM,Latham Group Inc. Common Stock,Industrials
+SWMR,Swarmer Inc Common Stock,Technology
 SWRD,Stewards Inc Common Stock,Finance
 SWX,Southwest Gas Holdings Inc. Common Stock (DE),Utilities
 SXC,SunCoke Energy Inc. Common Stock,Industrials
@@ -1881,7 +1883,6 @@ TITN,Titan Machinery Inc. Common Stock,Consumer Discretionary
 TKNO,Alpha Teknova Inc. Common Stock,Health Care
 TLRY,Tilray Brands Inc. Common Stock ,Health Care
 TLS,Telos Corporation Common Stock,Technology
-TLSI,TriSalus Life Sciences Inc. Common Stock,Health Care
 TMCI,Treace Medical Concepts Inc. Common Stock,Health Care
 TMDX,TransMedics Group Inc. Common Stock,Health Care
 TMP,Tompkins Financial Corporation Common Stock,Finance
@@ -1961,7 +1962,6 @@ UPWK,Upwork Inc. Common Stock,Technology
 USAR,USA Rare Earth Inc. Class A Common Stock,Basic Materials
 USAU,U.S. Gold Corp. Common Stock,Basic Materials
 USCB,USCB Financial Holdings Inc. Class A Common Stock,Finance
-USDE,StablecoinX Inc. Class A Common Stock,Finance
 USLM,United States Lime & Minerals Inc. Common Stock,Industrials
 USNA,USANA Health Sciences Inc. Common Stock,Health Care
 USPH,U.S. Physical Therapy Inc. Common Stock,Health Care
@@ -2021,7 +2021,6 @@ VSTS,Vestis Corporation Common Stock,Consumer Discretionary
 VTN,Invesco Trust for Investment Grade New York Municipals Commo,Finance
 VTOL,Bristow Group Inc. Common Stock,Consumer Discretionary
 VTS,Vitesse Energy Inc. Common Stock,Energy
-VUZI,Vuzix Corporation Common Stock,Technology
 VVV,Valvoline Inc. Common Stock,Industrials
 VVX,V2X Inc. Common Stock,Consumer Discretionary
 VYX,NCR Voyix Corporation Common Stock,Miscellaneous
