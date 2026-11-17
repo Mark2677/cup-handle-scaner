@@ -807,13 +807,13 @@
 "beta_y": 1.976,
 "float_sh": 564474001,
 "industry": "Steel",
-"inst_own": 83.91,
-"mcap": 6538903552,
-"short_date": 1792022400,
-"short_float": 13.45,
-"short_ratio": 4.44,
-"short_sh": 76027636,
-"ts": 1794001643.3351693
+"inst_own": 82.73,
+"mcap": 6715785216,
+"short_date": 1793318400,
+"short_float": 10.93,
+"short_ratio": 2.56,
+"short_sh": 61755748,
+"ts": 1794952881.5697925
 },
 "CLNE": {
 "beta_y": 1.851,
@@ -1427,6 +1427,18 @@
 "short_sh": 6441458,
 "ts": 1794606854.2147577
 },
+"GAP": {
+"beta_y": 2.062,
+"float_sh": 201239149,
+"industry": "Apparel Retail",
+"inst_own": 64.38,
+"mcap": 6797077504,
+"short_date": 1793318400,
+"short_float": 12.64,
+"short_ratio": 4.54,
+"short_sh": 23806271,
+"ts": 1794952881.5697925
+},
 "GDRX": {
 "beta_y": 1.66,
 "float_sh": 93501128,
@@ -1813,15 +1825,15 @@
 },
 "KOD": {
 "beta_y": 1.979,
-"float_sh": 36844572,
+"float_sh": 39130931,
 "industry": "Biotechnology",
-"inst_own": 105.68,
-"mcap": 6240951296,
-"short_date": 1792022400,
-"short_float": 21.4,
-"short_ratio": 2.38,
-"short_sh": 8500479,
-"ts": 1794001643.3351693
+"inst_own": 98.77,
+"mcap": 6330289664,
+"short_date": 1793318400,
+"short_float": 19.71,
+"short_ratio": 5.03,
+"short_sh": 8115058,
+"ts": 1794952881.5697925
 },
 "KODK": {
 "beta_y": 1.626,
@@ -2055,13 +2067,13 @@
 "beta_y": 1.844,
 "float_sh": 52113297,
 "industry": "Building Products & Equipment",
-"inst_own": 100.71,
-"mcap": 5646853120,
-"short_date": 1792022400,
-"short_float": 4.78,
-"short_ratio": 1.77,
-"short_sh": 2501175,
-"ts": 1794261327.566022
+"inst_own": 99.73,
+"mcap": 6901236224,
+"short_date": 1793318400,
+"short_float": 4.68,
+"short_ratio": 1.79,
+"short_sh": 2444541,
+"ts": 1794952881.5697925
 },
 "MP": {
 "beta_y": 2.108,
@@ -2115,13 +2127,13 @@
 "beta_y": 2.084,
 "float_sh": 59145155,
 "industry": "Packaged Foods",
-"inst_own": 41.11,
-"mcap": 170273344,
-"short_date": 1792022400,
-"short_float": 8.14,
-"short_ratio": 7.73,
-"short_sh": 4175152,
-"ts": 1794347312.8384616
+"inst_own": 38.46,
+"mcap": 161561680,
+"short_date": 1793318400,
+"short_float": 8.45,
+"short_ratio": 7.56,
+"short_sh": 4348687,
+"ts": 1794952881.5697925
 },
 "NCMI": {
 "beta_y": 1.753,
@@ -2449,15 +2461,15 @@
 },
 "PDYN": {
 "beta_y": 3.889,
-"float_sh": 35821238,
+"float_sh": 37730182,
 "industry": "Software - Infrastructure",
-"inst_own": 28.48,
-"mcap": 176138480,
-"short_date": 1792022400,
-"short_float": 13.86,
-"short_ratio": 6.54,
-"short_sh": 6075075,
-"ts": 1794347312.8384616
+"inst_own": 26.44,
+"mcap": 147463792,
+"short_date": 1793318400,
+"short_float": 13.96,
+"short_ratio": 7.4,
+"short_sh": 6405228,
+"ts": 1794952881.5697925
 },
 "PENG": {
 "beta_y": 2.881,
@@ -3615,13 +3627,13 @@
 "beta_y": 2.456,
 "float_sh": 25773070,
 "industry": "Electronic Components",
-"inst_own": 70.77,
-"mcap": 6778306560,
-"short_date": 1792022400,
-"short_float": 10.78,
-"short_ratio": 2.19,
-"short_sh": 2263509,
-"ts": 1794001643.3351693
+"inst_own": 66.81,
+"mcap": 6690162688,
+"short_date": 1793318400,
+"short_float": 10.21,
+"short_ratio": 1.95,
+"short_sh": 2145012,
+"ts": 1794952881.5697925
 },
 "VIR": {
 "beta_y": 1.741,
