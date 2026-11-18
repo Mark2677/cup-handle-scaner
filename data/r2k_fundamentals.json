@@ -2004,16 +2004,16 @@
 "ts": 1794606854.2147577
 },
 "MAC": {
-"beta_y": 2.1,
-"float_sh": 283343343,
+"beta_y": 2.118,
+"float_sh": 282827792,
 "industry": "REIT - Retail",
-"inst_own": 113.62,
-"mcap": 7172188160,
-"short_date": 1792022400,
-"short_float": 16.56,
-"short_ratio": 9.85,
-"short_sh": 33576636,
-"ts": 1793353051.1460133
+"inst_own": 117.03,
+"mcap": 7220054528,
+"short_date": 1793318400,
+"short_float": 16.57,
+"short_ratio": 10.61,
+"short_sh": 33698736,
+"ts": 1795039274.0373302
 },
 "MARA": {
 "beta_y": 5.253,

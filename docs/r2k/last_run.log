@@ -1,16 +1,13 @@
-iShares variant: HTTP 200, 1575133 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
-iShares variant: HTTP 200, 1575133 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
-iShares variant: HTTP 200, 1575106 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
+iShares variant: HTTP 200, 1575172 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
+iShares variant: HTTP 200, 1575172 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
+iShares variant: HTTP 200, 1575145 chars, starts '<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" p'
 iShares IWM failed: ValueError all iShares variants returned HTML
-Nasdaq screener: HTTP 200, 2283356 chars
-Universe: 2094 (Russell-2000 proxy (US stocks $150M-$7B, Nasdaq screener))
-
-1 Failed download:
-['ACNB']: OperationalError('database is locked')
-Downloaded 2058/2094 (2y 1d)
-Avg volume > 500,000: 1132
-Downloaded 1060/1133 (5y 1mo)
-Beta pre-filter (>= 1.6): 278
-Fundamentals: 271 cached, fetching 7
+Nasdaq screener: HTTP 200, 2286364 chars
+Universe: 2084 (Russell-2000 proxy (US stocks $150M-$7B, Nasdaq screener))
+Downloaded 2049/2084 (2y 1d)
+Avg volume > 500,000: 1124
+Downloaded 1052/1125 (5y 1mo)
+Beta pre-filter (>= 1.6): 271
+Fundamentals: 270 cached, fetching 1
 Passed all filters: 11
-2026-11-17: 11 passed filters, 1 with a base pattern
+2026-11-18: 11 passed filters, 0 with a base pattern
