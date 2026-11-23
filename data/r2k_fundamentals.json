@@ -96,28 +96,28 @@
 "ts": 1795211794.062503
 },
 "ADEA": {
-"beta_y": 1.005,
-"float_sh": 107788271,
-"industry": "Software - Application",
-"inst_own": 106.89,
-"mcap": 1627921536,
-"short_date": 1793318400,
-"short_float": 11.05,
-"short_ratio": 5.81,
-"short_sh": 6972801,
-"ts": 1794866167.2742026
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "ADNT": {
-"beta_y": 1.653,
-"float_sh": 73609932,
-"industry": "Auto Parts",
-"inst_own": 103.88,
-"mcap": 1196800000,
-"short_date": 1793318400,
-"short_float": 11.06,
-"short_ratio": 7.06,
-"short_sh": 6786427,
-"ts": 1794606854.2147577
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "ADPT": {
 "beta_y": 2.152,
@@ -396,16 +396,16 @@
 "ts": 1795211794.062503
 },
 "AQST": {
-"beta_y": 1.505,
-"float_sh": 113178008,
-"industry": "Drug Manufacturers - Specialty & Generic",
-"inst_own": 58.13,
-"mcap": 472585760,
-"short_date": 1793318400,
-"short_float": 24.42,
-"short_ratio": 13.74,
-"short_sh": 29318686,
-"ts": 1794866167.2742026
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "ARHS": {
 "beta_y": 2.252,
@@ -708,28 +708,28 @@
 "ts": 1795211794.062503
 },
 "CABA": {
-"beta_y": 3.54,
-"float_sh": 196834072,
-"industry": "Biotechnology",
-"inst_own": 83.16,
-"mcap": 276122080,
-"short_date": 1793318400,
-"short_float": 19.19,
-"short_ratio": 7.35,
-"short_sh": 38369896,
-"ts": 1794606854.2147577
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "CARS": {
-"beta_y": 1.706,
-"float_sh": 43265218,
-"industry": "Internet Content & Information",
-"inst_own": 112.92,
-"mcap": 661885312,
-"short_date": 1793318400,
-"short_float": 19.58,
-"short_ratio": 10.58,
-"short_sh": 8086195,
-"ts": 1794606854.2147577
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "CAVA": {
 "beta_y": null,
@@ -816,16 +816,16 @@
 "ts": 1795211794.062503
 },
 "CHPT": {
-"beta_y": 1.623,
-"float_sh": 26035954,
-"industry": "Specialty Retail",
-"inst_own": 42.15,
-"mcap": 275215808,
-"short_date": 1793318400,
-"short_float": 24.16,
-"short_ratio": 6.65,
-"short_sh": 6386715,
-"ts": 1794866167.2742026
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "CIFR": {
 "beta_y": 3.541,
@@ -900,16 +900,16 @@
 "ts": 1795211794.062503
 },
 "COHU": {
-"beta_y": 1.612,
-"float_sh": 46225369,
-"industry": "Semiconductor Equipment & Materials",
-"inst_own": 116.75,
-"mcap": 1899147264,
-"short_date": 1793318400,
-"short_float": 22.41,
-"short_ratio": 7.02,
-"short_sh": 8791384,
-"ts": 1794866167.2742026
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "COMP": {
 "beta_y": null,
@@ -960,16 +960,16 @@
 "ts": 1795211794.062503
 },
 "CRVS": {
-"beta_y": 1.522,
-"float_sh": 73016909,
-"industry": "Biotechnology",
-"inst_own": 84.79,
-"mcap": 894143168,
-"short_date": 1793318400,
-"short_float": 23.93,
-"short_ratio": 16.48,
-"short_sh": 17759451,
-"ts": 1794866167.2742026
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "CTMX": {
 "beta_y": 2.241,
@@ -1212,16 +1212,16 @@
 "ts": 1795211794.062503
 },
 "ECG": {
-"beta_y": 2.485,
-"float_sh": 50861435,
-"industry": "Engineering & Construction",
-"inst_own": 89.94,
-"mcap": 4234240000,
-"short_date": 1793318400,
-"short_float": 5.34,
-"short_ratio": 3.8,
-"short_sh": 2094443,
-"ts": 1794866167.2742026
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "EDIT": {
 "beta_y": 2.077,
@@ -1392,16 +1392,16 @@
 "ts": 1794606854.2147577
 },
 "FIVN": {
-"beta_y": 1.554,
-"float_sh": 72294385,
-"industry": "Software - Infrastructure",
-"inst_own": 115.75,
-"mcap": 2012304640,
-"short_date": 1793318400,
-"short_float": 13.41,
-"short_ratio": 5.76,
-"short_sh": 9928694,
-"ts": 1794866167.2742026
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "FLNC": {
 "beta_y": 2.793,
@@ -1524,28 +1524,28 @@
 "ts": 1793353051.1460133
 },
 "GRAL": {
-"beta_y": 2.868,
-"float_sh": 34637957,
-"industry": "Diagnostics & Research",
-"inst_own": 86.22,
-"mcap": 4748005376,
-"short_date": 1793318400,
-"short_float": 18.16,
-"short_ratio": 7.78,
-"short_sh": 7998817,
-"ts": 1794866167.2742026
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "HAPN": {
-"beta_y": 1.573,
-"float_sh": 111446936,
-"industry": "Banks - Regional",
-"inst_own": 93.74,
-"mcap": 1773543040,
-"short_date": 1793318400,
-"short_float": 6.65,
-"short_ratio": 2.54,
-"short_sh": 6636117,
-"ts": 1794866167.2742026
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "HGV": {
 "beta_y": 1.612,
@@ -1668,16 +1668,16 @@
 "ts": 1795211794.062503
 },
 "HZO": {
-"beta_y": 1.728,
-"float_sh": 19904738,
-"industry": "Specialty Retail",
-"inst_own": 90.74,
-"mcap": 1166179584,
-"short_date": 1793318400,
-"short_float": 10.07,
-"short_ratio": 2.44,
-"short_sh": 1858123,
-"ts": 1794606854.2147577
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "ICHR": {
 "beta_y": 1.901,
@@ -1717,15 +1717,15 @@
 },
 "IMSR": {
 "beta_y": null,
-"float_sh": 50754668,
-"industry": "Utilities - Regulated Electric",
-"inst_own": 29.0,
-"mcap": 258611728,
-"short_date": 1793318400,
-"short_float": 18.64,
-"short_ratio": 5.07,
-"short_sh": 9033696,
-"ts": 1794866167.2742026
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "INDI": {
 "beta_y": 3.113,
@@ -1740,16 +1740,16 @@
 "ts": 1795211794.062503
 },
 "INGM": {
-"beta_y": 1.704,
-"float_sh": 77957193,
-"industry": "Information Technology Services",
-"inst_own": 97.89,
-"mcap": 6305759232,
-"short_date": 1793318400,
-"short_float": 21.01,
-"short_ratio": 4.17,
-"short_sh": 6176310,
-"ts": 1794866167.2742026
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "INO": {
 "beta_y": 1.725,
@@ -1788,16 +1788,16 @@
 "ts": 1795211794.062503
 },
 "IVR": {
-"beta_y": 1.695,
-"float_sh": 108818921,
-"industry": "REIT - Mortgage",
-"inst_own": 45.63,
-"mcap": 549882560,
-"short_date": 1793318400,
-"short_float": 12.68,
-"short_ratio": 3.47,
-"short_sh": 13807888,
-"ts": 1794606854.2147577
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "JANX": {
 "beta_y": 2.39,
@@ -1824,16 +1824,16 @@
 "ts": 1795211794.062503
 },
 "JBLU": {
-"beta_y": 1.901,
-"float_sh": 337737456,
-"industry": "Airlines",
-"inst_own": 91.72,
-"mcap": 1418842880,
-"short_date": 1793318400,
-"short_float": 34.89,
-"short_ratio": 3.58,
-"short_sh": 113576925,
-"ts": 1794606854.2147577
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "JOBY": {
 "beta_y": 2.836,
@@ -2424,16 +2424,16 @@
 "ts": 1795211794.062503
 },
 "ORC": {
-"beta_y": 1.64,
-"float_sh": 192613895,
-"industry": "REIT - Mortgage",
-"inst_own": 50.69,
-"mcap": 882656640,
-"short_date": 1793318400,
-"short_float": 10.71,
-"short_ratio": 2.78,
-"short_sh": 20636888,
-"ts": 1794606854.2147577
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "ORN": {
 "beta_y": null,
@@ -3156,16 +3156,16 @@
 "ts": 1795211794.062503
 },
 "SGRY": {
-"beta_y": 1.876,
-"float_sh": 58713330,
-"industry": "Medical Care Facilities",
-"inst_own": 119.47,
-"mcap": 3527249152,
-"short_date": 1793318400,
-"short_float": 13.98,
-"short_ratio": 1.82,
-"short_sh": 8951583,
-"ts": 1794606854.2147577
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "SHAK": {
 "beta_y": 1.766,
@@ -3336,16 +3336,16 @@
 "ts": 1795211794.062503
 },
 "SPHR": {
-"beta_y": 1.698,
-"float_sh": 25018565,
-"industry": "Entertainment",
-"inst_own": 135.77,
-"mcap": 4555756544,
-"short_date": 1793318400,
-"short_float": 33.2,
-"short_ratio": 6.78,
-"short_sh": 6864484,
-"ts": 1794606854.2147577
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "SPIR": {
 "beta_y": 3.169,
@@ -3456,16 +3456,16 @@
 "ts": 1795125495.8426292
 },
 "TILE": {
-"beta_y": 2.081,
-"float_sh": 56374523,
-"industry": "Furnishings, Fixtures & Appliances",
-"inst_own": 108.36,
-"mcap": 1769272064,
-"short_date": 1793318400,
-"short_float": 8.23,
-"short_ratio": 7.72,
-"short_sh": 3417326,
-"ts": 1794866167.2742026
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "TLRY": {
 "beta_y": 2.055,
@@ -3540,28 +3540,40 @@
 "ts": 1795211794.062503
 },
 "TTMI": {
-"beta_y": 2.259,
-"float_sh": 103617856,
-"industry": "Electronic Components",
-"inst_own": 94.6,
-"mcap": 7008525824,
-"short_date": 1792022400,
-"short_float": 6.62,
-"short_ratio": 2.03,
-"short_sh": 4969766,
-"ts": 1794001643.3351693
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
+},
+"TXG": {
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "UAA": {
-"beta_y": 1.603,
-"float_sh": 286530948,
-"industry": "Apparel Manufacturing",
-"inst_own": 112.03,
-"mcap": 2083295872,
-"short_date": 1793318400,
-"short_float": 44.78,
-"short_ratio": 7.48,
-"short_sh": 64052429,
-"ts": 1794866167.2742026
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "UCTT": {
 "beta_y": 1.92,
@@ -3624,16 +3636,16 @@
 "ts": 1794866167.2742026
 },
 "UPBD": {
-"beta_y": 1.779,
-"float_sh": 55793629,
-"industry": "Software - Application",
-"inst_own": 104.77,
-"mcap": 1462806784,
-"short_date": 1793318400,
-"short_float": 16.79,
-"short_ratio": 6.56,
-"short_sh": 8346143,
-"ts": 1794606854.2147577
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "UPST": {
 "beta_y": 2.433,
@@ -3864,16 +3876,16 @@
 "ts": 1795211794.062503
 },
 "ZG": {
-"beta_y": 1.88,
-"float_sh": 207677460,
-"industry": "Internet Content & Information",
-"inst_own": 116.51,
-"mcap": 6776895488,
-"short_date": 1793318400,
-"short_float": 19.88,
-"short_ratio": 4.0,
-"short_sh": 4021753,
-"ts": 1794866167.2742026
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795471184.1427107
 },
 "ZNTL": {
 "beta_y": 1.929,
