@@ -853,15 +853,15 @@
 },
 "CLF": {
 "beta_y": 1.976,
-"float_sh": 564474001,
+"float_sh": 564645177,
 "industry": "Steel",
-"inst_own": 82.73,
-"mcap": 6715785216,
+"inst_own": 82.11,
+"mcap": 6253611008,
 "short_date": 1793318400,
 "short_float": 10.93,
 "short_ratio": 2.56,
 "short_sh": 61755748,
-"ts": 1794952881.5697925
+"ts": 1795558638.3948355
 },
 "CLNE": {
 "beta_y": 1.851,
@@ -1187,6 +1187,18 @@
 "short_sh": 6311677,
 "ts": 1795211794.062503
 },
+"DY": {
+"beta_y": 1.553,
+"float_sh": 23813885,
+"industry": "Engineering & Construction",
+"inst_own": 94.55,
+"mcap": 5399112704,
+"short_date": 1793318400,
+"short_float": 6.73,
+"short_ratio": 2.54,
+"short_sh": 1563170,
+"ts": 1795558638.3948355
+},
 "EAF": {
 "beta_y": 1.829,
 "float_sh": 19230348,
@@ -1270,6 +1282,18 @@
 "short_ratio": 4.99,
 "short_sh": 137214957,
 "ts": 1795211794.062503
+},
+"ETHA": {
+"beta_y": null,
+"float_sh": null,
+"industry": null,
+"inst_own": null,
+"mcap": null,
+"short_date": null,
+"short_float": null,
+"short_ratio": null,
+"short_sh": null,
+"ts": 1795558638.3948355
 },
 "ETSY": {
 "beta_y": 1.78,
@@ -1887,13 +1911,13 @@
 "beta_y": 1.979,
 "float_sh": 39130931,
 "industry": "Biotechnology",
-"inst_own": 98.77,
-"mcap": 6330289664,
+"inst_own": 96.06,
+"mcap": 7499561984,
 "short_date": 1793318400,
 "short_float": 19.71,
 "short_ratio": 5.03,
 "short_sh": 8115058,
-"ts": 1794952881.5697925
+"ts": 1795558638.3948355
 },
 "KODK": {
 "beta_y": 1.626,
@@ -2199,13 +2223,13 @@
 "beta_y": 2.084,
 "float_sh": 59145155,
 "industry": "Packaged Foods",
-"inst_own": 38.46,
-"mcap": 161561680,
+"inst_own": 39.16,
+"mcap": 162353648,
 "short_date": 1793318400,
 "short_float": 8.45,
 "short_ratio": 7.56,
 "short_sh": 4348687,
-"ts": 1794952881.5697925
+"ts": 1795558638.3948355
 },
 "NCMI": {
 "beta_y": 1.753,
@@ -3709,15 +3733,15 @@
 },
 "VICR": {
 "beta_y": 2.456,
-"float_sh": 25773070,
+"float_sh": 25773993,
 "industry": "Electronic Components",
-"inst_own": 66.81,
-"mcap": 6690162688,
+"inst_own": 67.28,
+"mcap": 5793956864,
 "short_date": 1793318400,
 "short_float": 10.21,
 "short_ratio": 1.95,
 "short_sh": 2145012,
-"ts": 1794952881.5697925
+"ts": 1795558638.3948355
 },
 "VIR": {
 "beta_y": 1.741,
