@@ -1,9 +1,6 @@
 Universe: 503 tickers (Wikipedia)
 Nasdaq-100: 101 tickers (Nasdaq.com)
 Universe: 518 unique tickers (S&P 500: Wikipedia · Nasdaq-100: Nasdaq.com)
-
-1 Failed download:
-['CVX']: OperationalError('database is locked')
-Downloaded 516/518
-Fundamentals: 5 cached, fetching 10
+Downloaded 517/518
+Fundamentals: 15 cached, fetching 0
 2026-11-24: funnel {'price': 509, 'volume': 442, 'setup': 15, 'mcap': 15}; AB 0, A 6, B 9
