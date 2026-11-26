@@ -1887,13 +1887,13 @@
 "beta_y": 3.693,
 "float_sh": 30784273,
 "industry": "Education & Training Services",
-"inst_own": 92.22,
-"mcap": 137530352,
-"short_date": 1793318400,
-"short_float": 11.15,
-"short_ratio": 4.75,
-"short_sh": 3595706,
-"ts": 1794866167.2742026
+"inst_own": 90.8,
+"mcap": 138715952,
+"short_date": 1794528000,
+"short_float": 11.74,
+"short_ratio": 3.75,
+"short_sh": 3789485,
+"ts": 1795664062.9274478
 },
 "KN": {
 "beta_y": 1.614,
@@ -2101,15 +2101,15 @@
 },
 "MAC": {
 "beta_y": 2.118,
-"float_sh": 282827792,
+"float_sh": 282830627,
 "industry": "REIT - Retail",
-"inst_own": 117.03,
-"mcap": 7220054528,
-"short_date": 1793318400,
-"short_float": 16.57,
-"short_ratio": 10.61,
-"short_sh": 33698736,
-"ts": 1795039274.0373302
+"inst_own": 117.57,
+"mcap": 7172845568,
+"short_date": 1794528000,
+"short_float": 16.68,
+"short_ratio": 10.92,
+"short_sh": 33828733,
+"ts": 1795664062.9274478
 },
 "MARA": {
 "beta_y": 5.253,
@@ -2161,15 +2161,15 @@
 },
 "MOD": {
 "beta_y": 1.844,
-"float_sh": 52113297,
+"float_sh": 52107977,
 "industry": "Building Products & Equipment",
-"inst_own": 99.73,
-"mcap": 6901236224,
-"short_date": 1793318400,
-"short_float": 4.68,
-"short_ratio": 1.79,
-"short_sh": 2444541,
-"ts": 1794952881.5697925
+"inst_own": 100.66,
+"mcap": 7252868096,
+"short_date": 1794528000,
+"short_float": 7.36,
+"short_ratio": 1.57,
+"short_sh": 3846919,
+"ts": 1795664062.9274478
 },
 "MP": {
 "beta_y": null,
@@ -2653,15 +2653,15 @@
 },
 "PLUG": {
 "beta_y": 2.147,
-"float_sh": 1335321076,
+"float_sh": 1335335065,
 "industry": "Electrical Equipment & Parts",
-"inst_own": 69.43,
-"mcap": 1552747776,
-"short_date": 1793318400,
-"short_float": 22.64,
-"short_ratio": 5.81,
-"short_sh": 280964711,
-"ts": 1794606854.2147577
+"inst_own": 64.48,
+"mcap": 1489798528,
+"short_date": 1794528000,
+"short_float": 24.25,
+"short_ratio": 5.45,
+"short_sh": 301189463,
+"ts": 1795664062.9274478
 },
 "POWI": {
 "beta_y": 1.574,
@@ -3913,14 +3913,14 @@
 },
 "ZNTL": {
 "beta_y": 1.929,
-"float_sh": 78412228,
+"float_sh": 71583733,
 "industry": "Biotechnology",
-"inst_own": 53.29,
-"mcap": 167051968,
-"short_date": 1793318400,
-"short_float": 6.0,
-"short_ratio": 3.74,
-"short_sh": 5036334,
-"ts": 1794606854.2147577
+"inst_own": 69.79,
+"mcap": 162138672,
+"short_date": 1794528000,
+"short_float": 6.52,
+"short_ratio": 3.86,
+"short_sh": 5471801,
+"ts": 1795664062.9274478
 }
 }
