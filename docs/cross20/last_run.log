@@ -1,3 +1,6 @@
 Universe: 503 tickers (Wikipedia)
-Downloaded 502/503
-2026-11-24: up 5, above 37
+
+1 Failed download:
+['BX']: OperationalError('database is locked')
+Downloaded 501/503
+2026-11-25: up 6, above 31
