@@ -1,5 +1,9 @@
 Universe: 503 tickers (Wikipedia)
 Nasdaq-100: 101 tickers (Nasdaq.com)
 Universe: 518 unique tickers (S&P 500: Wikipedia · Nasdaq-100: Nasdaq.com)
-Downloaded 517/518
-Latest bar 2026-11-25 != today 2026-11-26 (holiday / no session). Skipping.
+
+1 Failed download:
+['AXP']: OperationalError('database is locked')
+Downloaded 516/518
+Fundamentals: 7 cached, fetching 15
+2026-11-27: funnel {'price': 510, 'volume': 442, 'setup': 22, 'mcap': 22}; AB 0, A 0, B 22
